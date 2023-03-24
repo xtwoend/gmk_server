@@ -40,6 +40,13 @@ class Leepack2 extends Model
     public string $ts = 'ts';
 
     /**
+     * export table headers
+     */
+    protected $headersExport = [
+        'terminal_time' => 'Timestamp',
+    ];
+
+    /**
      * create or choice table
      */
     public static function table($device, $date = null)

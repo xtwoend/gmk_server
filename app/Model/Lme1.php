@@ -27,6 +27,13 @@ class Lme1 extends Model
     protected array $guarded = ['id'];
 
     /**
+     * export table headers
+     */
+    protected $headersExport = [
+        'terminal_time' => 'Timestamp',
+    ];
+
+    /**
      * The attributes that should be cast to native types.
      */
     protected array $casts = [
