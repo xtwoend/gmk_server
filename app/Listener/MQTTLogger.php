@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Model\Device;
 use App\Model\Received;
 use App\Event\MQTTReceived;
+use Hyperf\Utils\Codec\Json;
 use Hyperf\Event\Annotation\Listener;
 use Psr\Container\ContainerInterface;
 use Hyperf\Event\Contract\ListenerInterface;
@@ -56,7 +57,7 @@ class MQTTLogger implements ListenerInterface
                     'terminal_time' => $date,
                 ], [
                     'topic' => $topic,
-                    'data' => $message
+                    'data' => Json::encode($ts->format($data))
                 ]);
 
     
