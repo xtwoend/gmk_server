@@ -72,12 +72,8 @@ class Leepack2 extends Model
 
     public function format(array $data)
     {
-        $alarm = array_map(function($value){
-            return ($value)? 1: 0;
-        }, $data['alarm_leepack2']?:[]);
-
         return [
-            'alarm_leepack2' => $alarm,
+            'alarm_leepack2' => $this->map($data['alarm_leepack2']),
             'mc_run' => $data['mc_run'],
             'mc_stop' => $data['mc_stop'],
             'sv_speed_bpm' => $data['sv_speed_bpm'],
