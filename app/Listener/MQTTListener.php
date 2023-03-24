@@ -43,7 +43,7 @@ class MQTTListener implements ListenerInterface
         if(! class_exists($modelClass)) {
             return;
         }
-
+        
         $ts = (new $modelClass);
         $date = $data[$ts->ts];
         $data = $ts->format($data);

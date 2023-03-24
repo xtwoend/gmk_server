@@ -57,7 +57,7 @@ class MQTTLogger implements ListenerInterface
                     'terminal_time' => $date,
                 ], [
                     'topic' => $topic,
-                    'data' => Json::encode($ts->format($data))
+                    'data' => Json::encode(Json::decode($message))
                 ]);
 
     
