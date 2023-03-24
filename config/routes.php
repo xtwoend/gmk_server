@@ -9,9 +9,26 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+use App\Controller\TableController;
+use App\Controller\TrendController;
+use App\Controller\DeviceController;
 use Hyperf\HttpServer\Router\Router;
+use App\Controller\MqttLogController;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
+
+Router::get('/devices', [DeviceController::class, 'index']);
+Router::get('/devices/{id}', [DeviceController::class, 'show']);
+Router::post('/devices', [DeviceController::class, 'store']);
+Router::put('/devices/{id}', [DeviceController::class, 'update']);
+Router::delete('/devices/{id}', [DeviceController::class, 'delete']);
+
+
+Router::get('/trend/{deviceId}/data', [TrendController::class, 'data']);
+Router::get('/table/{deviceId}/data', [TableController::class, 'dataUnion']);
+Router::get('/table/{deviceId}/export', [TableController::class, 'export']);
+
+Router::get('/mqtt/{deviceId}/log', [MqttLogController::class, 'data']);
 
 Router::get('/favicon.ico', function () {
     return '';
