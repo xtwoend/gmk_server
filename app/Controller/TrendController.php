@@ -64,7 +64,8 @@ class TrendController
         }
         $query = implode(' UNION ', $query);
         $rows = Db::select($query);
-
+        $rows = (new $classModel)->jsonResource($rows);
+        
         return response($rows);
     }
 }

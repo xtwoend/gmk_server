@@ -14,7 +14,7 @@ use Hyperf\Database\Model\Events\Creating;
  */
 class PanelPkp extends Model
 {
-    use DeviceTrait;
+    use DeviceTrait, ResourceTrait;
 
     /**
      * The table associated with the model.
