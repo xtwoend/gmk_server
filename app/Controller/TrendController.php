@@ -46,7 +46,7 @@ class TrendController
         }
 
         for($i=0; $i <= $count; $i++) {
-            $tableName = (new $classModel)->table($device->id, $from)->getTable();
+            $tableName = (new $classModel)->table($device, $from)->getTable();
             $query[] = "
             (select 
                 (UNIX_TIMESTAMP(ct.terminal_time) * 1000) as unix_time, {$select_column}

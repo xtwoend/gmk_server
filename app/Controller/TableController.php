@@ -29,13 +29,13 @@ class TableController
             return response(['error' => 401, 'message' => 'model not found']);
         }
 
-        $tableName = (new $classModel)->table($device->id, $from)->getTable();
-        $subQuery = (new $classModel)->table($device->id, $from)
+        $tableName = (new $classModel)->table($device, $from)->getTable();
+        $subQuery = (new $classModel)->table($device, $from)
             ->select(Db::raw("MIN(terminal_time) as times, FLOOR(UNIX_TIMESTAMP(terminal_time)/{$interval}) AS timekey"))
             ->groupBy('timekey');
 
         $model = (new $classModel)
-            ->table($device->id, $from)
+            ->table($device, $from)
             ->select(Db::raw('*'))
             ->whereBetween('terminal_time', [$from, $to])
             ->joinSub($subQuery, 'ctx', function($join) use ($tableName) {
@@ -93,7 +93,7 @@ class TableController
         $count = Carbon::parse($fromDiff)->diffInMonths(Carbon::parse($toDiff));
         
         for($i=0; $i <= $count; $i++) {
-            $tableName = (new $classModel)->table($device->id, $from)->getTable();
+            $tableName = (new $classModel)->table($device, $from)->getTable();
             $query[] = "
             (select 
                 (UNIX_TIMESTAMP(ct.terminal_time) * 1000) as unix_time, ct.*
