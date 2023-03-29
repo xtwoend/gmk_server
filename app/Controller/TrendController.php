@@ -50,8 +50,6 @@ class TrendController
             return response(['error' => 401, 'message' => 'model not found']);
         }
 
-
-
         for($i=0; $i <= $count; $i++) {
             $tableName = (new $classModel)->table($device, $from)->getTable();
             $query[] = "

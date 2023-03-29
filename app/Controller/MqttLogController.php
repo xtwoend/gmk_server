@@ -15,9 +15,10 @@ class MqttLogController
         $device = Device::findOrFail($deviceId);
 
         $last = $request->input('last', 30);
-        $date = Carbon::now()->subMinutes($last)->format('Y-m-d H:i:s');
-        $data = Received::table($device->id)->where('device_id', $device->id)
-            ->where('terminal_time', '>=', $date)
+        // $date = Carbon::now()->subMinutes($last)->format('Y-m-d H:i:s');
+        $data = Received::table($device->id)
+            ->where('device_id', $device->id)
+            // ->where('terminal_time', '>=', $date)
             ->limit(200)
             ->orderBy('terminal_time', 'asc')
             ->get();
