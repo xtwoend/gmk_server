@@ -35,7 +35,12 @@ class TrendController
         $count = Carbon::parse($fromDiff)->diffInMonths(Carbon::parse($toDiff));
 
         $formattingSelect = array_map(function($val){
-            return "ct.{$val}";
+            $eval = $val;
+            $ex = explode('[', $val);
+            if(count($ex) > 1) {
+                $eval = $ex[0];
+            }
+            return "ct.{$eval}";
         }, $select);
 
         $select_column = implode(',', $formattingSelect);
@@ -44,6 +49,8 @@ class TrendController
         if(! class_exists($classModel)) {
             return response(['error' => 401, 'message' => 'model not found']);
         }
+
+
 
         for($i=0; $i <= $count; $i++) {
             $tableName = (new $classModel)->table($device, $from)->getTable();
