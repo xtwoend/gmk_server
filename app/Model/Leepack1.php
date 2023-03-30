@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Model\Events\Created;
 use Hyperf\Database\Model\Events\Creating;
 
 /**
@@ -45,6 +46,33 @@ class Leepack1 extends Model
      * timestamp attribute from device iot gateway
      */
     public string $ts = 'ts';
+
+    public array $alarmCode = [
+        'Air pressure drop',
+        'Abnormal temperature',
+        'Data limit over',
+        'Gripper limit error',
+        'Brake power fault',
+        'Bag open check miss',
+        'Target bag completion',
+        'Grease end',
+        'Filling time over',
+        'Hopper low level',
+        'Inverter alarm',
+        'Servo drive alarm',
+        'Bag loading check miss',
+        'Printer alarm',
+        'Fill nozzle open/close miss',
+        'Please,enter password',
+        'Drain mode',
+        'Bag open width limit over',
+        'Bag low level alarm',
+        'PLC APM Module alarm',
+        'Heat transfer oil low level',
+        'Product temp. low alarm',
+        'Recipe change confirmation',
+        'Safety guard open'
+    ];
 
     /**
      * create or choice table
@@ -95,5 +123,17 @@ class Leepack1 extends Model
             'sv_gripper_width' => $data['sv_gripper_width'],
             'sp_gripper_width' => $data['sp_gripper_width'],
         ];
+    }
+
+    /**
+     * created
+     */
+    public function created(Created $event)
+    {
+        $model = $event->getModel();
+        
+        foreach($model->alarm_leepack1 as $alarm) {
+            
+        }
     }
 }

@@ -46,6 +46,40 @@ class Leepack3 extends Model
      */
     public string $ts = 'ts';
 
+    public array $alarmCode = [
+        'Hopper high,low level',
+        'Data range limit over',
+        'Target bag completed',
+        'Air pressure drop',
+        'Abnormal temperature',
+        'Heat transfer oil low level',
+        'Product temperature low',
+        'Not use',
+        'Not use',
+        'Not use',
+        'Not use',
+        '3-Phase motor overload',
+        'Drain mode off',
+        'Drain mode',
+        'Servo jog driving',
+        'Please,enter password',
+        'Not use',
+        'Not use',
+        'Not use',
+        'Servo drive alarm',
+        'Not use',
+        'Not use',
+        'Nozzle open error',
+        'Nozzle close error',
+        'Not use',
+        'APM Module error',
+        'Not use',
+        'Not use',
+        'Not use',
+        'Not use',
+        'Not use',
+        'Not use'
+    ];
     /**
      * create or choice table
      */

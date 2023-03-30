@@ -39,6 +39,36 @@ class Leepack2 extends Model
      */
     public string $ts = 'ts';
 
+    public array $alarmCode = [
+        'Air pressure drop',
+        'Abnormal temperature',
+        'Data limit over',
+        'Gripper limit error',
+        'Brake power fault',
+        'Bag open check miss',
+        'Target bag completion',
+        'Grease end',
+        'Filling time over',
+        'Hopper low level',
+        'Inverter alarm',
+        'Servo drive alarm',
+        'Bag loading check miss',
+        'Safety guard open',
+        'Fill nozzle open/close miss',
+        'Please,enter password',
+        'Drain mode',
+        'Bag open width limit over',
+        'Bag low level alarm',
+        'PLC APM Module alarm',
+        'Heat transfer oil low level',
+        'Product temp. low alarm',
+        'Recipe change confirmation',
+        'Printer alarm',
+        '3-phase motor overload',
+        'Feeding motor IVT alarm',
+        'Drain mode reset'
+    ];
+
     /**
      * export table headers
      */
