@@ -82,4 +82,9 @@ class SampleData extends AbstractProcess
         }
         $mqtt->disconnect();
     }
+
+    public function isEnable($server): bool
+    {
+        return (boolean) env('SAMPLE_ENABLE', false);
+    }
 }
