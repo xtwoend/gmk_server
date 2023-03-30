@@ -38,6 +38,4 @@ class Alarm extends Model
 
         return $model->setTable($tableName);
     }
-
-    
 }
