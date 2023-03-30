@@ -120,4 +120,32 @@ class Lme1 extends Model
             'HMI_LME_ST_OutProdTemp' => $data['HMI_LME_ST_OutProdTemp']
         ];
     }
+    
+
+    protected array $tk_alarm_message_1 = [
+        'Cooling Tank Agitator Overload',
+        'Cooling Tank Agitator Without On Feedback Signal',
+        'Cooling Tank Max Alarm Weight',
+        'Hold Tank Agitator Overload',
+        'Hold Tank Agitator Without On Feedback Signal',
+        'Hold Tank Max Alarm Weight',
+        'Tanks Transfer Pump Overload',
+        'Tanks Transfer Pump On Feedback Signal',
+        'Lecithin Transfer Pump Overload',
+        'Lecithin Transfer Pump Without On Feedback Signal',
+        'Circuit Breaker Main Supply Frequency Inverter Lecithin Dosage Pump OFF',
+        'Lecithin Dosage Pump Inverter Without Main Supply Connection Feedback Signal',
+        'Lecithin Dosage Pump Without On Feedback Signal',
+        'Cooling Tank Valve CTK_PV1 Fault (Discharge Valve)',
+        'Cooling Tank Valve CTK_WV1 Fault (Input Water Valve)',
+        'Cooling Tank Valve CTK_WV2 Fault (Output Water Valve)',
+        'Cooling Tank Valve CTK_WV3 Fault (Hold Temperature Water Valve)',
+        'Hold Tank Valve HTK_PV1 Fault (Discharge Valve)',
+        'Hold Tank Valve CTK_WV1 Fault (Input Water Valve)',
+        'Hold Tank Valve CTK_WV2 Fault (Output Water Valve)',
+        'Hold Tank Valve CTK_WV3 Fault (Hold Temperature Water Valve)',
+        'Lecithin Level Sensor Fault',
+        'Lecithin Dosage Pump Running Without Product',
+        'Lecithin Dosage Pump Running Without Product',
+    ];
 }

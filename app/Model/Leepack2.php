@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Carbon\Carbon;
+use App\Model\Alarm;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Model\Events\Created;
 use Hyperf\Database\Model\Events\Creating;
 
 /**
@@ -121,5 +123,32 @@ class Leepack2 extends Model
             'pv_filling_speed_rpm' => $data['pv_filling_speed_rpm'],
             'level_hopper' => $data['level_hopper'],
         ];
+    }
+
+    /**
+     * created
+     */
+    public function created(Created $event)
+    {
+        $model = $event->getModel();
+       
+        foreach($model->alarm_leepack1 as $key => $alarm) {
+            if($alarm) {
+                
+                $al = Alarm::table($model->device_id)
+                    ->firstOrCreate([
+                        'device_id' => $model->device_id,
+                        'property' => 'alarm_leepack2',
+                        'property_index' => $key,
+                        'status' => 1
+                    ]);
+                if(is_null($al->started_at)) {
+                    $al->started_at = Carbon::now()->format('Y-m-d H:i:s');
+                }
+                $al->message = $this->alarmCode[$key];
+                $al->finished_at = Carbon::now()->format('Y-m-d H:i:s');
+                $al->save();
+            }
+        }
     }
 }
