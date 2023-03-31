@@ -132,23 +132,6 @@ class Leepack3 extends Model
     {
         $model = $event->getModel();
        
-        foreach($model->alarm_leepack1 as $key => $alarm) {
-            if($alarm) {
-                
-                $al = Alarm::table($model->device_id)
-                    ->firstOrCreate([
-                        'device_id' => $model->device_id,
-                        'property' => 'alarm_leepack3',
-                        'property_index' => $key,
-                        'status' => 1
-                    ]);
-                if(is_null($al->started_at)) {
-                    $al->started_at = Carbon::now()->format('Y-m-d H:i:s');
-                }
-                $al->message = $this->alarmCode[$key];
-                $al->finished_at = Carbon::now()->format('Y-m-d H:i:s');
-                $al->save();
-            }
-        }
+        $this->alarmDb($model, 'alarm_leepack3');
     }
 }
