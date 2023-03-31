@@ -97,7 +97,7 @@ class Lme1 extends Model
         return $model->setTable($tableName);
     }
 
-     /**
+    /**
      * created
      */
     public function created(Created $event)
@@ -255,25 +255,4 @@ class Lme1 extends Model
         'Conche Air Heating Temperature Sensor Fault',
         'Conche Product Temperature Sensor Fault',
     ];
-
-    public function alarmDb($model, string $property)
-    {
-        foreach($model->{$property} as $key => $alarm) {
-            if($alarm) {
-                $al = Alarm::table($model->device_id)
-                    ->firstOrCreate([
-                        'device_id' => $model->device_id,
-                        'property' => $property,
-                        'property_index' => $key,
-                        'status' => 1
-                    ]);
-                if(is_null($al->started_at)) {
-                    $al->started_at = Carbon::now()->format('Y-m-d H:i:s');
-                }
-                $al->message = $this->{$property}[$key];
-                $al->finished_at = Carbon::now()->format('Y-m-d H:i:s');
-                $al->save();
-            }
-        }
-    }
 }

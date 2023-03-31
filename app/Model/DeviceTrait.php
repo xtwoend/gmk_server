@@ -16,6 +16,30 @@ trait DeviceTrait
     }
 
     /**
+     * alram
+     */
+    public function alarmDb($model, string $property)
+    {
+        foreach($model->{$property} as $key => $alarm) {
+            if($alarm) {
+                $al = Alarm::table($model->device_id)
+                    ->firstOrCreate([
+                        'device_id' => $model->device_id,
+                        'property' => $property,
+                        'property_index' => $key,
+                        'status' => 1
+                    ]);
+                if(is_null($al->started_at)) {
+                    $al->started_at = Carbon::now()->format('Y-m-d H:i:s');
+                }
+                $al->message = $this->{$property}[$key];
+                $al->finished_at = Carbon::now()->format('Y-m-d H:i:s');
+                $al->save();
+            }
+        }
+    }
+
+    /**
      * device
      */
     public function device()

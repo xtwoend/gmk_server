@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Model\Events\Created;
 use Hyperf\Database\Model\Events\Creating;
 
 /**
@@ -103,4 +104,70 @@ class Lme3 extends Model
             'data10' => $data['data10']
         ];
     }
+
+    /**
+     * created
+     */
+    public function created(Created $event)
+    {
+        $model = $event->getModel();
+        
+        $this->alarmDb($model, 'alarm_message_1');
+        $this->alarmDb($model, 'alarm_message_2');
+        $this->alarmDb($model, 'alarm_message_3');
+        $this->alarmDb($model, 'alarm_message_4');
+    }
+
+    protected array $alarm_message_1 = [
+        'Emergency Button Triggered',
+        'mill overload',
+        'mill inverter defect',
+        'missing feedback mill on',
+        'maximum temperature in the liquid seal',
+        'minimum pressure on the liquid seal',
+        'minimum level in the liquid seal',
+        'mill on without feed pump',
+        'maximum mill inlet pressure',
+        'maximum mill outlet pressure',
+        'maximum mill outlet temperature',
+        'current too high in the mill',
+        'seal pump overload',
+        'missing feedback from seal pump on',
+        'minimum flow in the seal pump',
+        'supply pump overload'
+    ];
+
+    protected array $alarm_message_2 = [
+        'feed pump powered inverter feedback is missing',
+        'feedback from the power pump on is missing',
+        'discharge pump overload',
+        'discharge pump powered inverter feedback is missing',
+        'feedback from flush pump on is missing',
+        'CV100 valve failure',
+        'CV101 valve failure',
+        'CV103 valve failure',
+        'CV104 valve failure',
+        'CV105 valve failure',
+        'CV106 valve failure',
+        'fault in analog PT100',
+        'fault in analog TT100',
+        'fault in analog PT200',
+        'fault in analog TT200',
+        'failure in analog PT300'
+    ];    
+
+    protected array $alarm_message_3 = [
+        'clogging in the heat exchanger',
+        'maximum temperature in the heat exchanger',
+        'CV107 valve failure',
+    ];
+
+    protected array $alarm_message_4 = [
+        'Maximum pressure at the mill inlet',
+        'Maximum pressure at the mill outlet',
+        'Maximum temperature at the mill outlet',
+        'Maximum temperature in the heat exchanger',
+        'clogging in the heat exchanger',
+        'high current in the mill',
+    ];
 }
