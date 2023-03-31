@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Carbon\Carbon;
+use App\Model\Alarm;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Model\Events\Created;
 use Hyperf\Database\Model\Events\Creating;
 
 /**
@@ -95,6 +97,24 @@ class Lme1 extends Model
         return $model->setTable($tableName);
     }
 
+     /**
+     * created
+     */
+    public function created(Created $event)
+    {
+        $model = $event->getModel();
+        
+        $this->alarmDb($model, 'tk_alarm_message_1');
+        $this->alarmDb($model, 'tk_alarm_message_2');
+        $this->alarmDb($model, 'tk_warning_message');
+        $this->alarmDb($model, 'cum_alarm_message_1');
+        $this->alarmDb($model, 'cum_alarm_message_2');
+        $this->alarmDb($model, 'lme_alarm_message_1');
+        $this->alarmDb($model, 'lme_alarm_message_2');
+        $this->alarmDb($model, 'ce_alarm_message_1');
+        $this->alarmDb($model, 'ce_alarm_message_2');
+    }
+
     public function format(array $data)
     {
         return [
@@ -121,7 +141,6 @@ class Lme1 extends Model
         ];
     }
     
-
     protected array $tk_alarm_message_1 = [
         'Cooling Tank Agitator Overload',
         'Cooling Tank Agitator Without On Feedback Signal',
@@ -138,7 +157,10 @@ class Lme1 extends Model
         'Lecithin Dosage Pump Without On Feedback Signal',
         'Cooling Tank Valve CTK_PV1 Fault (Discharge Valve)',
         'Cooling Tank Valve CTK_WV1 Fault (Input Water Valve)',
-        'Cooling Tank Valve CTK_WV2 Fault (Output Water Valve)',
+        'Cooling Tank Valve CTK_WV2 Fault (Output Water Valve)' 
+    ];
+
+    protected array $tk_alarm_message_2 = [
         'Cooling Tank Valve CTK_WV3 Fault (Hold Temperature Water Valve)',
         'Hold Tank Valve HTK_PV1 Fault (Discharge Valve)',
         'Hold Tank Valve CTK_WV1 Fault (Input Water Valve)',
@@ -148,4 +170,110 @@ class Lme1 extends Model
         'Lecithin Dosage Pump Running Without Product',
         'Lecithin Dosage Pump Running Without Product',
     ];
+
+    protected array $tk_warning_message = [
+        'Cooling Tank Max Warning Weight',
+        'Hold Tank Max Warning Weight',
+    ];
+
+    protected array $cum_alarm_message_1 = [
+        'Mill CUM450 Emergency Button Pushed',
+        'Mill CUM450 Safety Sensors Screew Feeder Cover',
+        'Mill CUM450 Bag Filter Exhaust Fan Overload',
+        'Mill CUM450 Bag Filter Exhaust Fan Without Main Supply Connection Feedback Signal',
+        'Mill CUM450 Bag Filter Exhaust Fan Without On Feedback Signal',
+        'Bag Filter Explosion Security Sensor Fault',
+        'Mill CUM450 Low Bearing Pressure',
+        'Circuit Breaker Main Supply Frequency Inverter Mill CUM450 OFF',
+        'Mill CUM450 Inverter Without Main Supply Connection Feedback Signal',
+        'Mill CUM450 Motor Without On Feedback Signal',
+        'Mill CUM450 Motor Alarm Current',
+        'Rotary Feeder Valve Overload',
+        'Rotary Feeder Valve Without On Feedback Signal',
+        'Rotary Feeder Valve Without On Feedback Signal',
+        'Sugar Exhaust Fan Feeder Funnel Overload',
+        'Sugar Exhaust Fan Feeder Funnel Without On Feedback Signal'
+    ];
+
+    protected array $cum_alarm_message_2 = [
+        'Circuit Breaker Main Supply Frequency Inverter Screew Feeder OFF',
+        'Screew Feeder Inverter Without Main Supply Connection Feedback Signal',
+        'Screew Feeder Without On Feedback Signal'
+    ];
+
+    protected array $lme_alarm_message_1 = [
+        'Recirculation Seal Liquid Pump Overload',
+        'Recirculation Seal Liquid Pump Without On Feedback Signal',
+        'Seal Liquid Flow Control Fault',
+        'Mill LME500 Softstarter w ith Alarm',
+        'Mill LME500 Softsarter Without Main Supply Connection Feedback Signal',
+        'Mill LME 500 Without On Feedback Signal',
+        'Mill LME 500 Low Seal Pressure',
+        'Mill LME 500 Low Seal Pressure',
+        'Mill LME500 Motor Alarm Current',
+        'Max Temperature Alarm Mill LME500 Product Output',
+        'Max Pressure Alarm Mill LME500 Product Input',
+        'Circuit Breaker Main Supply Frequency Inverter LME500 Feeding Pump OFF',
+        'LME500 Feeding Pump Inverter Without Main Supply Connection Feedback Signal',
+        'LME500 Feeding Pump Without On Feedback Signal',
+        'Feeding Pump On Without Starting the Mill LME500',
+        'Mill LME500 Water Input Valve LME_WV1 Fault',
+    ];
+
+    protected array $lme_alarm_message_2 = [
+        'Mill LME500 Water Output Valve LME_WV2 Fault',
+        'Mill LME500 Recirculation/Discharge Valve LME_PV1 Fault',
+        'Mill LME500 Output Temperature Sensor Fault',
+        'Mill LME500 Input Product Pressure Sensor Fault',
+    ];
+
+    protected array $ce_alarm_message_1 = [
+        'Sugar Tank Safety Cover Open',
+        'Cocoa Exhaust Fan Feeder Funnel Overload',
+        'Sugar Exhaust Fan Feeder Funnel Without On Feedback Signal',
+        'Conche Motor Overload',
+        'Conche Softstarter Without Main Supply Connection Feedback Signal',
+        'Conche Motor Without On Feedback Signal',
+        'Forced Conche Ventilation Overload',
+        'Forced Conche Ventilation Without On Feedback Signal',
+        'Air Heating Fan Overload',
+        'Air Heating Fan Without On Feedback Signal',
+        'Air Heating Resistance Fault',
+        'Air Heating Resistance Without On Feedback Signal',
+        'Conche Air Heating Max Alarm Temperature',
+        'CE6000 Pump Discharge Overload',
+        'CE6000 Pump Discharge Without On Feedback Signal',
+        'Conche Discharge Valve Fault CE_PV1',
+        'Conche Fat Feeding Valve Fault CE_PV2',
+    ];
+
+    protected array $ce_alarm_message_2 = [
+        'Conche Cocoa Feeder Funnel Valve Fault CE_PV3',
+        'Conche Input Water Valve Fault CE_WV1',
+        'Conche Output Water Valve Fault CE_WV2',
+        'Conche Hold Temperature Valve Fault CE_WV3',
+        'Conche Air Heating Temperature Sensor Fault',
+        'Conche Product Temperature Sensor Fault',
+    ];
+
+    public function alarmDb($model, string $property)
+    {
+        foreach($model->{$property} as $key => $alarm) {
+            if($alarm) {
+                $al = Alarm::table($model->device_id)
+                    ->firstOrCreate([
+                        'device_id' => $model->device_id,
+                        'property' => $property,
+                        'property_index' => $key,
+                        'status' => 1
+                    ]);
+                if(is_null($al->started_at)) {
+                    $al->started_at = Carbon::now()->format('Y-m-d H:i:s');
+                }
+                $al->message = $this->{$property}[$key];
+                $al->finished_at = Carbon::now()->format('Y-m-d H:i:s');
+                $al->save();
+            }
+        }
+    }
 }
