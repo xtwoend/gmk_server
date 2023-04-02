@@ -22,7 +22,7 @@ class AlarmController
         $from = Carbon::parse($from)->timezone('Asia/Jakarta');
         $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
-        $model = Alarm::table($device->id);
+        $model = Alarm::table($device->id)->whereBetween('started_at', [$from, $to]);
 
         if($request->has('sortBy')) {
             $column = $request->input('sortBy');
