@@ -27,8 +27,10 @@ Router::delete('/devices/{id}', [DeviceController::class, 'delete']);
 Router::get('/trend/{deviceId}/data', [TrendController::class, 'data']);
 Router::get('/table/{deviceId}/data', [TableController::class, 'dataUnion']);
 Router::get('/table/{deviceId}/export', [TableController::class, 'export']);
-
 Router::get('/mqtt/{deviceId}/log', [MqttLogController::class, 'data']);
+
+Router::get('/alarm/{deviceId}/data', [AlarmController::class, 'data']);
+Router::get('/alarm/{deviceId}/export', [AlarmController::class, 'export']);
 
 Router::get('/favicon.ico', function () {
     return '';
