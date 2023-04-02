@@ -23,7 +23,9 @@
         "hyperf/http-server": "~3.0.0",
         "hyperf/logger": "~3.0.0",
         "hyperf/memory": "~3.0.0",
+        "hyperf/paginator": "^3.0",
         "hyperf/process": "^3.0",
+        "hyperf/resource": "^3.0",
         "ramsey/uuid": "^4.7",
         "xtwoend/hyperf-mqtt-client": "^3.0@dev",
         "xtwoend/hyperf-tinker": "^1.0"
