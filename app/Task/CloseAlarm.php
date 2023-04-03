@@ -9,7 +9,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\Crontab\Annotation\Crontab;
 use Hyperf\Contract\StdoutLoggerInterface;
 
-#[Crontab(name: "CloseAlarm", rule: "* * * * *", callback: "execute", memo: "Close alarm if opened until 1 minutes")]
+#[Crontab(name: "CloseAlarm", rule: "*\/5 * * * * *", callback: "execute", memo: "Close alarm if opened until 1 minutes")]
 class CloseAlarm
 {
     #[Inject]
@@ -17,7 +17,8 @@ class CloseAlarm
 
     public function execute()
     {
-        $this->logger->info(date('Y-m-d H:i:s', time()));
+        $this->logger->info('Crontab alarm runing '. date('Y-m-d H:i:s', time()));
+
         foreach(Device::active()->get() as $device) {
             Alarm::table($device->id)
             ->where('status', 1)
