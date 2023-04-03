@@ -73,7 +73,6 @@ class PanelPkp extends Model
         $date = is_null($date) ? date('Ym'): Carbon::parse($date)->format('Ym');
         $model = new self;
         $tableName = $model->getTable() . "_{$device->id}_{$date}";
-
         if(! Schema::hasTable($tableName)) {
             Schema::create($tableName, function (Blueprint $table) {
                 $table->uuid('id')->primary();
