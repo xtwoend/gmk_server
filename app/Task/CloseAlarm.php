@@ -19,7 +19,10 @@ class CloseAlarm
     {
         $this->logger->info(date('Y-m-d H:i:s', time()));
         foreach(Device::active()->get() as $device) {
-            Alarm::table($device->id)->where('status', 1)->where('finished_at', '<', Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s'))->update([
+            Alarm::table($device->id)
+            ->where('status', 1)
+            ->where('finished_at', '<', Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s'))
+            ->update([
                 'status' => 0
             ]);
         }
