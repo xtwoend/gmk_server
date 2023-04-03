@@ -52,7 +52,12 @@ class PanelPkp extends Model
         'ai_module_9' => 'array',
         'ai_module_10' => 'array',
         'ai_module_11' => 'array',
-        'ai_module_12' => 'array'
+        'ai_module_12' => 'array',
+        'ai_module_13' => 'array',
+        'ai_module_14' => 'array',
+        'ai_module_15' => 'array',
+        'ai_refiner' => 'array',
+        'di_refiner' => 'array'
     ];
 
     /**
@@ -68,7 +73,7 @@ class PanelPkp extends Model
         $date = is_null($date) ? date('Ym'): Carbon::parse($date)->format('Ym');
         $model = new self;
         $tableName = $model->getTable() . "_{$device->id}_{$date}";
-       
+
         if(! Schema::hasTable($tableName)) {
             Schema::create($tableName, function (Blueprint $table) {
                 $table->uuid('id')->primary();
