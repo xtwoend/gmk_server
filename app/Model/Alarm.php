@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Carbon\Carbon;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
@@ -16,8 +17,14 @@ class Alarm extends Model
     protected string $primaryKey = 'id';
     protected string $keyType = 'string';
     public bool $incrementing = false;
+    // protected array $appends = ['duration'];
 
     protected array $guarded = ['id'];
+
+    protected array $casts = [
+        'started_at' => 'datetime',
+        'finised_at' => 'datetime'
+    ];
 
     /**
      * creating
@@ -25,6 +32,14 @@ class Alarm extends Model
     public function creating(Creating $event)
     {
         $this->id = \Ramsey\Uuid\Uuid::uuid4()->toString();
+    }
+
+    /**
+     * get duration attribute
+     */
+    public function getDurationAttribute()
+    {
+        return (isset($this->finished_at) && isset($this->started_at)) ? Carbon::parse($this->finished_at)->diffInSeconds(Carbon::parse($this->started_at)): 0;
     }
     
     /**
