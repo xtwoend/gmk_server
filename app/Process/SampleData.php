@@ -38,8 +38,8 @@ class SampleData extends AbstractProcess
             $jayParsedAry = [
                 "alarm_leepack1" => [
                     false, 
-                    true, 
-                    true, 
+                    false, 
+                    false, 
                     false, 
                     false, 
                     false, 
