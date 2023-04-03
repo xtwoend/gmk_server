@@ -17,7 +17,7 @@ class Alarm extends Model
     protected string $primaryKey = 'id';
     protected string $keyType = 'string';
     public bool $incrementing = false;
-    // protected array $appends = ['duration'];
+    protected array $appends = ['duration'];
 
     protected array $guarded = ['id'];
 
