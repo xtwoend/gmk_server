@@ -29,6 +29,14 @@ class VerificationWithProduct extends Model
     protected array $casts = [];
 
     /**
+     * products
+     */
+    public function products()
+    {
+        return $this->hasMany(ProductRecord::class, 'production_id');
+    }
+
+    /**
      * state
      */
     public function state()

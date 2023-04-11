@@ -50,4 +50,32 @@ trait TraitConnection
             $relation
         );
     }
+
+
+    /**
+     * Define a one-to-many relationship.
+     *
+     * @param string $related
+     * @param string $foreignKey
+     * @param string $localKey
+     * @return \Hyperf\Database\Model\Relations\HasMany
+     */
+    public function hasMany($related, $foreignKey = null, $localKey = null)
+    {
+        $instance = $this->newRelatedInstance($related);
+        
+        // get connection from parent
+        $instance->setConnection(parent::getConnectionName());
+
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        return $this->newHasMany(
+            $instance->newQuery(),
+            $this,
+            $instance->getTable() . '.' . $foreignKey,
+            $localKey
+        );
+    }
 }
