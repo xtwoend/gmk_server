@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Codefication;
 use Hyperf\DbConnection\Model\Model;
 
 /**
  */
 class VerificationWithProduct extends Model
 {
+    use TraitConnection;
+
     /**
      * The table associated with the model.
      */
@@ -25,9 +28,35 @@ class VerificationWithProduct extends Model
      */
     protected array $casts = [];
 
-
-    public static function device()
+    /**
+     * state
+     */
+    public function state()
     {
-        # code...
+        return $this->belongsTo(Codefication::class, 'verification_id', 'code');
+    }
+
+    /**
+     * production
+     */
+    public function production()
+    {
+        return $this->belongsTo(Production::class, 'production_id', 'id'); 
+    }
+
+    /**
+     * 
+     */
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class, 'operator', 'nik'); 
+    }
+
+    /**
+     * 
+     */
+    public function foreman()
+    {
+        return $this->belongsTo(Operator::class, 'foreman', 'nik'); 
     }
 }
