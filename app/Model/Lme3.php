@@ -78,6 +78,7 @@ class Lme3 extends Model
                 $table->float('data8', 15, 10)->nullable();
                 $table->float('data9', 15, 10)->nullable();
                 $table->float('data10', 15, 10)->nullable();
+                $table->tinyInteger('IHM_ST_Moinho_status')->nullable();
                 $table->timestamps();
             });
         }
@@ -101,7 +102,8 @@ class Lme3 extends Model
             'data7' => $data['data7'],
             'data8' => $data['data8'],
             'data9' => $data['data9'],
-            'data10' => $data['data10']
+            'data10' => $data['data10'],
+            'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status']
         ];
     }
 

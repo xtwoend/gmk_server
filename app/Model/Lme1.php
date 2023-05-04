@@ -90,6 +90,10 @@ class Lme1 extends Model
                 $table->float('HMI_LME_ST_MillCurrent', 15, 10)->nullable();
                 $table->float('HMI_LME_ST_InProdPres', 15, 10)->nullable();
                 $table->float('HMI_LME_ST_OutProdTemp', 15, 10)->nullable();
+                $table->tinyInteger('HMI_TK_ST_CoolTkAgit_status')->nullable();
+                $table->tinyInteger('HMI_TK_ST_HoldTkAgit_status')->nullable();
+                $table->tinyInteger('HMI_CE_ST_Conche_status')->nullable();
+                $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
                 $table->timestamps();
             });
         }
@@ -137,7 +141,12 @@ class Lme1 extends Model
             'HMI_CUM_ST_MillSpeed' => $data['HMI_CUM_ST_MillSpeed'],
             'HMI_LME_ST_MillCurrent' => $data['HMI_LME_ST_MillCurrent'],
             'HMI_LME_ST_InProdPres' => $data['HMI_LME_ST_InProdPres'],
-            'HMI_LME_ST_OutProdTemp' => $data['HMI_LME_ST_OutProdTemp']
+            'HMI_LME_ST_OutProdTemp' => $data['HMI_LME_ST_OutProdTemp'],
+
+            'HMI_TK_ST_CoolTkAgit_status' => $data['HMI_TK_ST_CoolTkAgit_status'],
+            'HMI_TK_ST_HoldTkAgit_status' => $data['HMI_TK_ST_HoldTkAgit_status'],
+            'HMI_CE_ST_Conche_status' => $data['HMI_CE_ST_Conche_status'],
+            'HMI_LME_ST_RecirPump_status' => $data['HMI_LME_ST_RecirPump_status'],
         ];
     }
     

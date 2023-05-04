@@ -1,0 +1,23 @@
+{
+    "in_alarm_message_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "in_alarm_message_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "tk_alarm_message_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "tk_alarm_message_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "lme_alarm_message_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "lme_alarm_message_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "HMI_TK_ST_TksTransfPump_Status" : 1,
+    "HMI_LME_ST_MillMotor_Status" : 1,
+    "HMI_LME_ST_FeedingPump_Status" : 1,
+    "HMI_TK_ST_DispTKTemp" : 45.520000457763672,
+    "HMI_TK_ST_HoldTkTemp" : 45.759998321533203,
+    "HMI_LME_ST_FeedPSpeed" : 39.943500518798828,
+    "HMI_TK_ST_DispSpeed" : 194.69999694824219,
+    "HMI_LME_ST_MillCurrent" : 0,
+    "HMI_LME_ST_InProdPres" : 0.73440003395080566,
+    "HMI_LME_ST_OutProdTemp" : 53.389999389648438,
+    "HMI_LME_ST_MillSpeed" : 232.56449890136719,
+    "HMI_TK_ST_DispTkAgit_status" : 1,
+    "HMI_TK_ST_HoldTkAgit_status" : 1,
+    "HMI_LME_ST_RecirPump_status" : 1,
+    "ts" : "2023-05-04T10:24:30.941042"
+}

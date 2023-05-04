@@ -84,6 +84,9 @@ class Lme2 extends Model
                 $table->float('HMI_LME_ST_InProdPres', 15, 10)->nullable();
                 $table->float('HMI_LME_ST_OutProdTemp', 15, 10)->nullable();
                 $table->float('HMI_LME_ST_MillSpeed', 15, 10)->nullable();
+                $table->tinyInteger('HMI_TK_ST_DispTkAgit_status')->nullable();
+                $table->tinyInteger('HMI_TK_ST_HoldTkAgit_status')->nullable();
+                $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
                 $table->timestamps();
             });
         }
@@ -110,7 +113,11 @@ class Lme2 extends Model
             'HMI_LME_ST_MillCurrent' => $data['HMI_LME_ST_MillCurrent'],
             'HMI_LME_ST_InProdPres' => $data['HMI_LME_ST_InProdPres'],
             'HMI_LME_ST_OutProdTemp' => $data['HMI_LME_ST_OutProdTemp'],
-            'HMI_LME_ST_MillSpeed' => $data['HMI_LME_ST_MillSpeed']
+            'HMI_LME_ST_MillSpeed' => $data['HMI_LME_ST_MillSpeed'],
+
+            'HMI_TK_ST_DispTkAgit_status' => $data['HMI_TK_ST_DispTkAgit_status'],
+            'HMI_TK_ST_HoldTkAgit_status' => $data['HMI_TK_ST_HoldTkAgit_status'],
+            'HMI_LME_ST_RecirPump_status' => $data['HMI_LME_ST_RecirPump_status'],
         ];
     }
 

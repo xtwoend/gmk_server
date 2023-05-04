@@ -1,0 +1,18 @@
+{
+    "data1" : 120.36500549316406,
+    "data2" : 0,
+    "data3" : 1.519800066947937,
+    "data4" : 0.78720003366470337,
+    "data5" : 0,
+    "data6" : 20.923000335693359,
+    "data7" : 0,
+    "data8" : 199.904541015625,
+    "data9" : 69.959999084472656,
+    "data10" : 0,
+    "alarm_message_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "alarm_message_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "alarm_message_3" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "alarm_message_4" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "IHM_ST_Moinho_status" : 1,
+    "ts" : "2023-05-04T10:24:03.498708"
+}

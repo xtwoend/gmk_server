@@ -1,0 +1,11 @@
+{
+    "alarm_leepack3" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "mc_run" : false,
+    "mc_stop" : true,
+    "sv_bag" : 4000,
+    "pv_bag" : 541,
+    "sv_filling_speed_rpm" : 2000,
+    "sv_filling_pulse" : 2144,
+    "level_hopper" : 0,
+    "ts" : "2023-05-04T10:23:43.738986"
+}

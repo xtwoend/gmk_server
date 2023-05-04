@@ -11,9 +11,10 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 
 class MetdecReportController
 {
-    public function data($id, RequestInterface $request)
+    public function product($id, RequestInterface $request)
     {
         $rpp = (int) $request->input('rowsPerPage', 25);
+        $production_id = $request->input('production_id', null);
 
         $report = Metdec::findOrFail($id);
         $data   = VerificationWithProduct::on($report->connection)
@@ -25,9 +26,19 @@ class MetdecReportController
                     'products as product_ng' => function($query) {
                         return $query->where('quality_id', 1);
                     }
-                ])
-                ->paginate($rpp);
+                ]);
+
+        if($production_id) {
+            $data = $data->where('production_id', $production_id);
+        }
+        
+        $data = $data->paginate($rpp);
 
         return response(MetdecReportResource::collection($data));
+    }
+
+    public function nonProduct($id, RequestInterface $request)
+    {
+        # code...
     }
 }
