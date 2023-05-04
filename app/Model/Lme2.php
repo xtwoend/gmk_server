@@ -136,7 +136,7 @@ class Lme2 extends Model
         $this->alarmDb($model, 'lme_alarm_message_2');
     }
 
-    protected array $in_alarm_message_1 = [
+    protected array $desc_in_alarm_message_1 = [
         'Cocoa Exhaust Fan Feeder Funnel Overload',
         'Sugar Exhaust Fan Feeder Funnel Without On Feedback Signal',
         'Conche Discharge Valve Fault CE_PV1',
@@ -149,7 +149,7 @@ class Lme2 extends Model
         'Discharge Screew Without On Feedback Signal'
     ];
 
-    protected array $tk_alarm_message_1 = [
+    protected array $desc_tk_alarm_message_1 = [
         'Cooling Tank Agitator Overload',
         'Cooling Tank Agitator Without On Feedback Signal',
         'Cooling Tank Max Alarm Weight',
@@ -168,7 +168,7 @@ class Lme2 extends Model
         'Cooling Tank Valve CTK_WV2 Fault (Output Water Valve)',
     ];
 
-    protected array $tk_alarm_message_2 = [
+    protected array $desc_tk_alarm_message_2 = [
         'Cooling Tank Valve CTK_WV3 Fault (Hold Temperature Water Valve)',
         'Hold Tank Valve HTK_PV1 Fault (Discharge Valve)',
         'Hold Tank Valve CTK_WV1 Fault (Input Water Valve)',
@@ -179,7 +179,7 @@ class Lme2 extends Model
         'Lecithin Dosage Pump Running Without Product',
     ];
 
-    protected array $lme_alarm_message_1 = [
+    protected array $desc_lme_alarm_message_1 = [
         'Recirculation Seal Liquid Pump Overload',
         'Recirculation Seal Liquid Pump Without On Feedback Signal',
         'Seal Liquid Flow Control Fault',
@@ -198,7 +198,7 @@ class Lme2 extends Model
         'Mill LME500 Water Input Valve LME_FV4_OP Fault',
     ];
 
-    protected array $lme_alarm_message_2 = [
+    protected array $desc_lme_alarm_message_2 = [
         'Mill LME500 Water Output Valve LME_FV5_OP Fault',
         'Mill LME500 Water Output Valve LME_FV6_OP Fault',
         'Mill LME500 Recirculation/Discharge Valve LME_PV1 Fault',

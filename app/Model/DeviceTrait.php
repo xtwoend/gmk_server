@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Carbon\Carbon;
 use App\Model\Device;
 use Hyperf\Database\Model\Events\Creating;
 
@@ -21,6 +22,7 @@ trait DeviceTrait
     public function alarmDb($model, string $property)
     {
         foreach($model->{$property} as $key => $alarm) {
+            $alarm = is_bool($alarm)? $alarm : (bool) $alarm;
             if($alarm) {
                 $al = Alarm::table($model->device_id)
                     ->firstOrCreate([
@@ -32,7 +34,8 @@ trait DeviceTrait
                 if(is_null($al->started_at)) {
                     $al->started_at = Carbon::now()->format('Y-m-d H:i:s');
                 }
-                $al->message = $this->{$property}[$key];
+                $alarmCode = "desc_{$property}";
+                $al->message = $this->{$alarmCode}[$key];
                 $al->finished_at = Carbon::now()->format('Y-m-d H:i:s');
                 $al->save();
             }

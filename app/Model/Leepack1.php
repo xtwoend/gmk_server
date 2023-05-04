@@ -47,7 +47,7 @@ class Leepack1 extends Model
      */
     public string $ts = 'ts';
 
-    public array $alarmCode = [
+    public array $desc_alarm_leepack1 = [
         'Air pressure drop',
         'Abnormal temperature',
         'Data limit over',

@@ -150,7 +150,7 @@ class Lme1 extends Model
         ];
     }
     
-    protected array $tk_alarm_message_1 = [
+    protected array $desc_tk_alarm_message_1 = [
         'Cooling Tank Agitator Overload',
         'Cooling Tank Agitator Without On Feedback Signal',
         'Cooling Tank Max Alarm Weight',
@@ -169,7 +169,7 @@ class Lme1 extends Model
         'Cooling Tank Valve CTK_WV2 Fault (Output Water Valve)' 
     ];
 
-    protected array $tk_alarm_message_2 = [
+    protected array $desc_tk_alarm_message_2 = [
         'Cooling Tank Valve CTK_WV3 Fault (Hold Temperature Water Valve)',
         'Hold Tank Valve HTK_PV1 Fault (Discharge Valve)',
         'Hold Tank Valve CTK_WV1 Fault (Input Water Valve)',
@@ -180,12 +180,12 @@ class Lme1 extends Model
         'Lecithin Dosage Pump Running Without Product',
     ];
 
-    protected array $tk_warning_message = [
+    protected array $desc_tk_warning_message = [
         'Cooling Tank Max Warning Weight',
         'Hold Tank Max Warning Weight',
     ];
 
-    protected array $cum_alarm_message_1 = [
+    protected array $desc_cum_alarm_message_1 = [
         'Mill CUM450 Emergency Button Pushed',
         'Mill CUM450 Safety Sensors Screew Feeder Cover',
         'Mill CUM450 Bag Filter Exhaust Fan Overload',
@@ -204,13 +204,13 @@ class Lme1 extends Model
         'Sugar Exhaust Fan Feeder Funnel Without On Feedback Signal'
     ];
 
-    protected array $cum_alarm_message_2 = [
+    protected array $desc_cum_alarm_message_2 = [
         'Circuit Breaker Main Supply Frequency Inverter Screew Feeder OFF',
         'Screew Feeder Inverter Without Main Supply Connection Feedback Signal',
         'Screew Feeder Without On Feedback Signal'
     ];
 
-    protected array $lme_alarm_message_1 = [
+    protected array $desc_lme_alarm_message_1 = [
         'Recirculation Seal Liquid Pump Overload',
         'Recirculation Seal Liquid Pump Without On Feedback Signal',
         'Seal Liquid Flow Control Fault',
@@ -229,14 +229,14 @@ class Lme1 extends Model
         'Mill LME500 Water Input Valve LME_WV1 Fault',
     ];
 
-    protected array $lme_alarm_message_2 = [
+    protected array $desc_lme_alarm_message_2 = [
         'Mill LME500 Water Output Valve LME_WV2 Fault',
         'Mill LME500 Recirculation/Discharge Valve LME_PV1 Fault',
         'Mill LME500 Output Temperature Sensor Fault',
         'Mill LME500 Input Product Pressure Sensor Fault',
     ];
 
-    protected array $ce_alarm_message_1 = [
+    protected array $desc_ce_alarm_message_1 = [
         'Sugar Tank Safety Cover Open',
         'Cocoa Exhaust Fan Feeder Funnel Overload',
         'Sugar Exhaust Fan Feeder Funnel Without On Feedback Signal',
@@ -256,7 +256,7 @@ class Lme1 extends Model
         'Conche Fat Feeding Valve Fault CE_PV2',
     ];
 
-    protected array $ce_alarm_message_2 = [
+    protected array $desc_ce_alarm_message_2 = [
         'Conche Cocoa Feeder Funnel Valve Fault CE_PV3',
         'Conche Input Water Valve Fault CE_WV1',
         'Conche Output Water Valve Fault CE_WV2',

@@ -48,7 +48,7 @@ class Leepack3 extends Model
      */
     public string $ts = 'ts';
 
-    public array $alarmCode = [
+    public array $desc_alarm_leepack3 = [
         'Hopper high,low level',
         'Data range limit over',
         'Target bag completed',
