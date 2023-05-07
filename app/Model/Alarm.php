@@ -44,7 +44,12 @@ class Alarm extends Model
      */
     public function getDurationAttribute()
     {
-        return (isset($this->finished_at) && isset($this->started_at)) ? Carbon::parse($this->finished_at)->diffInSeconds(Carbon::parse($this->started_at)): 0;
+        $duration = (isset($this->finished_at) && isset($this->started_at)) ? Carbon::parse($this->finished_at)->diffInSeconds(Carbon::parse($this->started_at)): 0;
+        if($duration > 0) {
+            return gmdate("H:i:s", $duration);
+        }
+
+        return 0;
     }
     
     /**

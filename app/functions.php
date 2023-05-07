@@ -27,10 +27,11 @@ if( ! function_exists('response')) {
         if ($meta) {
             $payload['meta'] = $meta;
         }
-
+        
         if($data instanceof \Hyperf\Resource\Json\AnonymousResourceCollection || $data instanceof \Hyperf\Resource\Json\ResourceCollection){
             if($data->resource instanceof \Hyperf\Paginator\LengthAwarePaginator) {
-                $payload['meta'] = Arr::except($data->resource->toArray(), [
+                $resource = $data->resource->toArray();
+                $payload['meta'] = Arr::except($resource, [
                     'data',
                     'first_page_url',
                     'last_page_url',

@@ -7,9 +7,8 @@ namespace App\Controller;
 use Carbon\Carbon;
 use App\Model\Alarm;
 use App\Model\Device;
-use App\Resource\TableResource;
+use App\Resource\AlarmResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class AlarmController
 {
@@ -33,8 +32,8 @@ class AlarmController
         }
 
         $model = $model->paginate($rpp);
-
-        return response(TableResource::collection($model));
+    
+        return response(AlarmResource::collection($model));
     }
 
     public function export($deviceId, RequestInterface $request)
