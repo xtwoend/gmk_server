@@ -20,7 +20,7 @@ class MqttLogController
             ->where('device_id', $device->id)
             // ->where('terminal_time', '>=', $date)
             ->limit(200)
-            ->orderBy('terminal_time', 'asc')
+            ->orderBy('terminal_time', 'desc')
             ->get();
 
         return response($data);

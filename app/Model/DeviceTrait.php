@@ -52,7 +52,11 @@ trait DeviceTrait
 
     protected function map(array $data){
         return array_map(function($value){
-            return ($value)? 1: 0;
+            if(is_numeric($value)){
+                 return $value;
+            }else{
+                return ($value)? 1: 0;
+            }
         }, $data); 
     }
 

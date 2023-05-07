@@ -2,7 +2,7 @@
     "di_module_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "di_module_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "di_module_3" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
-    "ai_module_1" : [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+    "ai_module_1" : [ 113, 0, 0, 0, 0, 0, 0, 0 ],
     "ai_module_2" : [ 0, 0, 0, 0, 0, 0, 0, 0 ],
     "ai_module_3" : [ 0, 0, 0, 0, 0, 0, 0, 0 ],
     "ai_module_4" : [ 0, 0, 0, 0, 0, 0, 0, 0 ],
