@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Carbon\Carbon;
 use App\Model\Device;
+use Hyperf\Utils\Arr;
 use Hyperf\DbConnection\Db;
 use App\Resource\TableResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -118,9 +119,19 @@ class TableController
             $dir = $request->input('sortType');
             $rows = $rows->orderBy($column, $dir);
         }
-
+        
         $rows = $rows->paginate($rpp);
+        $data = (new $classModel)->jsonResource($rows->items());
 
-        return response(TableResource::collection($rows));
+        $payload['error'] = 0;
+        $payload['data'] = $data;
+        $payload['meta'] = Arr::except($rows->toArray(), [
+            'data',
+            'first_page_url',
+            'last_page_url',
+            'prev_page_url',
+            'next_page_url',
+        ]);
+        return $payload;
     }
 }
