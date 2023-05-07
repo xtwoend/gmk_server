@@ -6,6 +6,7 @@ namespace App\Model;
 
 use Carbon\Carbon;
 use App\Model\Alarm;
+use Hyperf\DbConnection\Db;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
@@ -101,6 +102,78 @@ class Lme1 extends Model
         return $model->setTable($tableName);
     }
 
+    public function export($device, $request)
+    {
+        $classModel = self::class;
+
+        $from = $request->input('from', Carbon::now()->format('Y-m-d H:i:s'));
+        $to = $request->input('to', Carbon::now()->format('Y-m-d H:i:s'));
+        $interval = $request->input('interval', 60);
+
+        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+
+        $query = [];
+        $fromClone = clone $from;
+        $toClone = clone $to;
+
+        $fromDiff = $from->format("Y-m-01 00:00:00");
+        $toDiff = $to->format("Y-m-01 00:00:00");
+
+
+        $count = Carbon::parse($fromDiff)->diffInMonths(Carbon::parse($toDiff));
+        
+        for($i=0; $i <= $count; $i++) {
+            $tableName = (new $classModel)->table($device, $from)->getTable();
+            $query[] = "
+            (select 
+                (UNIX_TIMESTAMP(ct.terminal_time) * 1000) as unix_time, ct.*
+                from {$tableName} as `ct` 
+                    inner join 
+                    (
+                        SELECT MIN(terminal_time) as times, FLOOR(UNIX_TIMESTAMP(terminal_time)/{$interval}) AS timekey 
+                        FROM {$tableName} 
+                        WHERE terminal_time BETWEEN '{$fromClone->format('Y-m-d H:i:s')}' AND '{$toClone->format('Y-m-d H:i:s')}' 
+                        GROUP BY timekey
+                    ) ctx 
+                    on `ct`.`terminal_time` = `ctx`.`times`)
+            ";
+            $from = $from->addMonth();
+        }
+        $querySql = implode(' UNION ', $query);
+        
+        $rows = Db::table(Db::raw("($querySql order by terminal_time asc) as datalog"));
+
+        if($request->has('sortBy')) {
+            $column = $request->input('sortBy');
+            $dir = $request->input('sortType');
+            $rows = $rows->orderBy($column, $dir);
+        }
+
+        $rows = $rows->get()->toArray();
+
+        $headers =[
+            'terminal_time' => 'Timestamp',
+            'HMI_CE_ST_ConcProdTemp' => 'Conche Product Temperatur(°C)',
+            'HMI_TK_ST_CoolTkTemp' => 'Product CT Temperatur(°C)',
+            'HMI_TK_ST_HoldTkTemp' => 'Product HT Temperatur(°C)',
+            'HMI_LME_ST_FeedPSpeed' => 'LME500 FeedPump Speed (rpm)',
+            'HMI_CUM_ST_MillSpeed' => 'LME 500 Mill Speed (rpm)',
+            'HMI_LME_ST_MillCurrent' => 'LME500 Mill Current (A)',
+            'HMI_LME_ST_InProdPres' => 'LME500 Product Pressure (bar)',
+            'HMI_LME_ST_OutProdTemp' => 'LME500 Product Temperature (°C)',
+            'LME_ST_MillMotor_Status' => 'Mill Motor Status',
+            'TK_ST_TksTransfPump_Status' => 'Transfer Pump Status',
+            'LME_ST_FeedingPump_Status' => 'Feed Pump Status',                
+            'HMI_TK_ST_CoolTkAgit_status' => 'CT Agitator Status',
+            'HMI_TK_ST_HoldTkAgit_status' => 'HT Agitator Status',
+            'HMI_CE_ST_Conche_status' => 'CE Motor Status',
+            'HMI_LME_ST_RecirPump_status' => 'LME Recirc Pump Status'
+        ];
+    
+        return export($headers, $rows, 'report_lme1_'.$from.'-'.$to);
+    }
+    
     /**
      * created
      */

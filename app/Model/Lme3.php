@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Carbon\Carbon;
+use Hyperf\DbConnection\Db;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
@@ -105,6 +106,70 @@ class Lme3 extends Model
             'data10' => $data['data10'],
             'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status']
         ];
+    }
+
+    public function export($device, $request)
+    {
+        $classModel = self::class;
+
+        $from = $request->input('from', Carbon::now()->format('Y-m-d H:i:s'));
+        $to = $request->input('to', Carbon::now()->format('Y-m-d H:i:s'));
+        $interval = $request->input('interval', 60);
+
+        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+
+        $query = [];
+        $fromClone = clone $from;
+        $toClone = clone $to;
+
+        $fromDiff = $from->format("Y-m-01 00:00:00");
+        $toDiff = $to->format("Y-m-01 00:00:00");
+
+
+        $count = Carbon::parse($fromDiff)->diffInMonths(Carbon::parse($toDiff));
+        
+        for($i=0; $i <= $count; $i++) {
+            $tableName = (new $classModel)->table($device, $from)->getTable();
+            $query[] = "
+            (select 
+                (UNIX_TIMESTAMP(ct.terminal_time) * 1000) as unix_time, ct.*
+                from {$tableName} as `ct` 
+                    inner join 
+                    (
+                        SELECT MIN(terminal_time) as times, FLOOR(UNIX_TIMESTAMP(terminal_time)/{$interval}) AS timekey 
+                        FROM {$tableName} 
+                        WHERE terminal_time BETWEEN '{$fromClone->format('Y-m-d H:i:s')}' AND '{$toClone->format('Y-m-d H:i:s')}' 
+                        GROUP BY timekey
+                    ) ctx 
+                    on `ct`.`terminal_time` = `ctx`.`times`)
+            ";
+            $from = $from->addMonth();
+        }
+        $querySql = implode(' UNION ', $query);
+        
+        $rows = Db::table(Db::raw("($querySql order by terminal_time asc) as datalog"));
+
+        if($request->has('sortBy')) {
+            $column = $request->input('sortBy');
+            $dir = $request->input('sortType');
+            $rows = $rows->orderBy($column, $dir);
+        }
+
+        $rows = $rows->get()->toArray();
+
+        $headers =[
+            'terminal_time' => 'Timestamp',
+            'data1' => 'Mill Current (a)',
+            'data3' => 'Mill Inlet Pressure (bar)',
+            'data4' => 'Mill Outlet Pressure (bar)',
+            'data6' => 'Feed Pump Speed (rpm)',
+            'data8' => 'Mill Motor Speed (rpm)',
+            'data9' => 'Product Output Temperature (°C)',
+            'IHM_ST_Moinho_status' => 'Mill Motor Status'
+        ];
+    
+        return export($headers, $rows, 'report_lme2_'.$from.'-'.$to);
     }
 
     /**

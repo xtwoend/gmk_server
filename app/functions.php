@@ -65,7 +65,13 @@ if( ! function_exists('export')) {
             $temp_arr = [];
             $value = json_decode(json_encode($value), true);
             foreach ($head_keys as $key) {
-                $temp_arr[] = $value[$key] ?? '';
+                if(strpos($key, ".") == true) {
+                    $k = explode('.', $key);
+                    $val = $value[$k[0]][$k[1]];
+                }else{
+                    $val = $value[$key] ?? '';
+                }
+                $temp_arr[] = $val;
             }
             $fileData .= implode(',', $temp_arr) . "\n";
         }
