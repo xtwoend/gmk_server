@@ -15,6 +15,8 @@ class MetdecReportController
     {
         $rpp = (int) $request->input('rowsPerPage', 25);
         $production_id = $request->input('production_id', null);
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+        $date = Carbon::parse($date)->format('Y-m-d');
 
         $report = Metdec::findOrFail($id);
         $data   = VerificationWithProduct::on($report->connection)
