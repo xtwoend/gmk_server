@@ -26,4 +26,9 @@ class ProductionRecord extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    public function production()
+    {
+        return $this->belongsTo(Production::class, 'production_id');
+    }
 }

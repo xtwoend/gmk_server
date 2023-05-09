@@ -24,4 +24,24 @@ class ProductionProblem extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    public function production()
+    {
+        return $this->belongsTo(Production::class, 'production_id');
+    }
+
+    public function record()
+    {
+        return $this->belongsTo(ProductRecord::class, 'record_id');
+    }
+
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'operator_id');
+    }
+
+    public function qa()
+    {
+        return $this->belongsTo(User::class, 'qa_id');
+    }
 }

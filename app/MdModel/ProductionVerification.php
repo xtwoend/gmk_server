@@ -51,4 +51,20 @@ class ProductionVerification extends Model
         'started_at' => 'datetime',
         'finished_at' => 'datetime'
     ];
+
+
+    public function production()
+    {
+        return $this->belongsTo(Production::class, 'production_id');
+    }
+
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'operator_id');
+    }
+
+    public function foreman()
+    {
+        return $this->belongsTo(User::class, 'foreman_id');
+    }
 }

@@ -38,4 +38,28 @@ class StartupVerfication extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    /**
+     * date relation startup
+     */
+    public function startup()
+    {
+        return $this->belongsTo(Startup::class, 'startup_id');
+    }
+
+    /**
+     * operator
+     */
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'operator_id');
+    }
+
+    /**
+     * foreman
+     */
+    public function foreman()
+    {
+        return $this->belongsTo(User::class, 'foreman_id');
+    }
 }

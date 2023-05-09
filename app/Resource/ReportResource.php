@@ -4,7 +4,7 @@ namespace App\Resource;
 
 use Hyperf\Resource\Json\JsonResource;
 
-class MetdecReportResource extends JsonResource
+class ReportResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

@@ -25,4 +25,17 @@ class Production extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    /**
+     * startup 
+     */
+    public function startup()
+    {
+        return $this->belongsTo(Startup::class, 'startup_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

@@ -24,4 +24,28 @@ class Startup extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    /**
+     * relation productions
+     */
+    public function productions()
+    {
+        return $this->hasMany(Production::class, 'startup_id');
+    }
+
+    /**
+     * metdect mechine device
+     */
+    public function device()
+    {
+        return $this->belongsTo(Device::class, 'device_id');
+    }
+
+    /**
+     * relation to operator
+     */
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'operator_id');
+    }
 }
