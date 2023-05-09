@@ -15,5 +15,5 @@ use Hyperf\DbConnection\Model\Model as BaseModel;
 
 abstract class Model extends BaseModel
 {
-    protected $connection = 'metdec';
+    protected ?string $connection = 'metdec';
 }
