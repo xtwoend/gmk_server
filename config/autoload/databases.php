@@ -36,10 +36,10 @@ return [
             ],
         ],
     ],
-    'metdec_01' => [
+    'metdec' => [
         'driver' => env('DB_DRIVER', 'mysql'),
         'host' => env('DB_HOST', 'localhost'),
-        'database' => env('DB_MD_01_DATABASE', 'hyperf'),
+        'database' => env('DB_MD_DATABASE', 'hyperf'),
         'port' => env('DB_PORT', 3306),
         'username' => env('DB_USERNAME', 'root'),
         'password' => env('DB_PASSWORD', ''),
