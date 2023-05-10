@@ -75,8 +75,8 @@ class TableController
         $to = $request->input('to', Carbon::now()->format('Y-m-d H:i:s'));
         $interval = $request->input('interval', 60);
 
-        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
-        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+        // $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        // $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
         $classModel = $device->model;
         if(! class_exists($classModel)) {

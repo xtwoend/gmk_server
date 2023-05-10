@@ -20,8 +20,8 @@ class AlarmController
         $from = $request->input('from', Carbon::now()->format('Y-m-d H:i:s'));
         $to = $request->input('to', Carbon::now()->format('Y-m-d H:i:s'));
         
-        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
-        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+        // $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        // $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
         $model = Alarm::table($device->id)->whereBetween('started_at', [$from, $to]);
 

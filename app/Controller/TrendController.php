@@ -19,8 +19,8 @@ class TrendController
         $to = $request->input('to', Carbon::now()->format('Y-m-d H:i:s'));
         $interval = $request->input('interval', 1800);
 
-        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
-        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+        // $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        // $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
         $limit = $request->input('limit', 360);
         $select = $request->input('select', ['*']);
