@@ -12,15 +12,14 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 
 class ReportController
 {
-    public function product($id, RequestInterface $request)
+    public function data($id, RequestInterface $request)
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
         $date = Carbon::parse($date)->format('Y-m-d');
 
         $device = Device::findOrFail($id);
-        $startup = Startup::where('device_id', $device->id)->whereDate('started_at', $date)->first();
+        $startup = Startup::with('device', 'verifications', 'productions', 'productions.product')->where('device_id', $device->id)->whereDate('started_at', $date)->first();
         
-
-        return response(ReportResource::collection($startup));
+        return response(new ReportResource($startup));
     }
 }

@@ -11,7 +11,7 @@ class Startup extends Model
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'startups';
+    protected ?string $table = 'startup';
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +31,11 @@ class Startup extends Model
     public function productions()
     {
         return $this->hasMany(Production::class, 'startup_id');
+    }
+
+    public function verifications()
+    {
+        return $this->hasMany(StartupVerification::class, 'startup_id');
     }
 
     /**

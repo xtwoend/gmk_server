@@ -6,12 +6,12 @@ namespace App\MdModel;
 
 /**
  */
-class StartupVerfication extends Model
+class StartupVerification extends Model
 {
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'startup_verfications';
+    protected ?string $table = 'startup_verifications';
 
     /**
      * type verification
