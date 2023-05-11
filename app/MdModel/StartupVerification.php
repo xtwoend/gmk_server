@@ -17,7 +17,7 @@ class StartupVerification extends Model
      * type verification
      */
     protected array $types = [
-        'Start Up', 'After Mainetenace', 'Break', 'Noise', 'Change Over'
+        'Start Up', 'MD Noise','MD Mainetenace', 'Istirahat Shift 1', 'Istirahat Shift 2', 'Istirahat Shift 3', 'Change Over', 'Verifikasi Perjam', 'Verifikasi Perbatch'
     ];
 
     /**
@@ -34,10 +34,20 @@ class StartupVerification extends Model
         'startup_id', 'started_at', 'finished_at', 'type', 'status', 'fe', 'non_fe', 'ss', 'operator_id', 'foreman_id',  'wor_number', 'remark'
     ];
 
+    protected array $appends = ['type_text'];
+
     /**
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    /**
+     * get type
+     */
+    public function getTypeTextAttribute()
+    {
+        return $this->types[$this->type] ?? '-';
+    }
 
     /**
      * date relation startup

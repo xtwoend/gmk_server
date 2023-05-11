@@ -17,7 +17,15 @@ class ProductionVerification extends Model
      * Types
      */
     protected array $types = [
-        'Hourly', 'Batch', 'Change Over', 'Noise', 'Maintenance'
+        'Start Up', 'MD Noise','MD Mainetenace', 'Istirahat Shift 1', 'Istirahat Shift 2', 'Istirahat Shift 3', 'Change Over', 'Verifikasi Perjam', 'Verifikasi Perbatch'
+    ];
+
+    protected array $orders = [
+        'Verifikasi perjam',
+        'Verifikasi perbatch awal',
+        'Verifikasi perbatch tengah',
+        'Verifikasi perbatch akhir',
+        'Verifikasi perjam terlewat',
     ];
 
     /**
@@ -66,5 +74,15 @@ class ProductionVerification extends Model
     public function foreman()
     {
         return $this->belongsTo(User::class, 'foreman_id');
+    }
+
+    public function good_records()
+    {
+        return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 0);
+    }
+
+    public function ng_records()
+    {
+        return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 1);
     }
 }

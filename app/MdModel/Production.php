@@ -38,4 +38,19 @@ class Production extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function productionVerifications()
+    {
+        return $this->hasMany(ProductionVerification::class, 'production_id');
+    }
+
+    public function good_records()
+    {
+        return $this->hasMany(ProductionRecord::class, 'production_id')->where('status', 0);
+    }
+
+    public function ng_records()
+    {
+        return $this->hasMany(ProductionRecord::class, 'production_id')->where('status', 1);
+    }
 }
