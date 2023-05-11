@@ -21,11 +21,11 @@ class ProductionVerification extends Model
     ];
 
     protected array $orders = [
-        'Verifikasi perjam',
-        'Verifikasi perbatch awal',
-        'Verifikasi perbatch tengah',
-        'Verifikasi perbatch akhir',
-        'Verifikasi perjam terlewat',
+        'Perjam',
+        'Batch awal',
+        'Batch tengah',
+        'Batch akhir',
+        'Perjam terlewat',
     ];
 
     /**
