@@ -38,5 +38,7 @@ class RestApiController
                 'id' => $row['id']
             ], $row);
         }
+
+        return response(['table' => $table, 'count' => count($data)]);
     }
 }
