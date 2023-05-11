@@ -48,7 +48,7 @@ class CloseAlarm
                     ->setPassword($config['password']);
 
                 $mqtt->connect($config, true);
-                $mqtt->publish($topic, json_encode($model->toArray()), 0);
+                $mqtt->publish($topic, json_encode($alarm->toArray()), 0);
                 $mqtt->disconnect();
             }
         }
