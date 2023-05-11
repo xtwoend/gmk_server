@@ -15,7 +15,7 @@ use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class RestApiController
 {
-    public function index($table, RequestInterface $request)
+    public function sync($table, RequestInterface $request)
     {
         if($table == 'startup') {
             $model = new Startup;
@@ -31,6 +31,12 @@ class RestApiController
             $model = new ProductionProblem;
         }
 
-        
+        $data = $request->all();
+            
+        foreach($data as $row) {
+            $model->updateOrCreate([
+                'id' => $row['id']
+            ], $row);
+        }
     }
 }

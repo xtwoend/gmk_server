@@ -13,9 +13,10 @@ use App\Controller\AlarmController;
 use App\Controller\TableController;
 use App\Controller\TrendController;
 use App\Controller\DeviceController;
+use App\Controller\ReportController;
 use Hyperf\HttpServer\Router\Router;
 use App\Controller\MqttLogController;
-use App\Controller\ReportController;
+use App\Controller\RestApiController;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
 
@@ -35,6 +36,8 @@ Router::get('/alarm/{deviceId}/data', [AlarmController::class, 'data']);
 Router::get('/alarm/{deviceId}/export', [AlarmController::class, 'export']);
 
 Router::get('/report/{id}', [ReportController::class, 'data']);
+
+Router::post('/sync/{table}', [RestApiController::class, 'sync']);
 
 Router::get('/favicon.ico', function () {
     return '';
