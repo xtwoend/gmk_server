@@ -36,12 +36,11 @@ class CloseAlarm
                     8 => 'data/gmk/k/lme2/alarm',
                     9 => 'data/gmk/k/lme3/alarm'
                 ];
-                
+
                 $topic = $topics[$device->id] ?? 'data/gmk/k/general';
                 $listen = 'mqtt_1';
                 $config = config('mqtt.servers')[$listen];
                 $clientId = \Hyperf\Utils\Str::random(10);
-                $event = $this->event;
                 $mqtt = new \PhpMqtt\Client\MqttClient($config['host'], $config['port'], $clientId);
                 
                 $config = (new \PhpMqtt\Client\ConnectionSettings)
