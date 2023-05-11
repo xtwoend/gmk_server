@@ -20,12 +20,38 @@ class CloseAlarm
         $this->logger->info('Crontab alarm runing '. date('Y-m-d H:i:s', time()));
 
         foreach(Device::active()->get() as $device) {
-            Alarm::table($device->id)
+            $alarm = Alarm::table($device->id)
             ->where('status', 1)
             ->where('finished_at', '<', Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s'))
-            ->update([
-                'status' => 0
-            ]);
+            ->first();
+
+            if($alarm) {
+                $alarm->update(['status' => 0]);
+
+                $topics = [
+                    1 => 'data/gmk/k/leepack1/alarm',
+                    2 => 'data/gmk/k/leepack2/alarm',
+                    3 => 'data/gmk/k/leepack3/alarm',
+                    7 => 'data/gmk/k/lme1/alarm',
+                    8 => 'data/gmk/k/lme2/alarm',
+                    9 => 'data/gmk/k/lme3/alarm'
+                ];
+                
+                $topic = $topics[$device->id] ?? 'data/gmk/k/general';
+                $listen = 'mqtt_1';
+                $config = config('mqtt.servers')[$listen];
+                $clientId = \Hyperf\Utils\Str::random(10);
+                $event = $this->event;
+                $mqtt = new \PhpMqtt\Client\MqttClient($config['host'], $config['port'], $clientId);
+                
+                $config = (new \PhpMqtt\Client\ConnectionSettings)
+                    ->setUsername($config['username'])
+                    ->setPassword($config['password']);
+
+                $mqtt->connect($config, true);
+                $mqtt->publish($topic, json_encode($model->toArray()), 0);
+                $mqtt->disconnect();
+            }
         }
     }
 }
