@@ -29,9 +29,8 @@ class ReportController
         $productions = ProductionVerification::with('operator', 'foreman', 'production', 'production.product')
             ->withCount(['good_records', 'ng_records'])
             ->whereIn('production_id', $startup->productions->pluck('id')->toArray())
-            ->orderBy('type')
-            ->orderBy('order')
             ->orderBy('started_at')
+            ->orderBy('order')
             ->get();
         
         return response([

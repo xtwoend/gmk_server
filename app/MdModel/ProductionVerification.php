@@ -52,6 +52,8 @@ class ProductionVerification extends Model
         'remark'
     ];
 
+    protected array $appends = ['order_text'];
+
     /**
      * The attributes that should be cast to native types.
      */
@@ -60,6 +62,10 @@ class ProductionVerification extends Model
         'finished_at' => 'datetime'
     ];
 
+    public function getOrderTextAttribute()
+    {
+        return $this->orders[$this->order] ?? '';
+    }
 
     public function production()
     {
