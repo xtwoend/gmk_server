@@ -18,7 +18,7 @@ class CreateScoresTable extends Migration
             $table->tinyInteger('number_of_shift')->default(3);
             $table->tinyInteger('hours_per_shift')->default(8);
             $table->tinyInteger('planned_shutdown_shift')->default(1);
-            $table->float('downtime_loss', 4, 2)->nullable(); // from summary duration alarm
+            $table->float('downtime_loss', 6, 4)->nullable(); // from summary duration alarm
             $table->tinyInteger('ideal_cycle_time_seconds')->default(0);  // in seconds
             $table->integer('total_production')->nullable();
             $table->integer('good_production')->nullable();
