@@ -46,7 +46,7 @@ class Score extends Model
     ];
 
     protected array $appends = [
-        'total_available', 
+        'total_available_time', 
         'planned_shutdown', 
         'scheduled_operating_time', 
         'ideal_cycle_time', 
@@ -98,7 +98,7 @@ class Score extends Model
 
     public function calcAvailability()
     {
-        return $this->getTotalAvailableTimeAttribute() / $this->getOperatingTimeAttribute();
+        return $this->getOperatingTimeAttribute() / $this->getTotalAvailableTimeAttribute();
     }
 
     public function calcPerformance()

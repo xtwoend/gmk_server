@@ -22,10 +22,10 @@ class CreateScoresTable extends Migration
             $table->tinyInteger('ideal_cycle_time_seconds')->default(0);  // in seconds
             $table->integer('total_production')->nullable();
             $table->integer('good_production')->nullable();
-            $table->float('availability', 5, 2)->nullable();
-            $table->float('performance', 5, 2)->nullable();
-            $table->float('quality', 5, 2)->nullable();
-            $table->float('oee', 5, 2)->nullable();
+            $table->float('availability', 5, 4)->nullable();
+            $table->float('performance', 5, 4)->nullable();
+            $table->float('quality', 5, 4)->nullable();
+            $table->float('oee', 5, 4)->nullable();
             $table->timestamps();
         });
     }

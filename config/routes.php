@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 use App\Controller\AlarmController;
+use App\Controller\ScoreController;
 use App\Controller\TableController;
 use App\Controller\TrendController;
 use App\Controller\DeviceController;
@@ -36,6 +37,10 @@ Router::get('/mqtt/{deviceId}/log', [MqttLogController::class, 'data']);
 Router::get('/alarm/{deviceId}/summary', [AlarmController::class, 'summary']);
 Router::get('/alarm/{deviceId}/data', [AlarmController::class, 'data']);
 Router::get('/alarm/{deviceId}/export', [AlarmController::class, 'export']);
+
+// score
+Router::post('/score/{deviceId}', [ScoreController::class, 'store']);
+Router::get('/score/{deviceId}', [ScoreController::class, 'index']);
 
 Router::get('/report/{id}', [ReportController::class, 'data']);
 

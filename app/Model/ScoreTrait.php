@@ -20,17 +20,13 @@ trait ScoreTrait
             'date_score' => $date,
             'device_id' => $model->device_id,
         ], [
-            'number_of_shift' => 3,
-            'hours_per_shift' => 8,
-            'planned_shutdown_shift' => 1,
-            'ideal_cycle_time_seconds' => 30,
-            'total_production' => $model->pv_bag ?: 0,
-            'good_production' => $model->pv_bag ?: 0,
+            // 'number_of_shift' => 3,
+            // 'hours_per_shift' => 8,
+            // 'planned_shutdown_shift' => 1,
+            // 'ideal_cycle_time_seconds' => 30,
+            // 'total_production' => $model->pv_bag ?: 0,
+            // 'good_production' => $model->pv_bag ?: 0,
             'downtime_loss' => $duration > 0 ? $duration / (60 * 60): 0,
-            'availability' => 0,
-            'performance' => 0,
-            'quality' => 0,
-            'oee' => 0
         ]);
 
         $score->update([
