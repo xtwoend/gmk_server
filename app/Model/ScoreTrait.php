@@ -20,7 +20,7 @@ trait ScoreTrait
             
             $score->downtime_loss = $duration > 0 ? $duration / (60 * 60): 0;
             
-            if($model->pv_bag) {
+            if($model->pv_bag > 0) {
                 if($score->total_production < $model->pv_bag) {
                     $score->total_production = $model->pv_bag ?: 0;
                 }
