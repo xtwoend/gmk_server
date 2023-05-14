@@ -28,10 +28,6 @@ class Score extends Model
         'ideal_cycle_time_seconds',
         'total_production',
         'good_production',
-        'availability',
-        'performance',
-        'quality',
-        'oee',
     ];
 
     /**
