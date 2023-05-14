@@ -7,6 +7,7 @@ namespace App\Controller;
 use Carbon\Carbon;
 use App\Model\Alarm;
 use App\Model\Device;
+use Hyperf\DbConnection\Db;
 use App\Resource\AlarmResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
 
@@ -42,5 +43,22 @@ class AlarmController
         $model = Alarm::table($deviceId);
 
         return $model->export($device, $request);
+    }
+
+    public function summary($deviceId, RequestInterface $request)
+    {
+        $date = $request->input('date', Carbon::now()->format('Y-m-d H:i:s'));
+        $date = Carbon::parse($date)->timezone('Asia/Jakarta');
+
+        $rows = Alarm::table($deviceId)
+            ->select(Db::raw("message, SUM(TIMESTAMPDIFF(SECOND, started_at, finished_at)) as seconds, count(message) as message_count"))
+            ->where(Db::raw("YEAR(started_at)"), $date->format('Y'))
+            ->where(Db::raw("MONTH(started_at)"), $date->format('m'))
+            ->groupBy('message')
+            ->orderBy('seconds', 'desc')
+            ->limit(10)
+            ->get();
+       
+        return response($rows);
     }
 }
