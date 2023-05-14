@@ -17,7 +17,7 @@ use Hyperf\Database\Model\Events\Creating;
  */
 class Lme2 extends Model
 {
-    use DeviceTrait, ResourceTrait;
+    use DeviceTrait, ResourceTrait, ScoreTrait;
 
     /**
      * The table associated with the model.
@@ -206,6 +206,8 @@ class Lme2 extends Model
         $this->alarmDb($model, 'tk_alarm_message_2');
         $this->alarmDb($model, 'lme_alarm_message_1');
         $this->alarmDb($model, 'lme_alarm_message_2');
+
+        $this->createScoreDaily($model);
     }
 
     protected array $desc_in_alarm_message_1 = [

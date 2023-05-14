@@ -47,14 +47,14 @@ class AlarmController
 
     public function summary($deviceId, RequestInterface $request)
     {
-        $date = $request->input('date', Carbon::now()->format('Y-m-d H:i:s'));
-        $date = Carbon::parse($date)->timezone('Asia/Jakarta');
+        $year = $request->input('year', Carbon::now()->format('Y'));
+        $month = $request->input('month', Carbon::now()->format('m'));
 
         $rows = Alarm::table($deviceId)
-            ->select(Db::raw("message, SUM(TIMESTAMPDIFF(SECOND, started_at, finished_at)) as seconds, count(message) as message_count"))
-            ->where(Db::raw("YEAR(started_at)"), $date->format('Y'))
-            ->where(Db::raw("MONTH(started_at)"), $date->format('m'))
-            ->groupBy('message')
+            ->select(Db::raw("message, SUM(TIMESTAMPDIFF(SECOND, started_at, finished_at)) as seconds, count(message) as message_count, YEAR(started_at) year, MONTH(started_at) month"))
+            ->where(Db::raw("YEAR(started_at)"), $year)
+            ->where(Db::raw("MONTH(started_at)"), $month + 1)
+            ->groupBy('year', 'month', 'message')
             ->orderBy('seconds', 'desc')
             ->limit(10)
             ->get();

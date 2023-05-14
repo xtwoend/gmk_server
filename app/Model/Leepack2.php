@@ -17,7 +17,7 @@ use Hyperf\Database\Model\Events\Creating;
  */
 class Leepack2 extends Model
 {
-    use DeviceTrait, ResourceTrait;
+    use DeviceTrait, ResourceTrait, ScoreTrait;
 
     /**
      * The table associated with the model.
@@ -134,6 +134,7 @@ class Leepack2 extends Model
         $model = $event->getModel();
        
         $this->alarmDb($model, 'alarm_leepack2');
+        $this->createScoreDaily($model);
     }
     
 
