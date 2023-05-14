@@ -27,11 +27,6 @@ class Alarm extends Model
         'finised_at' => 'datetime'
     ];
 
-    // protected $fillable = [
-    //     'device_id', ''
-    // ];
-
-
     /**
      * creating
      */

@@ -13,6 +13,9 @@ class OEEController
 {
     public function index($deviceId, RequestInterface $request)
     {
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+        $date = Carbon::parse($date)->timezone('Asia/Jakarta');
+        
         return [];
     }
     

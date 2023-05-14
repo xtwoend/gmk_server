@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Hyperf\DbConnection\Model\Model;
+use Hyperf\Database\Model\Events\Created;
+use Hyperf\Database\Model\Events\Updated;
+use Hyperf\Database\Model\Events\Creating;
+use Hyperf\Database\Model\Events\Updating;
 
 /**
  */
@@ -28,6 +32,10 @@ class Score extends Model
         'ideal_cycle_time_seconds',
         'total_production',
         'good_production',
+        'availability',
+        'performance',
+        'quality',
+        'oee'
     ];
 
     /**
@@ -37,14 +45,30 @@ class Score extends Model
         'date_score' => 'date'
     ];
 
-    public function getScheduledOperatingTimeAttribute()
-    {
-        return ($this->number_of_shift * $this->hours_per_shift) - ($this->number_of_shift * $this->planned_shutdown_shift);
-    }
+    protected array $appends = [
+        'total_available', 
+        'planned_shutdown', 
+        'scheduled_operating_time', 
+        'ideal_cycle_time', 
+        'operating_time',
+        'effective_operating_time',
+        'speed_loss',
+        'production_reject',
+    ];
 
     public function getTotalAvailableTimeAttribute()
     {
         return ($this->number_of_shift * $this->hours_per_shift);
+    }
+
+    public function getPlannedShutdownAttribute()
+    {
+        return ($this->number_of_shift * $this->planned_shutdown_shift);
+    }
+
+    public function getScheduledOperatingTimeAttribute()
+    {
+        return $this->getTotalAvailableTimeAttribute() - $this->getPlannedShutdownAttribute();
     }
 
     public function getIdealCycleTimeAttribute()
@@ -54,12 +78,17 @@ class Score extends Model
 
     public function getOperatingTimeAttribute()
     {
-        return (($this->number_of_shift * $this->hours_per_shift) - ($this->number_of_shift * $this->planned_shutdown_shift)) - $this->downtime_loss;
+        return $this->getScheduledOperatingTimeAttribute() - $this->downtime_loss;
     }
     
     public function getEffectiveOperatingTimeAttribute()
     {
-        return ($this->ideal_cycle_time_seconds / (60 * 60)) * $this->total_production;
+        return $this->getIdealCycleTimeAttribute() * $this->total_production;
+    }
+
+    public function getSpeedLossAttribute()
+    {
+        return $this->getOperatingTimeAttribute() - $this->getEffectiveOperatingTimeAttribute();
     }
 
     public function getProductionRejectAttribute()
@@ -67,26 +96,26 @@ class Score extends Model
         return ($this->total_production - $this->good_production);
     }
 
-    public function getAvailabilityAttribute()
+    public function calcAvailability()
     {
-        return ($this->number_of_shift * $this->hours_per_shift) / ((($this->number_of_shift * $this->hours_per_shift) - ($this->number_of_shift * $this->planned_shutdown_shift)) - $this->downtime_loss);
+        return $this->getTotalAvailableTimeAttribute() / $this->getOperatingTimeAttribute();
     }
 
-    public function getPerformanceAttribute()
+    public function calcPerformance()
     {
-        return (($this->ideal_cycle_time_seconds / (60 * 60)) * $this->total_production) / ((($this->number_of_shift * $this->hours_per_shift) - ($this->number_of_shift * $this->planned_shutdown_shift)) - $this->downtime_loss);
+        return ($this->getIdealCycleTimeAttribute() * $this->total_production) / $this->getOperatingTimeAttribute();
     }
 
-    public function getQualityAttribute()
+    public function calcQuality()
     {
-        return ($this->good_production / $this->total_total_production);
+        return $this->total_production > 0 ? ($this->good_production / $this->total_production): 0;
     }
 
-    public function getOeeAttribute()
+    public function calcOee()
     {
-        $a = ($this->number_of_shift * $this->hours_per_shift) / ((($this->number_of_shift * $this->hours_per_shift) - ($this->number_of_shift * $this->planned_shutdown_shift)) - $this->downtime_loss);
-        $p = (($this->ideal_cycle_time_seconds / (60 * 60)) * $this->total_production) / ((($this->number_of_shift * $this->hours_per_shift) - ($this->number_of_shift * $this->planned_shutdown_shift)) - $this->downtime_loss);
-        $q = ($this->total_total_production / $this->good_production);
+        $a = $this->calcAvailability();
+        $p = $this->calcPerformance();
+        $q = $this->calcQuality();
         return $a * $p * $q;
     }
     

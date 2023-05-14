@@ -15,9 +15,9 @@ trait ScoreTrait
         $duration = Alarm::table($model->device_id)
             ->whereDate('started_at', $date)
             ->sum(Db::raw("TIMESTAMPDIFF(SECOND, started_at, finished_at)"));
-
+        
         $score = Score::updateOrCreate([
-            'date_score' => Carbon::now()->format('Y-m-d'),
+            'date_score' => $date,
             'device_id' => $model->device_id,
         ], [
             'number_of_shift' => 3,
@@ -26,7 +26,18 @@ trait ScoreTrait
             'ideal_cycle_time_seconds' => 30,
             'total_production' => $model->pv_bag ?: 0,
             'good_production' => $model->pv_bag ?: 0,
-            'downtime_loss' => $duration / (60 * 60),
+            'downtime_loss' => $duration > 0 ? $duration / (60 * 60): 0,
+            'availability' => 0,
+            'performance' => 0,
+            'quality' => 0,
+            'oee' => 0
+        ]);
+
+        $score->update([
+            'availability' => $score->calcAvailability(),
+            'performance' => $score->calcPerformance(),
+            'quality' => $score->calcQuality(),
+            'oee' => $score->calcOee()
         ]);
     }
 }
