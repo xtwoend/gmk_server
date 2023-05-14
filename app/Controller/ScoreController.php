@@ -36,4 +36,17 @@ class ScoreController
         }
         return \response($score);
     }
+
+    public function history($deviceId, RequestInterface $request)
+    {
+        $from = $request->input('from', Carbon::now()->format('Y-m-d'));
+        $to = $request->input('to', Carbon::now()->format('Y-m-d'));
+
+        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+
+        $rows = Score::where('device_id', $deviceId)->whereBetween('date_score', [$from, $to])->get();
+
+        return response(ReportResource::collection($rows));
+    }
 }
