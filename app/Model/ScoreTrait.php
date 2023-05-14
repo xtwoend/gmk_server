@@ -15,25 +15,52 @@ trait ScoreTrait
         $duration = Alarm::table($model->device_id)
             ->whereDate('started_at', $date)
             ->sum(Db::raw("TIMESTAMPDIFF(SECOND, started_at, finished_at)"));
-        
-        $score = Score::updateOrCreate([
-            'date_score' => $date,
-            'device_id' => $model->device_id,
-        ], [
-            // 'number_of_shift' => 3,
-            // 'hours_per_shift' => 8,
-            // 'planned_shutdown_shift' => 1,
-            // 'ideal_cycle_time_seconds' => 30,
-            // 'total_production' => $model->pv_bag ?: 0,
-            // 'good_production' => $model->pv_bag ?: 0,
-            'downtime_loss' => $duration > 0 ? $duration / (60 * 60): 0,
-        ]);
+        $score = Score::where('date_score', $date)->where('device_id', $model->device_id)->first();
+        if($score){
+            
+            $score->downtime_loss = $duration > 0 ? $duration / (60 * 60): 0;
+            
+            if($model->pv_bag) {
+                if($score->total_production < $model->pv_bag) {
+                    $score->total_production = $model->pv_bag ?: 0;
+                }
 
-        $score->update([
-            'availability' => $score->calcAvailability(),
-            'performance' => $score->calcPerformance(),
-            'quality' => $score->calcQuality(),
-            'oee' => $score->calcOee()
-        ]);
+                if($score->good_production < $model->pv_bag) {
+                    $score->good_production = $model->pv_bag ?: 0;
+                }
+            }
+
+            $score->availability = $score->calcAvailability();
+            $score->performance  = $score->calcPerformance();
+            $score->quality = $score->calcQuality();
+            $score->oee = $score->calcOee();
+            $score->save();
+
+        }else{
+            $score = Score::create([
+                'number_of_shift' => 3,
+                'hours_per_shift' => 8,
+                'planned_shutdown_shift' => 1,
+                'ideal_cycle_time_seconds' => 30,
+                'total_production' => $model->pv_bag ?: 0,
+                'good_production' => $model->pv_bag ?: 0,
+                'downtime_loss' => $duration > 0 ? $duration / (60 * 60): 0,
+            ]);
+        }
+
+        // $score = Score::updateOrCreate([
+        //     'date_score' => $date,
+        //     'device_id' => $model->device_id,
+        // ], [
+        //     'number_of_shift' => 3,
+        //     'hours_per_shift' => 8,
+        //     'planned_shutdown_shift' => 1,
+        //     'ideal_cycle_time_seconds' => 30,
+        //     'total_production' => $model->pv_bag ?: 0,
+        //     'good_production' => $model->pv_bag ?: 0,
+        //     'downtime_loss' => $duration > 0 ? $duration / (60 * 60): 0,
+        // ]);
+
+        
     }
 }
