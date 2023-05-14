@@ -96,6 +96,18 @@ class Alarm extends Model
     }
 
     /**
+     * get duration in hours
+     */
+    public function getDurationInMinuteAttribute()
+    {
+        $duration = (isset($this->finished_at) && isset($this->started_at)) ? Carbon::parse($this->finished_at)->diffInSeconds(Carbon::parse($this->started_at)): 0;
+        if($duration > 0) {
+            return (float) $duration / 60;
+        }
+        return 0;
+    }
+
+    /**
      * relation to device
      */
     public function device()
