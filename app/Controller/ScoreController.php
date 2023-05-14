@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Carbon\Carbon;
 use App\Model\Score;
+use App\Resource\ReportResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
 
 class ScoreController
