@@ -44,6 +44,7 @@ Router::post('/score/{deviceId}', [ScoreController::class, 'store']);
 Router::get('/score/{deviceId}', [ScoreController::class, 'index']);
 
 Router::get('/report/{id}', [ReportController::class, 'data']);
+Router::get('/report/{id}/export', [ReportController::class, 'export']);
 
 Router::post('/sync/{table}', [RestApiController::class, 'sync']);
 

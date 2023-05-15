@@ -27,6 +27,7 @@
         "hyperf/paginator": "^3.0",
         "hyperf/process": "^3.0",
         "hyperf/resource": "^3.0",
+        "phpoffice/phpspreadsheet": "^1.28",
         "ramsey/uuid": "^4.7",
         "xtwoend/hyperf-mqtt-client": "^3.0@dev",
         "xtwoend/hyperf-tinker": "^1.0"
