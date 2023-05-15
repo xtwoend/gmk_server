@@ -129,7 +129,7 @@ class ReportController
 
         $sheet->getStyle('B15:W'.$j)->applyFromArray($styleArray);
 
-        $path = BASE_PATH . '/' . $fileName;
+        $path = BASE_PATH . '/runtime/' . $fileName;
         $writer = new Xlsx($spreadsheet);
         $writer->save($path);
 
