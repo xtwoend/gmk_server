@@ -37,7 +37,21 @@ trait ScoreTrait
             $score->save();
 
         }else{
+            /**
+             * (Shift 1 = 06.00 sd 14.00)
+             * (Shift 2 = 14.00 sd 21.00)
+             * (Shift 3 = 21.00 sd 06.00)
+             */
+            $hour = Carbon::now()->format('G');
+            $shift = 1;
+            if($hour >= 14 && $hour <= 21) {
+                $shift = 2;
+            }elseif($hour >= 21 && $hour <= 23 || $hour >= 0 && $hour <= 6) {
+                $shift = 3;
+            }
+
             $score = Score::create([
+                'shift' => $shift,
                 'number_of_shift' => 3,
                 'hours_per_shift' => 8,
                 'planned_shutdown_shift' => 1,

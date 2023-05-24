@@ -14,6 +14,7 @@ class CreateScoresTable extends Migration
         Schema::create('scores', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('device_id');
+            $table->integer('shift')->nullable(); // shift 1, 2, 3
             $table->date('date_score');
             $table->tinyInteger('number_of_shift')->default(3);
             $table->tinyInteger('hours_per_shift')->default(8);

@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\ApplicationContext;
@@ -85,5 +86,24 @@ if( ! function_exists('export')) {
             ->withHeader('content-transfer-encoding', 'binary')
             ->withHeader('pragma', 'public')
             ->withBody(new SwooleStream($fileData));
+    }
+}
+
+if(! function_exists('shift')) {
+    function shift($date = null) {
+        $date = $date ?: Carbon::now()->format('Y-m-d H:i:s');
+        /**
+         * (Shift 1 = 06.00 sd 14.00)
+         * (Shift 2 = 14.00 sd 21.00)
+         * (Shift 3 = 21.00 sd 06.00)
+         */
+        $hour = Carbon::now()->format('G');
+        $shift = 1;
+        if($hour >= 14 && $hour <= 21) {
+            $shift = 2;
+        }elseif($hour >= 21 && $hour <= 23 || $hour >= 0 && $hour <= 6) {
+            $shift = 3;
+        }
+        return $shift;
     }
 }
