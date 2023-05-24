@@ -27,7 +27,6 @@ Router::post('/devices', [DeviceController::class, 'store']);
 Router::put('/devices/{id}', [DeviceController::class, 'update']);
 Router::delete('/devices/{id}', [DeviceController::class, 'delete']);
 
-
 Router::get('/trend/{deviceId}/data', [TrendController::class, 'data']);
 Router::get('/table/{deviceId}/data', [TableController::class, 'dataUnion']);
 Router::get('/table/{deviceId}/export', [TableController::class, 'export']);
@@ -43,9 +42,15 @@ Router::get('/score/{deviceId}/history', [ScoreController::class, 'history']);
 Router::post('/score/{deviceId}', [ScoreController::class, 'store']);
 Router::get('/score/{deviceId}', [ScoreController::class, 'index']);
 
+// score setting
+Router::get('/setting/score/{id}', [ScoreController::class, 'getSetting']);
+Router::post('/setting/score/{id}', [ScoreController::class, 'setting']);
+
+// report
 Router::get('/report/{id}', [ReportController::class, 'data']);
 Router::get('/report/{id}/export', [ReportController::class, 'export']);
 
+// sync 
 Router::post('/sync/{table}', [RestApiController::class, 'sync']);
 
 Router::get('/favicon.ico', function () {
