@@ -134,7 +134,7 @@ class Leepack1 extends Model
         $model = $event->getModel();
        
         $this->alarmDb($model, 'alarm_leepack1');
-        $this->createScoreDaily($model);
+        $this->createScoreShift($model);
     }
 
 

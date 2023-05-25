@@ -80,8 +80,8 @@ class Lme1 extends Model
                 $table->text('lme_alarm_message_2')->nullable();
                 $table->text('ce_alarm_message_1')->nullable();
                 $table->text('ce_alarm_message_2')->nullable();
-                $table->tinyInteger('TK_ST_TksTransfPump_Status')->nullable();
-                $table->tinyInteger('LME_ST_MillMotor_Status')->nullable();
+                $table->tinyInteger('TK_ST_TksTransfPump_Status')->nullable(); // untuk acuan downtime loss jika nilai 0 mulai menghitung durasi
+                $table->tinyInteger('LME_ST_MillMotor_Status')->nullable(); // untuk acuan downtime loss jika nilai 0 mulai menghitung durasi
                 $table->tinyInteger('LME_ST_FeedingPump_Status')->nullable();
                 $table->float('HMI_CE_ST_ConcProdTemp', 15, 10)->nullable();
                 $table->float('HMI_TK_ST_CoolTkTemp', 15, 10)->nullable();
