@@ -88,6 +88,7 @@ class Lme2 extends Model
                 $table->tinyInteger('HMI_TK_ST_DispTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_TK_ST_HoldTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
+                $table->float('HMI_LME_SP_MillAutSpeed', 15, 10)->nullable();
                 $table->float('performance_per_minutes')->nullable();
                 $table->timestamps();
             });
@@ -120,6 +121,9 @@ class Lme2 extends Model
             'HMI_TK_ST_DispTkAgit_status' => $data['HMI_TK_ST_DispTkAgit_status'],
             'HMI_TK_ST_HoldTkAgit_status' => $data['HMI_TK_ST_HoldTkAgit_status'],
             'HMI_LME_ST_RecirPump_status' => $data['HMI_LME_ST_RecirPump_status'],
+
+            'HMI_LME_SP_MillAutSpeed' => $data['HMI_LME_SP_MillAutSpeed'],
+            'performance_per_minutes' => ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed'])
         ];
     }
 

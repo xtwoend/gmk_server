@@ -95,7 +95,8 @@ class Lme1 extends Model
                 $table->tinyInteger('HMI_TK_ST_HoldTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_CE_ST_Conche_status')->nullable();
                 $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
-                $table->float('performance_per_minutes')->nullable();
+                $table->float('HMI_LME_SP_MillPAutSpd', 15, 10)->nullable();
+                $table->float('performance_per_minutes', 15, 10)->nullable();
                 $table->timestamps();
             });
         }
@@ -223,6 +224,9 @@ class Lme1 extends Model
             'HMI_TK_ST_HoldTkAgit_status' => $data['HMI_TK_ST_HoldTkAgit_status'],
             'HMI_CE_ST_Conche_status' => $data['HMI_CE_ST_Conche_status'],
             'HMI_LME_ST_RecirPump_status' => $data['HMI_LME_ST_RecirPump_status'],
+
+            'HMI_LME_SP_MillPAutSpd' => $data['HMI_LME_SP_MillPAutSpd'],
+            'performance_per_minutes' => ($data['HMI_CUM_ST_MillSpeed'] / $data['HMI_LME_SP_MillPAutSpd'])
         ];
     }
     

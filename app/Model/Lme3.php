@@ -80,7 +80,8 @@ class Lme3 extends Model
                 $table->float('data9', 15, 10)->nullable();
                 $table->float('data10', 15, 10)->nullable();
                 $table->tinyInteger('IHM_ST_Moinho_status')->nullable();
-                $table->float('performance_per_minutes')->nullable();
+                $table->float('SP_LME3_Mill_Speed', 15, 10)->nullable();
+                $table->float('performance_per_minutes', 15, 10)->nullable();
                 $table->timestamps();
             });
         }
@@ -105,7 +106,9 @@ class Lme3 extends Model
             'data8' => $data['data8'],
             'data9' => $data['data9'],
             'data10' => $data['data10'],
-            'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status']
+            'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status'],
+            'SP_LME3_Mill_Speed' => $data['SP_LME3_Mill_Speed'],
+            'performance_per_minutes' => ($data['data8'] / $data['SP_LME3_Mill_Speed'])
         ];
     }
 
