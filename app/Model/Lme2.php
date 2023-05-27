@@ -88,6 +88,7 @@ class Lme2 extends Model
                 $table->tinyInteger('HMI_TK_ST_DispTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_TK_ST_HoldTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
+                $table->float('performance_per_minutes')->nullable();
                 $table->timestamps();
             });
         }

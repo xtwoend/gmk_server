@@ -97,12 +97,16 @@ if(! function_exists('shift')) {
          * (Shift 2 = 14.00 sd 21.00)
          * (Shift 3 = 21.00 sd 06.00)
          */
-        $hour = Carbon::now()->format('G');
-        $shift = 1;
-        if($hour >= 14 && $hour <= 21) {
-            $shift = 2;
-        }elseif($hour >= 21 && $hour <= 23 || $hour >= 0 && $hour <= 6) {
-            $shift = 3;
+        $hour = Carbon::parse($date)->format('G');
+        
+        $shifts = Shift::all();
+        $shift = $shifts->where('id', 3)->first();
+        $shift_1 = $shifts->where('id', 1)->first();
+        $shift_2 = $shifts->where('id', 2)->first();
+        if($hour >= $shift_1->started_at && $hour < $shift_1->ended_at) {
+            $shift = $shift_1;
+        }elseif($hour >= $shift_2->started_at && $hour < $shift_2->ended_at) {
+            $shift = $shift_2;
         }
         return $shift;
     }

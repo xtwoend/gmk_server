@@ -80,6 +80,7 @@ class Lme3 extends Model
                 $table->float('data9', 15, 10)->nullable();
                 $table->float('data10', 15, 10)->nullable();
                 $table->tinyInteger('IHM_ST_Moinho_status')->nullable();
+                $table->float('performance_per_minutes')->nullable();
                 $table->timestamps();
             });
         }
