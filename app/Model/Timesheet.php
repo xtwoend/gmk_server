@@ -15,13 +15,19 @@ class Timesheet extends Model
      */
     protected ?string $table = 'timesheets';
 
+    protected array $status = ['run', 'idle', 'breakdown'];
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = [];
+    protected array $fillable = [
+        'score_id', 'started_at', 'ended_at', 'output', 'reject', 'ppm', 'status'
+    ];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = [];
+    protected array $casts = [
+        'started_at' => 'datetime:Y-m-d H:i:s',
+        'ended_at' => 'datetime:Y-m-d H:i:s',
+    ];
 }
