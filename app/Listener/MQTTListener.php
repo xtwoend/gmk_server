@@ -53,8 +53,8 @@ class MQTTListener implements ListenerInterface
         $last = $model->orderBy('terminal_time', 'desc')->first();
         $now = Carbon::parse($date);
 
-        // save interval 10 detik
-        if($last && $now->diffInSeconds($last->terminal_time) < config('mqtt.interval_save', 10) ) {   
+        // save interval 60 detik
+        if($last && $now->diffInSeconds($last->terminal_time) < config('mqtt.interval_save', 60) ) {   
             return;
         }
 

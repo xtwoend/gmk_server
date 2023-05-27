@@ -37,7 +37,7 @@ class MQTTReceiver extends AbstractProcess
             $mqtt->subscribe($device->topic, function ($topic, $message) use ($logger, $event, $device) {
                 $data = (new Extractor($message))->toArray();
                 $event->dispatch(new MQTTReceived($data, $message, $topic, $device));
-                $logger->info('Received Topic: '. $topic);
+                // $logger->info('Received Topic: '. $topic);
             }, 0);
         }
 

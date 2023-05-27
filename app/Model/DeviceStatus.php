@@ -18,7 +18,9 @@ class DeviceStatus extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = [];
+    protected array $fillable = [
+        'device_id', 'shift_id', 'started_at', 'ended_at', 'type'
+    ];
 
     /**
      * The attributes that should be cast to native types.

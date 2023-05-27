@@ -194,6 +194,7 @@ class Lme1 extends Model
         $this->alarmDb($model, 'ce_alarm_message_2');
         
         $this->createScoreDaily($model);
+        $this->setLossesTime($model, 'LME_ST_MillMotor_Status');
     }
 
     public function format(array $data)

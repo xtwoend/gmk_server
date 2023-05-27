@@ -17,7 +17,7 @@ class CreateDeviceStatusTable extends Migration
             $table->unsignedBigInteger('shift_id')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ended_at')->nullable();
-            $table->tinyInteger('type')->default(0); // 0: machine stop, 1: machine running
+            $table->tinyInteger('status')->default(0); // 0: machine stop, 1: machine running
             $table->timestamps();
         });
     }

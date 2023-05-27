@@ -5,6 +5,7 @@ namespace App\Model;
 use Carbon\Carbon;
 use App\Model\Alarm;
 use App\Model\Score;
+use App\Model\DeviceStatus;
 use Hyperf\DbConnection\Db;
 
 trait ScoreTrait
@@ -105,6 +106,38 @@ trait ScoreTrait
                 'total_production' => $model->pv_bag ?: 0,
                 'good_production' => $model->pv_bag ?: 0,
                 'downtime_loss' => $duration > 0 ? $duration / (60 * 60): 0,
+            ]);
+        }
+    }
+
+    public function setLossesTime($model, $attribute, $shift = null)
+    {
+        $value = $model->$attribute ?: 0;
+
+        $status = DeviceStatus::where([
+            'device_id', $model->device_id,
+            'shift_id' => $shift,
+            'status' => 0,
+        ])->first();
+
+        if($status && ! $value) {
+            $status->update([
+                'ended_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+        }
+
+        if(! $value && ! $status) {
+            DeviceStatus::create([
+                'device_id', $model->device_id,
+                'shift_id' => $shift,
+                'status' => 0,
+                'started_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+        }
+
+        if($value && $status)  {
+            $status->update([
+                'status' => 1
             ]);
         }
     }
