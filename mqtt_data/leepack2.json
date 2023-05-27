@@ -1,13 +1,13 @@
 {
-    "alarm_leepack2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false ],
-    "mc_run" : true,
-    "mc_stop" : false,
-    "sv_speed_bpm" : 23,
-    "pv_speed_bpm" : 23,
+    "alarm_leepack2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
+    "mc_run" : false,
+    "mc_stop" : true,
+    "sv_speed_bpm" : 14,
+    "pv_speed_bpm" : 0,
     "sv_bag" : 0,
-    "pv_bag" : 1092,
-    "sv_filling_speed_rpm" : 2300,
+    "pv_bag" : 184,
+    "sv_filling_speed_rpm" : 2400,
     "pv_filling_speed_rpm" : 0,
-    "level_hopper" : 72,
-    "ts" : "2023-05-04T10:24:13.991505"
+    "level_hopper" : 76,
+    "ts" : "2023-05-27T15:32:56.399762"
 }

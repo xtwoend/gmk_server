@@ -188,8 +188,7 @@ class Lme3 extends Model
         $this->alarmDb($model, 'alarm_message_3');
         $this->alarmDb($model, 'alarm_message_4');
 
-        $this->createScoreDaily($model);
-        $this->setLossesTime($model, 'IHM_ST_Moinho_status');
+        $score = $this->createScoreDaily($model);
     }
 
     protected array $desc_alarm_message_1 = [

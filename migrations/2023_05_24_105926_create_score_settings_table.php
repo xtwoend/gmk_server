@@ -18,8 +18,7 @@ class CreateScoreSettingsTable extends Migration
             $table->tinyInteger('hours_per_shift')->default(8);
             $table->tinyInteger('planned_shutdown_shift')->default(1);
             $table->tinyInteger('ideal_cycle_time_seconds')->default(0);  // in seconds
-            $table->integer('total_production')->nullable();
-            $table->integer('good_production')->nullable();
+            $table->integer('production_plan')->nullable();
             $table->timestamps();
         });
     }

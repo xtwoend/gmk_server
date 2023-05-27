@@ -2,7 +2,7 @@
 
 return [
     'default' => 'mqtt_1',
-    'interval_save' => 60,
+    'interval_save' => 5,
     'servers' => [
         'mqtt_1' => [
             'host' => env('MQTT1_HOST', 'broker.hivemq.com'),

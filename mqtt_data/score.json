@@ -1,0 +1,45 @@
+{
+    "response_code": 0,
+    "message": "success",
+    "data": {
+        "id": 7134,
+        "deviceId": 1,
+        "device": {
+            "id": 1,
+            "name": "BL1",
+            "ppm": 4,
+            "pmHour": null,
+            "runMinutes": null,
+            "outputMultiplier": null
+        },
+        "userId": 24,
+        "user": {
+            "id": 24,
+            "username": "imam",
+            "fullname": "Imam Hilmanto",
+            "roleId": 0,
+            "role": {
+                "id": 0,
+                "name": ""
+            },
+            "token": ""
+        },
+        "productionDate": "2023-05-23",
+        "shift": 1,
+        "startTime": "06:00:00",
+        "endTime": "14:00:00",
+        "ppm": 4,
+        "shiftTime": 480,
+        "stopTime": 0,
+        "runTime": 404,
+        "downTime": 76,
+        "output": 1035,
+        "reject": 0,
+        "availability": 0.84166664,
+        "performance": 0.7319661,
+        "quality": 1,
+        "oee": 0.6160714,
+        "createdAt": "2023-05-23T06:00:16Z",
+        "updatedAt": "2023-05-23T06:00:16Z"
+    }
+}

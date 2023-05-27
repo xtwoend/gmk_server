@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Timesheet;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Model\Events\Created;
 use Hyperf\Database\Model\Events\Updated;
@@ -24,14 +25,17 @@ class Score extends Model
      */
     protected array $fillable = [
         'device_id',
-        'date_score',
-        'number_of_shift',
-        'hours_per_shift',
-        'planned_shutdown_shift',
-        'downtime_loss', // from summary duration alarm
-        'ideal_cycle_time_seconds',
-        'total_production',
-        'good_production',
+        'shift_id',
+        'user_id',
+        'production_date',
+        'started_at',
+        'ended_at',
+        'ppm',
+        'run_time',
+        'stop_time',
+        'down_time',
+        'output',
+        'reject',
         'availability',
         'performance',
         'quality',
@@ -42,19 +46,24 @@ class Score extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [
-        'date_score' => 'date:Y-m-d'
+        'production_date' => 'date:Y-m-d'
     ];
 
     protected array $appends = [
-        'total_available_time', 
-        'planned_shutdown', 
-        'scheduled_operating_time', 
-        'ideal_cycle_time', 
-        'operating_time',
-        'effective_operating_time',
-        'speed_loss',
-        'production_reject',
+        // 'total_available_time', 
+        // 'planned_shutdown', 
+        // 'scheduled_operating_time', 
+        // 'ideal_cycle_time', 
+        // 'operating_time',
+        // 'effective_operating_time',
+        // 'speed_loss',
+        // 'production_reject',
     ];
+
+    public function timesheets()
+    {
+        return $this->hasMany(Timesheet::class, 'score_id');
+    }
 
     public function getTotalAvailableTimeAttribute()
     {

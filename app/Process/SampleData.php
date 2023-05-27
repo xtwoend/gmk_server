@@ -33,6 +33,8 @@ class SampleData extends AbstractProcess
             ->setPassword($config['password']);
 
         $mqtt->connect($config, true);
+
+        $leepack1 = file_get_contents(BASE_PATH . '/mqtt_data/leepack1.json');
         $leepack2 = file_get_contents(BASE_PATH . '/mqtt_data/leepack2.json');
         $leepack3 = file_get_contents(BASE_PATH . '/mqtt_data/leepack3.json');
         $lme1 = file_get_contents(BASE_PATH . '/mqtt_data/lme1.json');
@@ -41,49 +43,10 @@ class SampleData extends AbstractProcess
         $pku1 = file_get_contents(BASE_PATH . '/mqtt_data/pku1.json');
         
         while (true) {
-            $jayParsedAry = [
-                "alarm_leepack1" => [
-                    false, 
-                    true, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false, 
-                    false 
-                ], 
-                "mc_run" => false, 
-                "mc_stop" => true, 
-                "filling_speed" => 800, 
-                "sv_speed_bpm" => 20, 
-                "pv_speed_bpm" => 0, 
-                "sv_bag" => 0, 
-                "pv_bag" => 0, 
-                "sv_filling_speed_rpm" => 800, 
-                "pv_filling_speed_rpm" => 400, 
-                "sv_gripper_width" => 155, 
-                "sp_gripper_width" => 155, 
-                "ts" => Carbon::now()->format('Y-m-d H:i:s')
-            ]; 
             
-            $mqtt->publish('data/gmk/k/leepack1', json_encode($jayParsedAry), 0);
-            
+            $eleepack1 = json_decode($leepack1, true);
+            $eleepack1['ts'] = Carbon::now()->format('Y-m-d H:i:s');
+
             $eleepack2 = json_decode($leepack2, true);
             $eleepack2['ts'] = Carbon::now()->format('Y-m-d H:i:s');
 
@@ -102,12 +65,15 @@ class SampleData extends AbstractProcess
             $epku1 = json_decode($pku1, true);
             $epku1['ts'] = Carbon::now()->format('Y-m-d H:i:s');
 
-            $mqtt->publish('data/gmk/k/leepack2', json_encode($eleepack2), 0);
-            $mqtt->publish('data/gmk/k/leepack3', json_encode($eleepack3), 0);
-            $mqtt->publish('data/gmk/k/pku1', json_encode($epku1), 0);
+            // $mqtt->publish('data/gmk/k/leepack1', json_encode($eleepack1), 0);
+            // $mqtt->publish('data/gmk/k/leepack2', json_encode($eleepack2), 0);
+            // $mqtt->publish('data/gmk/k/leepack3', json_encode($eleepack3), 0);
             $mqtt->publish('data/gmk/k/lme1', json_encode($elme1), 0);
             $mqtt->publish('data/gmk/k/lme2', json_encode($elme2), 0);
             $mqtt->publish('data/gmk/k/lme3', json_encode($elme3), 0);
+
+
+            // $mqtt->publish('data/gmk/k/pku1', json_encode($epku1), 0);
 
             sleep(1);
         }

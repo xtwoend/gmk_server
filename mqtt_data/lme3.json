@@ -1,18 +1,19 @@
 {
-    "data1" : 120.36500549316406,
+    "data1" : 116.02100372314453,
     "data2" : 0,
-    "data3" : 1.519800066947937,
-    "data4" : 0.78720003366470337,
+    "data3" : 1.1472001075744629,
+    "data4" : 0.57960003614425659,
     "data5" : 0,
-    "data6" : 20.923000335693359,
+    "data6" : 20.996198654174805,
     "data7" : 0,
-    "data8" : 199.904541015625,
-    "data9" : 69.959999084472656,
+    "data8" : 200.13636779785156,
+    "data9" : 55.80999755859375,
     "data10" : 0,
     "alarm_message_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "alarm_message_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "alarm_message_3" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "alarm_message_4" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "IHM_ST_Moinho_status" : 1,
-    "ts" : "2023-05-04T10:24:03.498708"
+    "SP_LME3_Mill_Speed" : 255,
+    "ts" : "2023-05-27T15:31:35.300457"
 }

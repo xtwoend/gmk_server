@@ -14,15 +14,17 @@ class CreateScoresTable extends Migration
         Schema::create('scores', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('device_id');
-            $table->integer('shift')->nullable(); // shift 1, 2, 3
-            $table->date('date_score');
-            $table->tinyInteger('number_of_shift')->default(3);
-            $table->tinyInteger('hours_per_shift')->default(8);
-            $table->tinyInteger('planned_shutdown_shift')->default(1);
-            $table->float('downtime_loss', 6, 4)->nullable(); // from summary duration alarm
-            $table->tinyInteger('ideal_cycle_time_seconds')->default(0);  // in seconds
-            $table->integer('total_production')->nullable();
-            $table->integer('good_production')->nullable();
+            $table->unsignedBigInteger('shift_id')->nullable(); // shift 1, 2, 3
+            $table->unsignedBigInteger('user_id')->nullable(); // relation to user but not now
+            $table->date('production_date');
+            $table->time('started_at')->nullable();
+            $table->time('ended_at')->nullable();
+            $table->float('ppm', 10, 4)->default(0); 
+            $table->integer('run_time')->default(0); // in seconds
+            $table->integer('stop_time')->default(0); // in seconds
+            $table->integer('down_time')->default(0); // in seconds
+            $table->integer('ouput')->nullable();
+            $table->integer('reject')->nullable();
             $table->float('availability', 5, 4)->nullable();
             $table->float('performance', 5, 4)->nullable();
             $table->float('quality', 5, 4)->nullable();
