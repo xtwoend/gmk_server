@@ -44,7 +44,7 @@ trait ScoreTrait
         return $score;
     }
 
-    public function setTimesheet($model, $score)
+    public function setTimesheet($model, $score, array $params = [])
     {
         // 
     }
