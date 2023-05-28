@@ -23,8 +23,8 @@ class CreateScoresTable extends Migration
             $table->integer('run_time')->default(0); // in seconds
             $table->integer('stop_time')->default(0); // in seconds
             $table->integer('down_time')->default(0); // in seconds
-            $table->integer('ouput')->nullable();
-            $table->integer('reject')->nullable();
+            $table->integer('output')->default(0);
+            $table->integer('reject')->default(0);
             $table->float('availability', 5, 4)->nullable();
             $table->float('performance', 5, 4)->nullable();
             $table->float('quality', 5, 4)->nullable();

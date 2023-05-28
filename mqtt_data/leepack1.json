@@ -6,7 +6,7 @@
     "sv_speed_bpm" : 20,
     "pv_speed_bpm" : 0,
     "sv_bag" : 100,
-    "pv_bag" : 100,
+    "pv_bag" : 10,
     "sv_filling_speed_rpm" : 800,
     "pv_filling_speed_rpm" : 400,
     "sv_gripper_width" : 155,

@@ -20,10 +20,13 @@ trait ScoreTrait
             'shift_id' => null,
             'production_date' => $date,
             'started_at' => '00:00:00',
-            'ended_at' => '23:59:59'
+            'ended_at' => '23:59:59',
         ]);
 
         if($score->timesheets()->count() > 0) {
+            $score->run_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+            $score->down_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->get()->sum('downTime');
+            $score->stop_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->get()->sum('stopTime');
             $score->performance = $this->avgPerformance($model, $score);
             $score->availability = $this->getAvailability($model, $score);
             $score->quality = 1;
@@ -59,19 +62,23 @@ trait ScoreTrait
         ]);
         
         if($score->timesheets()->count() > 0) {
+            
             list($perfomance, $output, $ppm) = $this->leepackPerformance($model, $score);
-            // var_dump($perfomance);
+            $score->run_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+            $score->down_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->get()->sum('downTime');
+            $score->stop_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->get()->sum('stopTime');
             $score->output = $output;
             $score->ppm = $ppm;
-            $score->performance = $perfomance;
+            $score->performance = ($perfomance < 1) ? $perfomance: 1;
             $score->availability = $this->getAvailability($model, $score);
             $score->quality = 1;
             $score->oee = $score->performance * $score->availability * $score->quality;
             $score->save();
+
         }else{
             $score->timesheets()
                 ->create([
-                    'started_at' => $date . ' 00:00:00',
+                    'started_at' => $date . ' ' . $shift->started_at,
                     'status' => 'idle'
                 ]);
         }
@@ -82,10 +89,12 @@ trait ScoreTrait
     public function leepackPerformance($model, $score)
     {
         $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+        
         $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
         $output = (int) $model->pv_bag;
         $ppm = (float) 0;
         $perfomance =  (float)0;
+
         if($output > 0){
             $ppm = (float) ($runTime / $output);
             if($ppm > 0){
