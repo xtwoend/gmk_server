@@ -10,7 +10,7 @@
     "ce_alarm_message_1" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "ce_alarm_message_2" : [ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ],
     "TK_ST_TksTransfPump_Status" : 0,
-    "LME_ST_MillMotor_Status" : 0,
+    "LME_ST_MillMotor_Status" : 1,
     "LME_ST_FeedingPump_Status" : 0,
     "HMI_CE_ST_ConcProdTemp" : 44.919998168945312,
     "HMI_TK_ST_CoolTkTemp" : 48.950000762939453,

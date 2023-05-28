@@ -20,6 +20,7 @@ class CreateTimesheetsTable extends Migration
             $table->integer('reject')->default(0);
             $table->float('ppm', 10, 4)->default(0);
             $table->string('status')->nullable();
+            $table->boolean('in_progress')->default(true);
             $table->timestamps();
         });
     }

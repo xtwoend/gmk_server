@@ -233,7 +233,7 @@ class Lme2 extends Model
         if($score && $model->HMI_LME_ST_MillMotor_Status > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
-                ->whereNull('ended_at')
+                ->where('in_progress', 1)
                 ->where('status', 'run')
                 ->latest()
                 ->first();
@@ -241,18 +241,20 @@ class Lme2 extends Model
             if(is_null($timesheet)) {
                 $time = Carbon::now();
                 $score->timesheets()
-                    ->whereNull('ended_at')
+                    ->where('in_progress', 1)
                     ->update([
-                        'ended_at' => $time
+                        'in_progress' => 0
                     ]);
                 $timesheet = $score->timesheets()
                     ->create([
                         'started_at' => $time,
+                        'in_progress' => 1,
                         'status' => 'run'
                     ]);
             }
 
             $timesheet->update([
+                'ended_at' => Carbon::now(),
                 'output' => 0,
                 'reject' => 0,
                 'ppm' => 0
@@ -261,7 +263,8 @@ class Lme2 extends Model
 
         if($score && $model->HMI_LME_ST_MillMotor_Status == 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
-                ->whereNull('ended_at')
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
                 ->where('status', 'breakdown')
                 ->latest()
                 ->first();
@@ -269,18 +272,20 @@ class Lme2 extends Model
             if(is_null($timesheet)) {
                 $time = Carbon::now();
                 $score->timesheets()
-                    ->whereNull('ended_at')
+                    ->where('in_progress', 1)
                     ->update([
-                        'ended_at' => $time
+                        'in_progress' => 0
                     ]);
                 $timesheet = $score->timesheets()
                     ->create([
                         'started_at' => $time,
+                        'in_progress' => 1,
                         'status' => 'breakdown'
                     ]);
             }
-            
+
             $timesheet->update([
+                'ended_at' => Carbon::now(),
                 'output' => 0,
                 'reject' => 0,
                 'ppm' => 0
@@ -289,7 +294,8 @@ class Lme2 extends Model
 
         if($score && $model->HMI_LME_ST_MillMotor_Status == 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
-                ->whereNull('ended_at')
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
                 ->where('status', 'idle')
                 ->latest()
                 ->first();
@@ -297,18 +303,20 @@ class Lme2 extends Model
             if(is_null($timesheet)) {
                 $time = Carbon::now();
                 $score->timesheets()
-                    ->whereNull('ended_at')
+                    ->where('in_progress', 1)
                     ->update([
-                        'ended_at' => $time
+                        'in_progress' => 0
                     ]);
                 $timesheet = $score->timesheets()
                     ->create([
                         'started_at' => $time,
+                        'in_progress' => 1,
                         'status' => 'idle'
                     ]);
             }
-            
+
             $timesheet->update([
+                'ended_at' => Carbon::now(),
                 'output' => 0,
                 'reject' => 0,
                 'ppm' => 0

@@ -20,7 +20,7 @@ class Timesheet extends Model
      * The attributes that are mass assignable.
      */
     protected array $fillable = [
-        'score_id', 'started_at', 'ended_at', 'output', 'reject', 'ppm', 'status'
+        'score_id', 'started_at', 'ended_at', 'output', 'reject', 'ppm', 'status', 'in_progress'
     ];
 
     /**
@@ -29,5 +29,6 @@ class Timesheet extends Model
     protected array $casts = [
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
+        'in_progress' => 'boolean'
     ];
 }
