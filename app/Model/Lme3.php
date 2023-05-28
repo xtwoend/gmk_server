@@ -82,6 +82,10 @@ class Lme3 extends Model
                 $table->tinyInteger('IHM_ST_Moinho_status')->nullable();
                 $table->float('SP_LME3_Mill_Speed', 15, 10)->nullable();
                 $table->float('performance_per_minutes', 15, 10)->nullable();
+                $table->tinyInteger('alarm1')->default(0);
+                $table->tinyInteger('alarm2')->default(0);
+                $table->tinyInteger('alarm3')->default(0);
+                $table->tinyInteger('alarm4')->default(0);
                 $table->timestamps();
             });
         }
@@ -108,7 +112,11 @@ class Lme3 extends Model
             'data10' => $data['data10'],
             'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status'],
             'SP_LME3_Mill_Speed' => $data['SP_LME3_Mill_Speed'],
-            'performance_per_minutes' => ($data['data8'] / $data['SP_LME3_Mill_Speed'])
+            'performance_per_minutes' => ($data['data8'] / $data['SP_LME3_Mill_Speed']),
+            'alarm1' => $data['alarm1'],
+            'alarm2' => $data['alarm2'],
+            'alarm3' => $data['alarm3'],
+            'alarm4' => $data['alarm4'],
         ];
     }
 
@@ -189,6 +197,96 @@ class Lme3 extends Model
         $this->alarmDb($model, 'alarm_message_4');
 
         $score = $this->createScoreDaily($model);
+
+        if($score && $model->IHM_ST_Moinho_status > 0) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->whereNull('ended_at')
+                ->where('status', 'run')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'run'
+                    ]);
+            }
+
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+
+        if($score && $model->IHM_ST_Moinho_status == 0 && $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->whereNull('ended_at')
+                ->where('status', 'breakdown')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'breakdown'
+                    ]);
+            }
+            
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+
+        if($score && $model->IHM_ST_Moinho_status == 0 && ! $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->whereNull('ended_at')
+                ->where('status', 'idle')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'idle'
+                    ]);
+            }
+            
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+    }
+
+    public function isAlarmOn(): bool
+    {
+        return (bool) $this->alarm1 || $this->alarm2 || $this->alarm3 || $this->alarm4;
     }
 
     protected array $desc_alarm_message_1 = [

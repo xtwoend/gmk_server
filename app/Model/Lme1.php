@@ -97,6 +97,16 @@ class Lme1 extends Model
                 $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
                 $table->float('HMI_LME_SP_MillPAutSpd', 15, 10)->nullable();
                 $table->float('performance_per_minutes', 15, 10)->nullable();
+                // alarm to be breakdown
+                $table->tinyInteger('tank_alarm1')->default(0);
+                $table->tinyInteger('tank_alarm2')->default(0);
+                $table->tinyInteger('lme_alarm1')->default(0);
+                $table->tinyInteger('lme_alarm2')->default(0);
+                $table->tinyInteger('stk_alarm')->default(0);
+                $table->tinyInteger('cum_alarm1')->default(0);
+                $table->tinyInteger('cum_alarm2')->default(0);
+                $table->tinyInteger('ce_alarm1')->default(0);
+                $table->tinyInteger('ce_alarm2')->default(0);
                 $table->timestamps();
             });
         }
@@ -195,10 +205,102 @@ class Lme1 extends Model
         
         $score = $this->createScoreDaily($model);
         
+        if($score && $model->LME_ST_MillMotor_Status > 0) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->whereNull('ended_at')
+                ->where('status', 'run')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'run'
+                    ]);
+            }
+
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+
+        
+
+        if($score && $model->LME_ST_MillMotor_Status == 0 && $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->whereNull('ended_at')
+                ->where('status', 'breakdown')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'breakdown'
+                    ]);
+            }
+            
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+
+        if($score && $model->LME_ST_MillMotor_Status == 0 && ! $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->whereNull('ended_at')
+                ->where('status', 'idle')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'idle'
+                    ]);
+            }
+            
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+    }
+
+    public function isAlarmOn(): bool
+    {
+        return (bool) $this->tank_alarm1 || $this->tank_alarm2 || $this->lme_alarm1 || $this->lme_alarm2 || $this->stk_alarm || $this->cum_alarm1 || $this->cum_alarm2 || $this->ce_alarm1 || $this->ce_alarm2;
     }
 
     public function format(array $data)
     {
+        $perfoma = ($data['HMI_CUM_ST_MillSpeed'] / $data['HMI_LME_SP_MillPAutSpd']);
         return [
             'tk_alarm_message_1' => $this->map($data['tk_alarm_message_1']),
             'tk_alarm_message_2' => $this->map($data['tk_alarm_message_2']),
@@ -227,7 +329,17 @@ class Lme1 extends Model
             'HMI_LME_ST_RecirPump_status' => $data['HMI_LME_ST_RecirPump_status'],
 
             'HMI_LME_SP_MillPAutSpd' => $data['HMI_LME_SP_MillPAutSpd'],
-            'performance_per_minutes' => ($data['HMI_CUM_ST_MillSpeed'] / $data['HMI_LME_SP_MillPAutSpd'])
+            'performance_per_minutes' => $perfoma > 1 ? 1: $perfoma,
+
+            'tank_alarm1' => $data['tank_alarm1'],
+            'tank_alarm2' => $data['tank_alarm2'],
+            'lme_alarm1' => $data['lme_alarm1'],
+            'lme_alarm2' => $data['lme_alarm2'],
+            'stk_alarm' => $data['stk_alarm'],
+            'cum_alarm1' => $data['cum_alarm1'],
+            'cum_alarm2' => $data['cum_alarm2'],
+            'ce_alarm1' => $data['ce_alarm1'],
+            'ce_alarm2' => $data['ce_alarm2'],
         ];
     }
     

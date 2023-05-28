@@ -27,7 +27,7 @@ class Timesheet extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [
-        'started_at' => 'datetime:Y-m-d H:i:s',
-        'ended_at' => 'datetime:Y-m-d H:i:s',
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime',
     ];
 }

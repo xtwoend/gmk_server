@@ -13,7 +13,7 @@ trait ScoreTrait
     public function createScoreDaily($model)
     {
         $date = Carbon::now()->format('Y-m-d');
-
+        
         $score = Score::firstOrCreate([
             'device_id' => $model->device_id,
             'shift_id' => null,
@@ -21,7 +21,7 @@ trait ScoreTrait
             'started_at' => '00:00:00',
             'ended_at' => '23:59:59'
         ]);
-
+        
         return $score;
     }
 

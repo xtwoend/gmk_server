@@ -90,6 +90,14 @@ class Lme2 extends Model
                 $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
                 $table->float('HMI_LME_SP_MillAutSpeed', 15, 10)->nullable();
                 $table->float('performance_per_minutes')->nullable();
+
+                $table->tinyInteger('in_alarm1')->default(0);
+                $table->tinyInteger('in_alarm2')->default(0);
+                $table->tinyInteger('tk_alarm1')->default(0);
+                $table->tinyInteger('tk_alarm2')->default(0);
+                $table->tinyInteger('lme_alarm1')->default(0);
+                $table->tinyInteger('lme_alarm2')->default(0);
+
                 $table->timestamps();
             });
         }
@@ -99,6 +107,7 @@ class Lme2 extends Model
 
     public function format(array $data)
     {
+        $perfoma = ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed']);
         return [
             'in_alarm_message_1' => $this->map($data['in_alarm_message_1']),
             'in_alarm_message_2' => $this->map($data['in_alarm_message_2']),
@@ -123,7 +132,14 @@ class Lme2 extends Model
             'HMI_LME_ST_RecirPump_status' => $data['HMI_LME_ST_RecirPump_status'],
 
             'HMI_LME_SP_MillAutSpeed' => $data['HMI_LME_SP_MillAutSpeed'],
-            'performance_per_minutes' => ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed'])
+            'performance_per_minutes' => $perfoma > 1 ? 1: $perfoma,
+
+            'in_alarm1' => $data['in_alarm1'],
+            'in_alarm2' => $data['in_alarm2'],
+            'tk_alarm1' => $data['tk_alarm1'],
+            'tk_alarm2' => $data['tk_alarm2'],
+            'lme_alarm1' => $data['lme_alarm1'][0],
+            'lme_alarm2' => $data['lme_alarm2'],
         ];
     }
 
@@ -213,6 +229,96 @@ class Lme2 extends Model
         $this->alarmDb($model, 'lme_alarm_message_2');
 
         $score = $this->createScoreDaily($model);
+
+        if($score && $model->HMI_LME_ST_MillMotor_Status > 0) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->whereNull('ended_at')
+                ->where('status', 'run')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'run'
+                    ]);
+            }
+
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+
+        if($score && $model->HMI_LME_ST_MillMotor_Status == 0 && $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->whereNull('ended_at')
+                ->where('status', 'breakdown')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'breakdown'
+                    ]);
+            }
+            
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+
+        if($score && $model->HMI_LME_ST_MillMotor_Status == 0 && ! $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->whereNull('ended_at')
+                ->where('status', 'idle')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->whereNull('ended_at')
+                    ->update([
+                        'ended_at' => $time
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'status' => 'idle'
+                    ]);
+            }
+            
+            $timesheet->update([
+                'output' => 0,
+                'reject' => 0,
+                'ppm' => 0
+            ]);
+        }
+    }
+
+    public function isAlarmOn()
+    {
+        return (bool) $this->in_alarm1 || $this->in_alarm2 || $this->tk_alarm1 || $this->tk_alarm2 || $this->lme_alarm1 || $this->lme_alarm2;
     }
 
     protected array $desc_in_alarm_message_1 = [

@@ -57,7 +57,7 @@ class MQTTListener implements ListenerInterface
         if($last && $now->diffInSeconds($last->terminal_time) < config('mqtt.interval_save', 60) ) {   
             return;
         }
-
+        
         return $model->updateOrCreate([
             'device_id' => $device->id,
             'terminal_time' => $now->format('Y-m-d H:i:s'),
