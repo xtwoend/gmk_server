@@ -44,10 +44,12 @@ trait ScoreTrait
     public function createScoreShift($model)
     {
         $shift = shift();
+        
         $date = Carbon::now()->format('Y-m-d');
         if($shift->id == 3 && Carbon::now()->format('G') < $shift->ended_at) {
             $date = Carbon::now()->subDay()->format('Y-m-d');
         }
+        
         $score = Score::firstOrCreate([
             'device_id' => $model->device_id,
             'shift_id' => $shift->id,
@@ -55,9 +57,13 @@ trait ScoreTrait
             'started_at' => $shift->started_at,
             'ended_at' => $shift->ended_at
         ]);
-
+        
         if($score->timesheets()->count() > 0) {
-            $score->performance = $this->leepackPerformance($model, $score);
+            list($perfomance, $output, $ppm) = $this->leepackPerformance($model, $score);
+            // var_dump($perfomance);
+            $score->output = $output;
+            $score->ppm = $ppm;
+            $score->performance = $perfomance;
             $score->availability = $this->getAvailability($model, $score);
             $score->quality = 1;
             $score->oee = $score->performance * $score->availability * $score->quality;
@@ -76,15 +82,18 @@ trait ScoreTrait
     public function leepackPerformance($model, $score)
     {
         $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
-        $setting = ScoreSetting::where('device_id', $model->device_id)->first();
-
-        $output = $model->pv_bag;
+        $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
+        $output = (int) $model->pv_bag;
+        $ppm = (float) 0;
+        $perfomance =  (float)0;
+        if($output > 0){
+            $ppm = (float) ($runTime / $output);
+            if($ppm > 0){
+                $perfomance = (float) ($setting->ideal_cycle_time_seconds / $ppm);
+            }
+        }
         
-        $score->output = $output;
-        $score->ppm = ($runTime / $output);
-        $score->save();
-
-        return (float) ($setting->ideal_cycle_time_seconds / $score->ppm);
+        return [$perfomance, $output, $ppm];
     }
 
     public function avgPerformance($model, $score)

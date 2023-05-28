@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\Model\Shift;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\ApplicationContext;

@@ -139,10 +139,9 @@ class Leepack1 extends Model
     public function created(Created $event)
     {
         $model = $event->getModel();
-       
         $this->alarmDb($model, 'alarm_leepack1');
         $score = $this->createScoreShift($model);
-
+        
         if($score && $model->mc_run) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
