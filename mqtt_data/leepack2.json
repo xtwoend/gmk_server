@@ -5,9 +5,11 @@
     "sv_speed_bpm" : 14,
     "pv_speed_bpm" : 0,
     "sv_bag" : 0,
-    "pv_bag" : 184,
-    "sv_filling_speed_rpm" : 2400,
+    "pv_bag" : 2609,
+    "sv_filling_speed_rpm" : 2300,
     "pv_filling_speed_rpm" : 0,
-    "level_hopper" : 76,
-    "ts" : "2023-05-27T15:32:56.399762"
+    "level_hopper" : 69,
+    "inverter_fault" : false,
+    "servo_fault" : false,
+    "ts" : "2023-05-28T20:44:49.373794"
 }

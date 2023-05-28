@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Model\Alarm;
 use App\Model\Score;
 use App\Model\DeviceStatus;
+use App\Model\ScoreSetting;
 use Hyperf\DbConnection\Db;
 
 trait ScoreTrait
@@ -24,7 +25,7 @@ trait ScoreTrait
 
         if($score->timesheets()->count() > 0) {
             $score->performance = $this->avgPerformance($model, $score);
-            $score->availability = 0;
+            $score->availability = $this->getAvailability($model, $score);
             $score->quality = 1;
             $score->oee = $score->performance * $score->availability * $score->quality;
             $score->save();
@@ -55,14 +56,36 @@ trait ScoreTrait
             'ended_at' => $shift->ended_at
         ]);
 
+        if($score->timesheets()->count() > 0) {
+            $score->performance = $this->leepackPerformance($model, $score);
+            $score->availability = $this->getAvailability($model, $score);
+            $score->quality = 1;
+            $score->oee = $score->performance * $score->availability * $score->quality;
+            $score->save();
+        }else{
+            $score->timesheets()
+                ->create([
+                    'started_at' => $date . ' 00:00:00',
+                    'status' => 'idle'
+                ]);
+        }
+        
         return $score;
     }
 
-    public function setTimesheet($model, $score, array $params = [])
+    public function leepackPerformance($model, $score)
     {
-        // 
-    }
+        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+        $setting = ScoreSetting::where('device_id', $model->device_id)->first();
 
+        $output = $model->pv_bag;
+        
+        $score->output = $output;
+        $score->ppm = ($runTime / $output);
+        $score->save();
+
+        return (float) ($setting->ideal_cycle_time_seconds / $score->ppm);
+    }
 
     public function avgPerformance($model, $score)
     {   
@@ -77,10 +100,10 @@ trait ScoreTrait
     {
         $from = Carbon::parse($score->production_date->format('Y-m-d') . ' ' .$score->started_at);
         $to = Carbon::now();
-
-        $hour = $to->diffInHours($from);
-
-
-        $score->timesheets()->where('status', 'run');
+        $seconds = $to->diffInSeconds($from);
+       
+        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+       
+        return (float) ($runTime / $seconds);
     }
 }

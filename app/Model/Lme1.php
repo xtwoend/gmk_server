@@ -218,7 +218,8 @@ class Lme1 extends Model
                 $score->timesheets()
                     ->where('in_progress', 1)
                     ->update([
-                        'in_progress' => 0
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
                     ]);
                 $timesheet = $score->timesheets()
                     ->create([
@@ -251,7 +252,8 @@ class Lme1 extends Model
                 $score->timesheets()
                     ->where('in_progress', 1)
                     ->update([
-                        'in_progress' => 0
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
                     ]);
                 $timesheet = $score->timesheets()
                     ->create([
@@ -282,7 +284,8 @@ class Lme1 extends Model
                 $score->timesheets()
                     ->where('in_progress', 1)
                     ->update([
-                        'in_progress' => 0
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
                     ]);
                 $timesheet = $score->timesheets()
                     ->create([

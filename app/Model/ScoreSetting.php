@@ -13,12 +13,14 @@ class ScoreSetting extends Model
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'ScoreSetting';
+    protected ?string $table = 'score_settings';
 
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = [];
+    protected array $fillable = [
+        'device_id', 'number_of_shift', 'hours_per_shift', 'planned_shutdown_shift', 'ideal_cycle_time_seconds', 'production_plan',
+    ];
 
     /**
      * The attributes that should be cast to native types.

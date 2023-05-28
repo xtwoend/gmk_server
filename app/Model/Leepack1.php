@@ -33,7 +33,10 @@ class Leepack1 extends Model
      */
     protected array $casts = [
         'terminal_time' => 'datetime',
-        'alarm_leepack1' => 'array'
+        'alarm_leepack1' => 'array',
+        'inverter_fault' => 'boolean',
+        'servo_fault' => 'boolean',
+        'mc_run' => 'boolean'
     ];
 
     /**
@@ -101,6 +104,8 @@ class Leepack1 extends Model
                 $table->integer('pv_filling_speed_rpm')->nullable();
                 $table->integer('sv_gripper_width')->nullable();
                 $table->integer('sp_gripper_width')->nullable();
+                $table->boolean('inverter_fault')->default(false);
+                $table->boolean('servo_fault')->default(false);
                 $table->timestamps();
             });
         }
@@ -123,6 +128,8 @@ class Leepack1 extends Model
             'pv_filling_speed_rpm' => $data['pv_filling_speed_rpm'],
             'sv_gripper_width' => $data['sv_gripper_width'],
             'sp_gripper_width' => $data['sp_gripper_width'],
+            'inverter_fault' => $data['inverter_fault'],
+            'servo_fault' => $data['servo_fault']
         ];
     }
 
@@ -134,9 +141,100 @@ class Leepack1 extends Model
         $model = $event->getModel();
        
         $this->alarmDb($model, 'alarm_leepack1');
-        $this->createScoreShift($model);
+        $score = $this->createScoreShift($model);
+
+        if($score && $model->mc_run) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'run')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'run'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
+
+        if($score && ! $model->mc_run && ! $this->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'idle')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'idle'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
+
+        if($score && ! $model->mc_run && $this->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'breakdown')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'breakdown'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
     }
 
+    public function isAlarmOn(): bool
+    {
+        return (bool) $this->inverter_fault || $this->servo_fault;
+    }
 
     public function export($device, $request)
     {

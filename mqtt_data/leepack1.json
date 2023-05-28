@@ -11,5 +11,7 @@
     "pv_filling_speed_rpm" : 400,
     "sv_gripper_width" : 155,
     "sp_gripper_width" : 155,
-    "ts" : "2023-05-27T15:32:08.024312"
+    "inverter_fault" : false,
+    "servo_fault" : false,
+    "ts" : "2023-05-28T20:44:03.805639"
 }

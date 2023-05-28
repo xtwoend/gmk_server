@@ -65,12 +65,12 @@ class SampleData extends AbstractProcess
             $epku1 = json_decode($pku1, true);
             $epku1['ts'] = Carbon::now()->format('Y-m-d H:i:s');
 
-            // $mqtt->publish('data/gmk/k/leepack1', json_encode($eleepack1), 0);
-            // $mqtt->publish('data/gmk/k/leepack2', json_encode($eleepack2), 0);
-            // $mqtt->publish('data/gmk/k/leepack3', json_encode($eleepack3), 0);
-            $mqtt->publish('data/gmk/k/lme1', json_encode($elme1), 0);
-            $mqtt->publish('data/gmk/k/lme2', json_encode($elme2), 0);
-            $mqtt->publish('data/gmk/k/lme3', json_encode($elme3), 0);
+            $mqtt->publish('data/gmk/k/leepack1', json_encode($eleepack1), 0);
+            $mqtt->publish('data/gmk/k/leepack2', json_encode($eleepack2), 0);
+            $mqtt->publish('data/gmk/k/leepack3', json_encode($eleepack3), 0);
+            // $mqtt->publish('data/gmk/k/lme1', json_encode($elme1), 0);
+            // $mqtt->publish('data/gmk/k/lme2', json_encode($elme2), 0);
+            // $mqtt->publish('data/gmk/k/lme3', json_encode($elme3), 0);
 
 
             // $mqtt->publish('data/gmk/k/pku1', json_encode($epku1), 0);
