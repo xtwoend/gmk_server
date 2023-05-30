@@ -51,7 +51,7 @@ class ScoreController
         return response(ReportResource::collection($rows));
     }
 
-    public function setting($deviceId, RequestInterface $request)
+    public function setSetting($deviceId, RequestInterface $request)
     {
         $setting = ScoreSetting::updateOrCreate([
             'device_id' => $deviceId,
