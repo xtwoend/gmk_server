@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Carbon\Carbon;
 use App\Model\Score;
+use App\Model\ScoreSetting;
 use App\Resource\ReportResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
 
@@ -15,7 +16,7 @@ class ScoreController
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
         $date = Carbon::parse($date)->timezone('Asia/Jakarta');
-        $score = Score::where('device_id', $deviceId)->where('date_score', $date->format('Y-m-d'))->first();
+        $score = Score::where('device_id', $deviceId)->where('production_date', $date->format('Y-m-d'))->first();
 
         return \response($score);
     }
@@ -32,7 +33,7 @@ class ScoreController
         }else{
             $score = Score::create(array_merge([
                 'device_id' => $deviceId,
-                'date_score' => $date
+                'production_date' => $date
             ],$request->all()));
         }
         return \response($score);
@@ -46,7 +47,7 @@ class ScoreController
         $from = Carbon::parse($from)->timezone('Asia/Jakarta');
         $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
-        $rows = Score::where('device_id', $deviceId)->whereBetween('date_score', [$from, $to])->get();
+        $rows = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get();
 
         return response(ReportResource::collection($rows));
     }
@@ -62,7 +63,7 @@ class ScoreController
 
     public function getSetting($deviceId)
     {
-        $setting = ScoreSetting::findOrFail($deviceId);
+        $setting = ScoreSetting::find($deviceId);
         return response($setting);
     }
 

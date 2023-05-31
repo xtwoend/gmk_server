@@ -43,8 +43,8 @@ Router::post('/score/{deviceId}', [ScoreController::class, 'store']);
 Router::get('/score/{deviceId}', [ScoreController::class, 'index']);
 
 // score setting
-Router::get('/setting/score/{id}', [ScoreController::class, 'getSetting']);
-Router::post('/setting/score/{id}', [ScoreController::class, 'setSetting']);
+Router::get('/setting/score/{deviceId}', [ScoreController::class, 'getSetting']);
+Router::post('/setting/score/{deviceId}', [ScoreController::class, 'setSetting']);
 
 // report
 Router::get('/report/{id}', [ReportController::class, 'data']);
