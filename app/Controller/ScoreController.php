@@ -64,6 +64,7 @@ class ScoreController
     public function getSetting($deviceId)
     {
         $setting = ScoreSetting::find($deviceId);
+        
         return response($setting);
     }
 
