@@ -48,6 +48,12 @@ class ScoreController
         $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
         $rows = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get();
+        $rows = $rows->map(function($row){
+            foreach(['availability', 'performance', 'quality', 'oee'] as $val){
+                $row->$val = $row->$val * 100;   
+            }
+            return $row;
+        });
 
         return response(ReportResource::collection($rows));
     }
