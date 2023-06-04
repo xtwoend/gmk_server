@@ -74,4 +74,11 @@ class ScoreController
         return response($setting);
     }
 
+    public function score($id, RequestInterface $request)
+    {
+        $score = Score::with('timesheets')->findOrFail($id);
+        
+        return response($score);
+    }
+    
 }

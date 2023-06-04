@@ -41,6 +41,7 @@ Router::get('/alarm/{deviceId}/export', [AlarmController::class, 'export']);
 Router::get('/score/{deviceId}/history', [ScoreController::class, 'history']);
 Router::post('/score/{deviceId}', [ScoreController::class, 'store']);
 Router::get('/score/{deviceId}', [ScoreController::class, 'index']);
+Router::get('/score/timesheets/{id}', [ScoreController::class, 'score']);
 
 // score setting
 Router::get('/setting/score/{deviceId}', [ScoreController::class, 'getSetting']);
