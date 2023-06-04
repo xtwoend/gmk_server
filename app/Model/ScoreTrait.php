@@ -36,8 +36,8 @@ trait ScoreTrait
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
-
-            $score = Score::where('score_id', $score->id)->update([
+            
+            Score::where('id', $score->id)->update([
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
@@ -45,6 +45,8 @@ trait ScoreTrait
                 'availability' => $this->getAvailability($model, $score),
                 'quality' => 1,
             ]);
+
+            $score = Score::find($score->id);
         }else{
             $score->timesheets()
                 ->create([
@@ -83,14 +85,13 @@ trait ScoreTrait
         }
         
         if($score->timesheets()->count() > 0) {
-            
             list($perfomance, $output, $ppm) = $this->leepackPerformance($model, $score);
-
+            
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
-
-            $score = Score::where('score_id', $score->id)->update([
+            
+            Score::where('id', $score->id)->update([
                 'output' => $output,
                 'ppm' => $ppm,
                 'run_time' => $runTime,
@@ -100,7 +101,9 @@ trait ScoreTrait
                 'availability' => $this->getAvailability($model, $score),
                 'quality' => 1,
             ]);
-
+            
+            $score = Score::find($score->id);
+            
         }else{
             $score->timesheets()
                 ->create([
