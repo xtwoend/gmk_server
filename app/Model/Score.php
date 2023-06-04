@@ -6,9 +6,6 @@ namespace App\Model;
 
 use App\Model\Timesheet;
 use Hyperf\DbConnection\Model\Model;
-use Hyperf\Database\Model\Events\Created;
-use Hyperf\Database\Model\Events\Updated;
-use Hyperf\Database\Model\Events\Creating;
 use Hyperf\Database\Model\Events\Updating;
 
 /**
@@ -128,4 +125,10 @@ class Score extends Model
         return $a * $p * $q;
     }
     
+
+    public function updating(Updating $event)
+    {
+        $model = $event->getModel();
+        $this->setOee($model->availability * $model->performance * $model->quality);
+    }
 }

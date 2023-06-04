@@ -5,6 +5,7 @@ namespace App\Model;
 use Carbon\Carbon;
 use App\Model\Alarm;
 use App\Model\Score;
+use App\Model\Timesheet;
 use App\Model\DeviceStatus;
 use App\Model\ScoreSetting;
 use Hyperf\DbConnection\Db;
@@ -32,14 +33,18 @@ trait ScoreTrait
         }
 
         if($score->timesheets()->count() > 0) {
-            $score->run_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
-            $score->down_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->get()->sum('downTime');
-            $score->stop_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->get()->sum('stopTime');
-            $score->performance = $this->avgPerformance($model, $score);
-            $score->availability = $this->getAvailability($model, $score);
-            $score->quality = 1;
-            $score->oee = $score->performance * $score->availability * $score->quality;
-            $score->save();
+            $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
+            $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
+            $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
+
+            $score = Score::where('score_id', $score->id)->update([
+                'run_time' => $runTime,
+                'down_time' => $downTime,
+                'stop_time' => $stopTime,
+                'performance' => $this->avgPerformance($model, $score),
+                'availability' => $this->getAvailability($model, $score),
+                'quality' => 1,
+            ]);
         }else{
             $score->timesheets()
                 ->create([
@@ -81,17 +86,20 @@ trait ScoreTrait
             
             list($perfomance, $output, $ppm) = $this->leepackPerformance($model, $score);
 
-            $score->run_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
-            $score->down_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->get()->sum('downTime');
-            $score->stop_time = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->get()->sum('stopTime');
-            $score->output = $output;
-            $score->ppm = $ppm;
-            $score->performance = ($perfomance < 1) ? $perfomance: 1;
-            $score->availability = $this->getAvailability($model, $score);
-            $score->quality = 1;
-            $score->oee = $score->performance * $score->availability * $score->quality;
-            
-            $score->save();
+            $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
+            $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
+            $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
+
+            $score = Score::where('score_id', $score->id)->update([
+                'output' => $output,
+                'ppm' => $ppm,
+                'run_time' => $runTime,
+                'down_time' => $downTime,
+                'stop_time' => $stopTime,
+                'performance' => ($perfomance < 1) ? $perfomance: 1,
+                'availability' => $this->getAvailability($model, $score),
+                'quality' => 1,
+            ]);
 
         }else{
             $score->timesheets()
@@ -129,6 +137,7 @@ trait ScoreTrait
         $to = $score->production_date->format('Y-m-d') . ' ' . $score->ended_at;
         $nModel = get_class($model);
         $perfomance = $nModel::table($model->device, $score->production_date->format('Y-m-d'))->whereBetween('terminal_time', [$from, $to])->avg('performance_per_minutes');
+        
         return $perfomance;
     }
 
