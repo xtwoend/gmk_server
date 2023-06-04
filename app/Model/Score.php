@@ -125,7 +125,6 @@ class Score extends Model
         return $a * $p * $q;
     }
     
-
     public function updating(Updating $event)
     {
         $model = $event->getModel();
