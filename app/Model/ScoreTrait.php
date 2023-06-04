@@ -111,7 +111,7 @@ trait ScoreTrait
         $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
         $output = (int) $model->pv_bag;
         $ppm = (float) 0;
-        $perfomance =  (float)0;
+        $perfomance =  (float) 0;
 
         if($output > 0){
             $ppm = (float) ($runTime / $output);
