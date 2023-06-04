@@ -39,7 +39,7 @@ class MQTTListener implements ListenerInterface
         $device = $event->device;
 
         $modelClass = $device->model;
-       
+        
         if(! class_exists($modelClass)) {
             return;
         }

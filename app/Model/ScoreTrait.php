@@ -36,17 +36,20 @@ trait ScoreTrait
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
-            
-            Score::where('id', $score->id)->update([
+            $perfomance = $this->avgPerformance($model, $score);
+            $availability = $this->getAvailability($model, $score);
+
+            $s = Score::where('id', $score->id)->update([
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
-                'performance' => $this->avgPerformance($model, $score),
-                'availability' => $this->getAvailability($model, $score),
+                'performance' => $perfomance,
+                'availability' => $availability,
                 'quality' => 1,
+                'oee' =>  $perfomance * $availability * 1,
             ]);
-
             $score = Score::find($score->id);
+            
         }else{
             $score->timesheets()
                 ->create([
@@ -91,16 +94,20 @@ trait ScoreTrait
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
             
-            Score::where('id', $score->id)->update([
+            $availability = $this->getAvailability($model, $score);
+
+            $s = Score::where('id', $score->id)->update([
                 'output' => $output,
                 'ppm' => $ppm,
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
                 'performance' => ($perfomance < 1) ? $perfomance: 1,
-                'availability' => $this->getAvailability($model, $score),
+                'availability' => $availability,
                 'quality' => 1,
+                'oee' => $perfomance * $availability * 1
             ]);
+            var_dump($s, ($perfomance * $availability * 1));
             
             $score = Score::find($score->id);
             

@@ -108,6 +108,7 @@ class Lme2 extends Model
     public function format(array $data)
     {
         $perfoma = ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed']);
+
         return [
             'in_alarm_message_1' => $this->map($data['in_alarm_message_1']),
             'in_alarm_message_2' => $this->map($data['in_alarm_message_2']),
@@ -138,7 +139,7 @@ class Lme2 extends Model
             'in_alarm2' => $data['in_alarm2'],
             'tk_alarm1' => $data['tk_alarm1'],
             'tk_alarm2' => $data['tk_alarm2'],
-            'lme_alarm1' => $data['lme_alarm1'][0],
+            'lme_alarm1' => $data['lme_alarm1'],
             'lme_alarm2' => $data['lme_alarm2'],
         ];
     }

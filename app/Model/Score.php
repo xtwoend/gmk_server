@@ -62,72 +62,66 @@ class Score extends Model
         return $this->hasMany(Timesheet::class, 'score_id');
     }
 
-    public function getTotalAvailableTimeAttribute()
-    {
-        return ($this->number_of_shift * $this->hours_per_shift);
-    }
+    // public function getTotalAvailableTimeAttribute()
+    // {
+    //     return ($this->number_of_shift * $this->hours_per_shift);
+    // }
 
-    public function getPlannedShutdownAttribute()
-    {
-        return ($this->number_of_shift * $this->planned_shutdown_shift);
-    }
+    // public function getPlannedShutdownAttribute()
+    // {
+    //     return ($this->number_of_shift * $this->planned_shutdown_shift);
+    // }
 
-    public function getScheduledOperatingTimeAttribute()
-    {
-        return $this->getTotalAvailableTimeAttribute() - $this->getPlannedShutdownAttribute();
-    }
+    // public function getScheduledOperatingTimeAttribute()
+    // {
+    //     return $this->getTotalAvailableTimeAttribute() - $this->getPlannedShutdownAttribute();
+    // }
 
-    public function getIdealCycleTimeAttribute()
-    {
-        return ($this->ideal_cycle_time_seconds / (60 * 60));
-    }
+    // public function getIdealCycleTimeAttribute()
+    // {
+    //     return ($this->ideal_cycle_time_seconds / (60 * 60));
+    // }
 
-    public function getOperatingTimeAttribute()
-    {
-        return $this->getScheduledOperatingTimeAttribute() - $this->downtime_loss;
-    }
+    // public function getOperatingTimeAttribute()
+    // {
+    //     return $this->getScheduledOperatingTimeAttribute() - $this->downtime_loss;
+    // }
     
-    public function getEffectiveOperatingTimeAttribute()
-    {
-        return $this->getIdealCycleTimeAttribute() * $this->total_production;
-    }
+    // public function getEffectiveOperatingTimeAttribute()
+    // {
+    //     return $this->getIdealCycleTimeAttribute() * $this->total_production;
+    // }
 
-    public function getSpeedLossAttribute()
-    {
-        return $this->getOperatingTimeAttribute() - $this->getEffectiveOperatingTimeAttribute();
-    }
+    // public function getSpeedLossAttribute()
+    // {
+    //     return $this->getOperatingTimeAttribute() - $this->getEffectiveOperatingTimeAttribute();
+    // }
 
-    public function getProductionRejectAttribute()
-    {
-        return ($this->total_production - $this->good_production);
-    }
+    // public function getProductionRejectAttribute()
+    // {
+    //     return ($this->total_production - $this->good_production);
+    // }
 
-    public function calcAvailability()
-    {
-        return $this->getOperatingTimeAttribute() / $this->getTotalAvailableTimeAttribute();
-    }
+    // public function calcAvailability()
+    // {
+    //     return $this->getOperatingTimeAttribute() / $this->getTotalAvailableTimeAttribute();
+    // }
 
-    public function calcPerformance()
-    {
-        return ($this->getIdealCycleTimeAttribute() * $this->total_production) / $this->getOperatingTimeAttribute();
-    }
+    // public function calcPerformance()
+    // {
+    //     return ($this->getIdealCycleTimeAttribute() * $this->total_production) / $this->getOperatingTimeAttribute();
+    // }
 
-    public function calcQuality()
-    {
-        return $this->total_production > 0 ? ($this->good_production / $this->total_production): 0;
-    }
+    // public function calcQuality()
+    // {
+    //     return $this->total_production > 0 ? ($this->good_production / $this->total_production): 0;
+    // }
 
-    public function calcOee()
-    {
-        $a = $this->calcAvailability();
-        $p = $this->calcPerformance();
-        $q = $this->calcQuality();
-        return $a * $p * $q;
-    }
-    
-    public function updating(Updating $event)
-    {
-        $model = $event->getModel();
-        $this->setOee($model->availability * $model->performance * $model->quality);
-    }
+    // public function calcOee()
+    // {
+    //     $a = $this->calcAvailability();
+    //     $p = $this->calcPerformance();
+    //     $q = $this->calcQuality();
+    //     return $a * $p * $q;
+    // }
 }
