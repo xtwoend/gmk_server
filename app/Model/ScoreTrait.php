@@ -126,7 +126,11 @@ trait ScoreTrait
     {
         $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
         
+        $ideal_cycle_time_seconds = 30;
         $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
+        if($setting) {
+            $ideal_cycle_time_seconds = $setting->ideal_cycle_time_seconds;
+        }
         $output = (int) $model->pv_bag;
         $ppm = (float) 0;
         $perfomance =  (float) 0;
@@ -134,7 +138,7 @@ trait ScoreTrait
         if($output > 0){
             $ppm = (float) ($runTime / $output);
             if($ppm > 0){
-                $perfomance = (float) ($setting->ideal_cycle_time_seconds / $ppm);
+                $perfomance = (float) ($ideal_cycle_time_seconds / $ppm);
             }
         }
         
