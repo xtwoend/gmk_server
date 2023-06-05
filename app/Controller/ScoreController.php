@@ -16,7 +16,10 @@ class ScoreController
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
         $date = Carbon::parse($date)->timezone('Asia/Jakarta');
-        $score = Score::where('device_id', $deviceId)->where('production_date', $date->format('Y-m-d'))->first();
+        $score = Score::with('timesheets')
+            ->where('device_id', $deviceId)
+            ->where('production_date', $date->format('Y-m-d'))
+            ->first();
 
         return \response($score);
     }
