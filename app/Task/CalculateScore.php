@@ -4,7 +4,9 @@ namespace App\Task;
 
 use Carbon\Carbon;
 use App\Model\Alarm;
+use App\Model\Score;
 use App\Model\Device;
+use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Crontab\Annotation\Crontab;
 use Hyperf\Contract\StdoutLoggerInterface;
