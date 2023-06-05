@@ -15,7 +15,7 @@ class ScoreResource extends JsonResource
     {
         $data = parent::toArray();
 
-        $avail_duration = (is_null($data->shif_id))? "24:00:00": "08:00:00";
+        $avail_duration = (is_null($this->shift_id))? "24:00:00": "08:00:00";
         return array_merge($data, [
             'run_duration' => (string) gmdate("H:i:s", $this->run_time),
             'down_duration' => (string) gmdate("H:i:s", $this->down_time),
