@@ -28,6 +28,8 @@ class Lme3 extends Model
 
     protected array $guarded = ['id'];
 
+    public string $statusRun = 'IHM_ST_Moinho_status';
+
     /**
      * export table headers
      */

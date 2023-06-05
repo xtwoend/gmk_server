@@ -152,7 +152,7 @@ trait ScoreTrait
         $nModel = get_class($model);
         $perfomance = $nModel::table($model->device, $score->production_date->format('Y-m-d'))
             ->whereBetween('terminal_time', [$from, $to])
-            ->where('LME_ST_MillMotor_Status', 1)
+            ->where($model->statusRun, 1)
             ->avg('performance_per_minutes');
         
         return $perfomance;

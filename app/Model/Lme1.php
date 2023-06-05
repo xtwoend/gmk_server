@@ -29,6 +29,8 @@ class Lme1 extends Model
 
     protected array $guarded = ['id'];
 
+    public string $statusRun = 'LME_ST_MillMotor_Status';
+
     /**
      * export table headers
      */
