@@ -7,6 +7,7 @@ namespace App\Controller;
 use Carbon\Carbon;
 use App\Model\Score;
 use App\Model\ScoreSetting;
+use App\Resource\ScoreResource;
 use App\Resource\ReportResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
 
@@ -21,7 +22,7 @@ class ScoreController
             ->where('production_date', $date->format('Y-m-d'))
             ->first();
 
-        return \response($score);
+        return \response(new ScoreResource($score));
     }
     
     public function store($deviceId, RequestInterface $request)
@@ -39,7 +40,7 @@ class ScoreController
                 'production_date' => $date
             ],$request->all()));
         }
-        return \response($score);
+        return \response(new ScoreResource($score));
     }
 
     public function history($deviceId, RequestInterface $request)
@@ -58,7 +59,7 @@ class ScoreController
             return $row;
         });
 
-        return response(ReportResource::collection($rows));
+        return response(ScoreResource::collection($rows));
     }
 
     public function setSetting($deviceId, RequestInterface $request)
@@ -81,7 +82,7 @@ class ScoreController
     {
         $score = Score::with('timesheets')->findOrFail($id);
         
-        return response($score);
+        return \response(new ScoreResource($score));
     }
     
 }
