@@ -146,7 +146,10 @@ trait ScoreTrait
         $from = $score->production_date->format('Y-m-d') . ' ' . $score->started_at;
         $to = $score->production_date->format('Y-m-d') . ' ' . $score->ended_at;
         $nModel = get_class($model);
-        $perfomance = $nModel::table($model->device, $score->production_date->format('Y-m-d'))->whereBetween('terminal_time', [$from, $to])->avg('performance_per_minutes');
+        $perfomance = $nModel::table($model->device, $score->production_date->format('Y-m-d'))
+            ->whereBetween('terminal_time', [$from, $to])
+            ->where('LME_ST_MillMotor_Status', 1)
+            ->avg('performance_per_minutes');
         
         return $perfomance;
     }
@@ -157,7 +160,7 @@ trait ScoreTrait
         $to = Carbon::now();
         $seconds = $to->diffInSeconds($from);
        
-        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['idle', 'run'])->get()->sum('runTime');
        
         return (float) ($runTime / $seconds);
     }
