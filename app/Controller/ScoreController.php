@@ -73,7 +73,7 @@ class ScoreController
 
     public function getSetting($deviceId)
     {
-        $setting = ScoreSetting::find($deviceId);
+        $setting = ScoreSetting::where('device_id', $deviceId)->first();
         
         return response($setting);
     }
