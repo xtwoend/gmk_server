@@ -32,15 +32,15 @@ trait ScoreTrait
                 'ended_at' => Carbon::parse($date . ' 23:59:59')
             ]);
         }
-
         if($score->timesheets()->count() > 0) {
+            
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
             $availability = $this->getAvailability($model, $score);
-            
             list($ppm1, $ppm2) = $this->avgPerformance($model, $score);
-            if(! is_null($ppm2)) {
+            $perfomance = $ppm1;
+            if(!is_null($ppm2)) {
                 $perfomance = ($ppm1 + $ppm2) / 2;
             }
 
@@ -156,8 +156,8 @@ trait ScoreTrait
 
     public function avgPerformance($model, $score)
     {   
-        $from = $score->production_date->format('Y-m-d') . ' ' . $score->started_at;
-        $to = $score->production_date->format('Y-m-d') . ' ' . $score->ended_at;
+        $from = $score->started_at;
+        $to = $score->ended_at;
         $nModel = get_class($model);
         $tableName = $nModel::table($model->device, $score->production_date->format('Y-m-d'))->getTable();
         
@@ -179,7 +179,7 @@ trait ScoreTrait
 
     public function getAvailability($model, $score)
     {
-        $from = Carbon::parse($score->production_date->format('Y-m-d') . ' ' .$score->started_at);
+        $from = Carbon::parse($score->started_at);
         $to = Carbon::now();
         $seconds = $to->diffInSeconds($from);
        
