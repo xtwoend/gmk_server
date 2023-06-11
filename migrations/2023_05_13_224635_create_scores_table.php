@@ -17,8 +17,8 @@ class CreateScoresTable extends Migration
             $table->unsignedBigInteger('shift_id')->nullable(); // shift 1, 2, 3
             $table->unsignedBigInteger('user_id')->nullable(); // relation to user but not now
             $table->date('production_date');
-            $table->time('started_at')->nullable();
-            $table->time('ended_at')->nullable();
+            $table->datetime('started_at')->nullable();
+            $table->datetime('ended_at')->nullable();
             $table->float('ppm', 10, 4)->default(0); 
             $table->integer('run_time')->default(0); // in seconds
             $table->integer('stop_time')->default(0); // in seconds

@@ -43,7 +43,9 @@ class Score extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [
-        'production_date' => 'date:Y-m-d'
+        'production_date' => 'date:Y-m-d',
+        'started_at' => 'datetime:Y-m-d H:i:s',
+        'end_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     protected array $appends = [

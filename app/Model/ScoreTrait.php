@@ -27,8 +27,8 @@ trait ScoreTrait
                 'device_id' => $model->device_id,
                 'shift_id' => null,
                 'production_date' => $date,
-                'started_at' => '00:00:00',
-                'ended_at' => '23:59:59'
+                'started_at' => Carbon::parse($date . ' 00:00:00'),
+                'ended_at' => Carbon::parse($date . ' 23:59:59')
             ]);
         }
 
@@ -78,12 +78,14 @@ trait ScoreTrait
         ])->first();
 
         if(is_null($score)) {
+            $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
+            $started_at  = Carbon::parse($date.' '.$shift->started_at);
             $score = Score::create([
                 'device_id' => $model->device_id,
                 'shift_id' => $shift->id,
                 'production_date' => $date,
-                'started_at' => $shift->started_at,
-                'ended_at' => $shift->ended_at
+                'started_at' => $started_at,
+                'ended_at' => $$started_at->addHours(8)
             ]);
         }
         
