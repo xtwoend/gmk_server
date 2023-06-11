@@ -17,11 +17,17 @@ class ScoreController
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
         $date = Carbon::parse($date)->timezone('Asia/Jakarta');
-   
+        
         $score = Score::with('timesheets')
             ->where('device_id', $deviceId)
-            ->where('production_date', $date->format('Y-m-d'))
-            ->firstOrFail();
+            ->where('production_date', $date->format('Y-m-d'));
+
+        if($request->input('shift_id', null)) {
+            $score = $score->where('shift_id', $request->input('shift_id'));
+        }
+
+        $score = $score->firstOrFail();
+           
 
         return \response(new ScoreResource($score));
     }
