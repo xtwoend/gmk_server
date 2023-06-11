@@ -103,6 +103,7 @@ class Lme2 extends Model
                 $table->float('HMI_LME_SP_FeedPManSpd', 15, 10)->nullable();
                 $table->float('temp_chilled_water_in', 15, 10)->nullable();
                 $table->float('temp_chilled_water_out', 15, 10)->nullable();
+                $table->float('performance_per_minutes_2', 15, 10)->nullable();
 
                 $table->timestamps();
             });
@@ -114,6 +115,7 @@ class Lme2 extends Model
     public function format(array $data)
     {
         $perfoma = ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed']);
+        $perfoma2 = ($data['HMI_LME_SP_FeedPManSpd'] / $data['HMI_LME_ST_FeedPSpeed']);
 
         return [
             'in_alarm_message_1' => $this->map($data['in_alarm_message_1']),
@@ -150,7 +152,8 @@ class Lme2 extends Model
 
             'HMI_LME_SP_FeedPManSpd' => $data['HMI_LME_SP_FeedPManSpd'],
             'temp_chilled_water_in' => $data['temp_chilled_water_in'],
-            'temp_chilled_water_out' => $data['temp_chilled_water_out']
+            'temp_chilled_water_out' => $data['temp_chilled_water_out'],
+            'performance_per_minutes_2' => ($perfoma2 > 1) ? 1: $perfoma2,
         ];
     }
 

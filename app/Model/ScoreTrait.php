@@ -9,6 +9,7 @@ use App\Model\Timesheet;
 use App\Model\DeviceStatus;
 use App\Model\ScoreSetting;
 use Hyperf\DbConnection\Db;
+use Hyperf\Database\Schema\Schema;
 
 trait ScoreTrait
 {
@@ -36,10 +37,16 @@ trait ScoreTrait
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
-            $perfomance = $this->avgPerformance($model, $score);
             $availability = $this->getAvailability($model, $score);
+            
+            list($ppm1, $ppm2) = $this->avgPerformance($model, $score);
+            if(! is_null($ppm2)) {
+                $perfomance = ($ppm1 + $ppm2) / 2;
+            }
 
             $s = Score::where('id', $score->id)->update([
+                'ppm' => $ppm1,
+                'ppm2' => $ppm2,
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
@@ -152,12 +159,22 @@ trait ScoreTrait
         $from = $score->production_date->format('Y-m-d') . ' ' . $score->started_at;
         $to = $score->production_date->format('Y-m-d') . ' ' . $score->ended_at;
         $nModel = get_class($model);
-        $perfomance = $nModel::table($model->device, $score->production_date->format('Y-m-d'))
+        $tableName = $nModel::table($model->device, $score->production_date->format('Y-m-d'))->getTable();
+        
+        $ppm1 = $nModel::table($model->device, $score->production_date->format('Y-m-d'))
             ->whereBetween('terminal_time', [$from, $to])
             ->where($model->statusRun, 1)
             ->avg('performance_per_minutes');
         
-        return $perfomance;
+        $ppm2 = null;
+        if (Schema::hasColumn($tableName, 'performance_per_minutes_2')){
+            $ppm2 = $nModel::table($model->device, $score->production_date->format('Y-m-d'))
+                ->whereBetween('terminal_time', [$from, $to])
+                ->where($model->statusRun, 1)
+                ->avg('performance_per_minutes_2');
+        }
+        
+        return [$ppm1, $ppm2];
     }
 
     public function getAvailability($model, $score)

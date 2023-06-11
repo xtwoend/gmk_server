@@ -28,6 +28,7 @@ class Score extends Model
         'started_at',
         'ended_at',
         'ppm',
+        'ppm2',
         'run_time',
         'stop_time',
         'down_time',
