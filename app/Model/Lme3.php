@@ -88,6 +88,9 @@ class Lme3 extends Model
                 $table->tinyInteger('alarm2')->default(0);
                 $table->tinyInteger('alarm3')->default(0);
                 $table->tinyInteger('alarm4')->default(0);
+                // addeded
+                $table->float('temp_chilled_water_in', 15, 10)->nullable();
+                $table->float('temp_chilled_water_out', 15, 10)->nullable();
                 $table->timestamps();
             });
         }
@@ -119,6 +122,8 @@ class Lme3 extends Model
             'alarm2' => $data['alarm2'],
             'alarm3' => $data['alarm3'],
             'alarm4' => $data['alarm4'],
+            'temp_chilled_water_in' => $data['temp_chilled_water_in'],
+            'temp_chilled_water_out' => $data['temp_chilled_water_out']
         ];
     }
 

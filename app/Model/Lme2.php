@@ -99,6 +99,10 @@ class Lme2 extends Model
                 $table->tinyInteger('tk_alarm2')->default(0);
                 $table->tinyInteger('lme_alarm1')->default(0);
                 $table->tinyInteger('lme_alarm2')->default(0);
+                // addeded
+                $table->float('HMI_LME_SP_FeedPManSpd', 15, 10)->nullable();
+                $table->float('temp_chilled_water_in', 15, 10)->nullable();
+                $table->float('temp_chilled_water_out', 15, 10)->nullable();
 
                 $table->timestamps();
             });
@@ -143,6 +147,10 @@ class Lme2 extends Model
             'tk_alarm2' => $data['tk_alarm2'],
             'lme_alarm1' => $data['lme_alarm1'],
             'lme_alarm2' => $data['lme_alarm2'],
+
+            'HMI_LME_SP_FeedPManSpd' => $data['HMI_LME_SP_FeedPManSpd'],
+            'temp_chilled_water_in' => $data['temp_chilled_water_in'],
+            'temp_chilled_water_out' => $data['temp_chilled_water_out']
         ];
     }
 
