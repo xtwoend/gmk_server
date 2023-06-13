@@ -93,17 +93,19 @@ if( ! function_exists('export')) {
 if(! function_exists('shift')) {
     function shift($date = null) {
         $date = $date ?: Carbon::now()->format('Y-m-d H:i:s');
+       
         /**
          * (Shift 1 = 06.00 sd 14.00)
          * (Shift 2 = 14.00 sd 21.00)
          * (Shift 3 = 21.00 sd 06.00)
          */
-        $hour = Carbon::parse($date)->format('G');
+        $hour = Carbon::parse($date)->format('H:i:s');
         
         $shifts = Shift::all();
         $shift = $shifts->where('id', 3)->first();
         $shift_1 = $shifts->where('id', 1)->first();
         $shift_2 = $shifts->where('id', 2)->first();
+        
         if($hour >= $shift_1->started_at && $hour < $shift_1->ended_at) {
             $shift = $shift_1;
         }elseif($hour >= $shift_2->started_at && $hour < $shift_2->ended_at) {

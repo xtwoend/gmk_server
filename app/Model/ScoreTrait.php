@@ -74,7 +74,7 @@ trait ScoreTrait
         $shift = shift();
         
         $date = Carbon::now()->format('Y-m-d');
-        if($shift->id == 3 && Carbon::now()->format('G') < $shift->ended_at) {
+        if($shift->id == 3 && Carbon::now()->format('H:i:s') < $shift->ended_at) {
             $date = Carbon::now()->subDay()->format('Y-m-d');
         }
         
@@ -84,40 +84,42 @@ trait ScoreTrait
             'production_date' => $date
         ])->first();
 
+        
         if(is_null($score)) {
-            $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
             $started_at  = Carbon::parse($date.' '.$shift->started_at);
             $score = Score::create([
                 'device_id' => $model->device_id,
                 'shift_id' => $shift->id,
                 'production_date' => $date,
                 'started_at' => $started_at,
-                'ended_at' => $$started_at->addHours(8)
+                'ended_at' => $started_at->addHours(8)
             ]);
         }
         
         if($score->timesheets()->count() > 0) {
-            list($perfomance, $output, $ppm) = $this->leepackPerformance($model, $score);
+            
+            list($perfomance, $output_qty, $ppm, $ppm2) = $this->leepackPerformance($model, $score);
             
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
             $downTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as downTime"))->where('status', 'breakdown')->where('score_id', $score->id)->get()->sum('downTime');
             $stopTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as stopTime"))->where('status', 'idle')->where('score_id', $score->id)->get()->sum('stopTime');
             
             $availability = $this->getAvailability($model, $score);
-
-            $s = Score::where('id', $score->id)->update([
-                'output' => $output,
+            $perfomance = ($perfomance < 1) ? $perfomance: 1;
+            $s = Score::where('id', $score->id)
+            ->update([
+                'output_qty' => $output_qty,
+                'reject_qty' => 0,
                 'ppm' => $ppm,
+                'ppm2' => $ppm2,
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
-                'performance' => ($perfomance < 1) ? $perfomance: 1,
+                'performance' => $perfomance,
                 'availability' => $availability,
                 'quality' => 1,
-                'oee' => $perfomance * $availability * 1
+                'oee' => $perfomance * $availability * 1,
             ]);
-            var_dump($s, ($perfomance * $availability * 1));
-            
             $score = Score::find($score->id);
             
         }else{
@@ -133,25 +135,27 @@ trait ScoreTrait
 
     public function leepackPerformance($model, $score)
     {
-        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->get()->sum('runTime');
+        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['run', 'idle'])->get()->sum('runTime');
         
         $ideal_cycle_time_seconds = 30;
         $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
         if($setting) {
             $ideal_cycle_time_seconds = $setting->ideal_cycle_time_seconds;
         }
-        $output = (int) $model->pv_bag;
-        $ppm = (float) 0;
-        $perfomance =  (float) 0;
-
-        if($output > 0){
-            $ppm = (float) ($runTime / $output);
-            if($ppm > 0){
-                $perfomance = (float) ($ideal_cycle_time_seconds / $ppm);
+        $output_qty = (int) $model->pv_bag;
+        $ppm = $ideal_cycle_time_seconds;
+        $ppm2 = (float) 0;
+        $perfomance = (float) 0;
+       
+        if($output_qty > 0){
+            $ppm2 = (float) ($runTime / $output_qty);
+            
+            if($ppm2 > 0){
+                $perfomance = (float) ($ideal_cycle_time_seconds / $ppm2);
             }
         }
         
-        return [$perfomance, $output, $ppm];
+        return [$perfomance, $output_qty, $ppm, $ppm2];
     }
 
     public function avgPerformance($model, $score)
