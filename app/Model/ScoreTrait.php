@@ -92,7 +92,7 @@ trait ScoreTrait
                 'shift_id' => $shift->id,
                 'production_date' => $date,
                 'started_at' => $started_at,
-                'ended_at' => $started_at->addHours(8)
+                'ended_at' => Carbon::parse($date.' '.$shift->started_at)->addHours(8)
             ]);
         }
         
