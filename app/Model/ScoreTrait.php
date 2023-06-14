@@ -45,13 +45,21 @@ trait ScoreTrait
                 $perfomance = ($ppm1 + $ppm2) / 2;
             }
 
+            $ppm_pv = $model->{$model->ppm_pv} ?: 0;
+            $ppm_sv = $model->{$model->ppm_sv} ?: 0;
+
+            $ppm2_pv = $model->{$model->ppm2_pv} ?: 0;
+            $ppm2_sv = $model->{$model->ppm2_sv} ?: 0;
+
+            $isRun = $model->{$model->statusRun} ?: 0;
+
             $s = Score::where('id', $score->id)->update([
                 'ppm' => $ppm1,
-                'ppm_pv' => $model->{$model->ppm_pv} ?: 0,
-                'ppm_sv' => $model->{$model->ppm_sv} ?: 0,
+                'ppm_pv' => ($isRun)? $ppm_pv : $score->ppm_pv,
+                'ppm_sv' => ($isRun)? $ppm_sv : $score->ppm_sv,
                 'ppm2' => $ppm2 ?: 0,
-                'ppm2_pv' => $model->{$model->ppm2_pv} ?: 0,
-                'ppm2_sv' => $model->{$model->ppm2_sv} ?: 0,
+                'ppm2_pv' => ($isRun)? $ppm2_pv : $score->ppm2_pv,
+                'ppm2_sv' => ($isRun)? $ppm2_sv : $score->ppm2_sv,
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
