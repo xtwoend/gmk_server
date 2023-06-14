@@ -118,8 +118,8 @@ class Lme2 extends Model
 
     public function format(array $data)
     {
-        $perfoma = $data['HMI_LME_ST_MillSpeed'] > 0 ? ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed']) : 0;
-        $perfoma2 = $data['HMI_LME_SP_FeedPManSpd'] > 0 ? ($data['HMI_LME_SP_FeedPManSpd'] / $data['HMI_LME_ST_FeedPSpeed']) : 0;
+        $perfoma = $data['HMI_LME_SP_MillAutSpeed'] > 0 ? ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed']) : 0;
+        $perfoma2 = $data['HMI_LME_ST_FeedPSpeed'] > 0 ? ($data['HMI_LME_SP_FeedPManSpd'] / $data['HMI_LME_ST_FeedPSpeed']) : 0;
 
         return [
             'in_alarm_message_1' => $this->map($data['in_alarm_message_1']),

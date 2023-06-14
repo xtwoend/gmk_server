@@ -39,7 +39,7 @@ class MQTTListener implements ListenerInterface
         $device = $event->device;
 
         $modelClass = $device->model;
-        
+       
         if(! class_exists($modelClass)) {
             return;
         }
@@ -47,12 +47,11 @@ class MQTTListener implements ListenerInterface
         $ts = (new $modelClass);
         $date = $data[$ts->ts];
         $data = $ts->format($data);
-
         $model = $modelClass::table($device, $date);
        
         $last = $model->orderBy('terminal_time', 'desc')->first();
         $now = Carbon::parse($date);
-
+        
         // save interval 60 detik
         if($last && $now->diffInSeconds($last->terminal_time) < config('mqtt.interval_save', 60) ) {   
             return;

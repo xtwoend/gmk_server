@@ -119,7 +119,7 @@ class Lme3 extends Model
             'data10' => $data['data10'],
             'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status'],
             'SP_LME3_Mill_Speed' => $data['SP_LME3_Mill_Speed'],
-            'performance_per_minutes' => ($data['data8'] / $data['SP_LME3_Mill_Speed']),
+            'performance_per_minutes' => ($data['SP_LME3_Mill_Speed'] > 0) ? ($data['data8'] / $data['SP_LME3_Mill_Speed']) : 0,
             'alarm1' => $data['alarm1'],
             'alarm2' => $data['alarm2'],
             'alarm3' => $data['alarm3'],
