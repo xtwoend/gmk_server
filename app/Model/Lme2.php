@@ -30,6 +30,10 @@ class Lme2 extends Model
     protected array $guarded = ['id'];
 
     public string $statusRun = 'HMI_LME_ST_MillMotor_Status';
+    public string $ppm_pv = 'HMI_LME_ST_MillSpeed';
+    public string $ppm_sv = 'HMI_LME_SP_MillAutSpeed';
+    public string $ppm2_pv = 'HMI_LME_SP_FeedPManSpd';
+    public string $ppm2_sv = 'HMI_LME_ST_FeedPSpeed';
 
     /**
      * export table headers

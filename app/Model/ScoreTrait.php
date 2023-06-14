@@ -46,7 +46,11 @@ trait ScoreTrait
 
             $s = Score::where('id', $score->id)->update([
                 'ppm' => $ppm1,
+                'ppm_pv' => $model->{$model->ppm_pv} ?: 0,
+                'ppm_sv' => $model->{$model->ppm_sv} ?: 0,
                 'ppm2' => $ppm2,
+                'ppm2_pv' => $model->{$model->ppm2_pv} ?: 0,
+                'ppm2_sv' => $model->{$model->ppm2_sv} ?: 0,
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,

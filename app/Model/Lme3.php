@@ -29,6 +29,8 @@ class Lme3 extends Model
     protected array $guarded = ['id'];
 
     public string $statusRun = 'IHM_ST_Moinho_status';
+    public string $ppm_pv = 'data8';
+    public string $ppm_sv = 'SP_LME3_Mill_Speed';
 
     /**
      * export table headers
