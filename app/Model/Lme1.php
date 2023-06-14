@@ -244,10 +244,7 @@ class Lme1 extends Model
             }
 
             $timesheet->update([
-                'ended_at' => Carbon::now(),
-                'output' => 0,
-                'reject' => 0,
-                'ppm' => 0
+                'ended_at' => Carbon::now()
             ]);
         }
 
@@ -279,12 +276,9 @@ class Lme1 extends Model
 
             $timesheet->update([
                 'ended_at' => Carbon::now(),
-                'output' => 0,
-                'reject' => 0,
-                'ppm' => 0
             ]);
         }
-
+        // LME_ST_MillMotor_Status
         if($score && $model->LME_ST_MillMotor_Status == 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
@@ -310,10 +304,7 @@ class Lme1 extends Model
             }
 
             $timesheet->update([
-                'ended_at' => Carbon::now(),
-                'output' => 0,
-                'reject' => 0,
-                'ppm' => 0
+                'ended_at' => Carbon::now()
             ]);
         }
     }

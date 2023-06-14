@@ -69,6 +69,28 @@ class ScoreController
         return response(ScoreResource::collection($rows));
     }
 
+    public function timesheetHistory($deviceId, RequestInterface $request) 
+    {
+        $from = $request->input('from', Carbon::now()->format('Y-m-d'));
+        $to = $request->input('to', Carbon::now()->format('Y-m-d'));
+
+        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+
+        $scores = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get();
+        $rows = [];
+        
+        foreach($scores as $score) {
+            $rows[] = [
+                'timestamps' => 0,
+                'idle' => 0,
+                'run' => 0,
+                'breakdown' => 0,
+            ];
+        }
+
+    }   
+
     public function setSetting($deviceId, RequestInterface $request)
     {
         $setting = ScoreSetting::updateOrCreate([

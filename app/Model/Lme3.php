@@ -232,10 +232,7 @@ class Lme3 extends Model
             }
 
             $timesheet->update([
-                'ended_at' => Carbon::now(),
-                'output' => 0,
-                'reject' => 0,
-                'ppm' => 0
+                'ended_at' => Carbon::now()
             ]);
         }
 
@@ -264,10 +261,7 @@ class Lme3 extends Model
             }
 
             $timesheet->update([
-                'ended_at' => Carbon::now(),
-                'output' => 0,
-                'reject' => 0,
-                'ppm' => 0
+                'ended_at' => Carbon::now()
             ]);
         }
 
@@ -296,10 +290,7 @@ class Lme3 extends Model
             }
 
             $timesheet->update([
-                'ended_at' => Carbon::now(),
-                'output' => 0,
-                'reject' => 0,
-                'ppm' => 0
+                'ended_at' => Carbon::now()
             ]);
         }
     }
