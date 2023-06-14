@@ -22,7 +22,7 @@ trait ScoreTrait
             'shift_id' => null,
             'production_date' => $date
         ])->first();
-
+        
         if(is_null($score)) {
             $score = Score::create([
                 'device_id' => $model->device_id,
@@ -32,6 +32,7 @@ trait ScoreTrait
                 'ended_at' => Carbon::parse($date . ' 23:59:59')
             ]);
         }
+       
         if($score->timesheets()->count() > 0) {
             
             $runTime = Timesheet::select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->where('status', 'run')->where('score_id', $score->id)->get()->sum('runTime');
@@ -48,7 +49,7 @@ trait ScoreTrait
                 'ppm' => $ppm1,
                 'ppm_pv' => $model->{$model->ppm_pv} ?: 0,
                 'ppm_sv' => $model->{$model->ppm_sv} ?: 0,
-                'ppm2' => $ppm2,
+                'ppm2' => $ppm2 ?: 0,
                 'ppm2_pv' => $model->{$model->ppm2_pv} ?: 0,
                 'ppm2_sv' => $model->{$model->ppm2_sv} ?: 0,
                 'run_time' => $runTime,

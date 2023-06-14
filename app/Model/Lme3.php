@@ -204,9 +204,10 @@ class Lme3 extends Model
         $this->alarmDb($model, 'alarm_message_2');
         $this->alarmDb($model, 'alarm_message_3');
         $this->alarmDb($model, 'alarm_message_4');
-
+        
         $score = $this->createScoreDaily($model);
-
+        
+        
         if($score && $model->IHM_ST_Moinho_status > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
