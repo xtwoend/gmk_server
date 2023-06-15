@@ -6,7 +6,9 @@ namespace App\Controller;
 
 use Carbon\Carbon;
 use App\Model\Score;
+use App\Model\Timesheet;
 use App\Model\ScoreSetting;
+use Hyperf\DbConnection\Db;
 use App\Resource\ScoreResource;
 use App\Resource\ReportResource;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -16,7 +18,7 @@ class ScoreController
     public function index($deviceId, RequestInterface $request)
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-        $date = Carbon::parse($date)->timezone('Asia/Jakarta');
+        $date = Carbon::parse($date);
         
         $score = Score::with('timesheets')
             ->where('device_id', $deviceId)
@@ -35,7 +37,7 @@ class ScoreController
     public function store($deviceId, RequestInterface $request)
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-        $date = Carbon::parse($date)->timezone('Asia/Jakarta');
+        $date = Carbon::parse($date);
         
         $id = $request->input('id', null);
         if($id) {
@@ -55,8 +57,8 @@ class ScoreController
         $from = $request->input('from', Carbon::now()->format('Y-m-d'));
         $to = $request->input('to', Carbon::now()->format('Y-m-d'));
 
-        $from = Carbon::parse($from)->timezone('Asia/Jakarta');
-        $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to);
 
         $rows = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get();
         $rows = $rows->map(function($row){
@@ -77,18 +79,14 @@ class ScoreController
         $from = Carbon::parse($from)->timezone('Asia/Jakarta');
         $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
-        $scores = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get();
-        $rows = [];
-        
-        foreach($scores as $score) {
-            $rows[] = [
-                'timestamps' => 0,
-                'idle' => 0,
-                'run' => 0,
-                'breakdown' => 0,
-            ];
-        }
+        $scores = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get()->pluck('id');
+        $rows = Timesheet::select(Db::raw("scores.production_date, timesheets.score_id, SUM(IF(timesheets.status = 'run', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as run, SUM(IF(timesheets.status = 'idle', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as idle, SUM(IF(status = 'breakdown', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as breakdown"))
+            ->join('scores', 'scores.id', '=', 'timesheets.score_id')
+            ->whereIn('score_id', $scores)
+            ->groupBy('score_id')
+            ->get();
 
+        return response($rows);
     }   
 
     public function setSetting($deviceId, RequestInterface $request)

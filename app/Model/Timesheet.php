@@ -31,4 +31,9 @@ class Timesheet extends Model
         'ended_at' => 'datetime',
         'in_progress' => 'boolean'
     ];
+
+    public function score()
+    {
+        return $this->belongsTo(Score::class, 'score_id');
+    }
 }
