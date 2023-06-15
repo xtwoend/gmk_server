@@ -80,7 +80,7 @@ class ScoreController
         $to = Carbon::parse($to)->timezone('Asia/Jakarta');
 
         $scores = Score::where('device_id', $deviceId)->whereBetween('production_date', [$from, $to])->get()->pluck('id');
-        $rows = Timesheet::select(Db::raw("(UNIX_TIMESTAMP(ct.terminal_time) * 1000) as unix_time, SUM(IF(timesheets.status = 'run', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as run, SUM(IF(timesheets.status = 'idle', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as idle, SUM(IF(status = 'breakdown', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as breakdown"))
+        $rows = Timesheet::select(Db::raw("scores.production_date, SUM(IF(timesheets.status = 'run', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as run, SUM(IF(timesheets.status = 'idle', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as idle, SUM(IF(status = 'breakdown', TIMESTAMPDIFF(SECOND, timesheets.started_at, timesheets.ended_at), 0)) as breakdown"))
             ->join('scores', 'scores.id', '=', 'timesheets.score_id')
             ->whereIn('score_id', $scores)
             ->groupBy('score_id')
