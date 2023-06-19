@@ -30,8 +30,8 @@ class Lme2 extends Model
     protected array $guarded = ['id'];
 
     public string $statusRun = 'HMI_LME_ST_MillMotor_Status';
-    public string $ppm_pv = 'HMI_LME_SP_MillAutSpeed';
-    public string $ppm_sv = 'HMI_LME_ST_MillSpeed';
+    public string $ppm_pv = 'HMI_LME_ST_MillSpeed';
+    public string $ppm_sv = 'HMI_LME_SP_MillAutSpeed';
     public string $ppm2_pv = 'HMI_LME_ST_FeedPSpeed';
     public string $ppm2_sv = 'HMI_LME_SP_FeedPManSpd';
 
@@ -119,7 +119,7 @@ class Lme2 extends Model
     public function format(array $data)
     {
         $perfoma = $data['HMI_LME_SP_MillAutSpeed'] > 0 ? ($data['HMI_LME_ST_MillSpeed'] / $data['HMI_LME_SP_MillAutSpeed']) : 0;
-        $perfoma2 = $data['HMI_LME_ST_FeedPSpeed'] > 0 ? ($data['HMI_LME_SP_FeedPManSpd'] / $data['HMI_LME_ST_FeedPSpeed']) : 0;
+        $perfoma2 = $data['HMI_LME_SP_FeedPManSpd'] > 0 ? ($data['HMI_LME_ST_FeedPSpeed'] / $data['HMI_LME_SP_FeedPManSpd']) : 0;
 
         return [
             'in_alarm_message_1' => $this->map($data['in_alarm_message_1']),
