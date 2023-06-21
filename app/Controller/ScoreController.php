@@ -24,6 +24,7 @@ class ScoreController
             ->where('device_id', $deviceId)
             ->where('production_date', $date->format('Y-m-d'));
 
+      
         if($request->input('shift_id', null)) {
             $score = $score->where('shift_id', $request->input('shift_id'));
         }
@@ -31,7 +32,7 @@ class ScoreController
         $score = $score->firstOrFail();
            
 
-        return \response(new ScoreResource($score));
+        return \response(new ScoreResource($score), 0, ['current_shift' => shift()]);
     }
     
     public function store($deviceId, RequestInterface $request)
