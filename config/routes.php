@@ -49,7 +49,7 @@ Router::get('/setting/score/{deviceId}', [ScoreController::class, 'getSetting'])
 Router::post('/setting/score/{deviceId}', [ScoreController::class, 'setSetting']);
 
 // current shift
-Route::get('/shift/current', [ScoreController::class, 'getCurrentShift']);
+Router::get('/shift/current', [ScoreController::class, 'getCurrentShift']);
 
 // report
 Router::get('/report/{id}', [ReportController::class, 'data']);
