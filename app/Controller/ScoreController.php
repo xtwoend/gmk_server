@@ -29,9 +29,12 @@ class ScoreController
             $score = $score->where('shift_id', $request->input('shift_id'));
         }
 
-        $score = $score->firstOrFail();
-           
-        return \response(new ScoreResource($score), 0, ['current_shift' => shift()]);
+        $score = $score->first();
+        if($score) {
+            return \response(new ScoreResource($score), 0, ['current_shift' => shift()]);
+        }
+
+        return \response([], 0, ['current_shift' => shift()]);
     }
     
     public function store($deviceId, RequestInterface $request)
