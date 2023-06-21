@@ -31,7 +31,6 @@ class ScoreController
 
         $score = $score->firstOrFail();
            
-
         return \response(new ScoreResource($score), 0, ['current_shift' => shift()]);
     }
     
