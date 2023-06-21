@@ -112,4 +112,8 @@ class ScoreController
         return \response(new ScoreResource($score));
     }
     
+    public function getCurrentShift()
+    {
+        return response(shift());
+    }
 }
