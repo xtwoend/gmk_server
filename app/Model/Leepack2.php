@@ -120,7 +120,7 @@ class Leepack2 extends Model
     {
         $productId = array_search(true, $data['product_type']);
         return [
-            'product_id' => ($productId + 1),
+            'product_id' => $productId,
             'alarm_leepack2' => $this->map($data['alarm_leepack2']),
             'mc_run' => $data['mc_run'],
             'mc_stop' => $data['mc_stop'],
