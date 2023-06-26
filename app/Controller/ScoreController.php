@@ -96,6 +96,7 @@ class ScoreController
     {
         $setting = ScoreSetting::updateOrCreate([
             'device_id' => $deviceId,
+            'product_id' => $request->input('product_id', NULL)
         ], $request->all());
 
         return response($setting);
