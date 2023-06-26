@@ -151,7 +151,7 @@ trait ScoreTrait
         $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['run', 'idle'])->get()->sum('runTime');
         
         $ideal_cycle_time_seconds = 30;
-        $setting = ScoreSetting::where('device_id', $model->device_id)->limit(1)->first();
+        $setting = ScoreSetting::where('device_id', $model->device_id)->where('product_id', $model->product_id)->limit(1)->first();
         if($setting) {
             $ideal_cycle_time_seconds = $setting->ideal_cycle_time_seconds;
         }
