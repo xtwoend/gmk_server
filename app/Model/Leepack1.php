@@ -92,6 +92,7 @@ class Leepack1 extends Model
                 $table->uuid('id')->primary();
                 $table->unsignedBigInteger('device_id')->index();
                 $table->datetime('terminal_time')->unique()->index();
+                $table->tinyInteger('product_id')->nullable();
                 $table->text('alarm_leepack1')->nullable();
                 $table->boolean('mc_run')->nullable();
                 $table->boolean('mc_stop')->nullable();
@@ -115,7 +116,9 @@ class Leepack1 extends Model
 
     public function format(array $data)
     {
+        $productId = array_search(true, $data['product_type']);
         return [
+            'product_id' => ($productId + 1),
             'alarm_leepack1' => $this->map($data['alarm_leepack1']),
             'mc_run' => $data['mc_run'],
             'mc_stop' => $data['mc_stop'],
