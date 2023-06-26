@@ -102,10 +102,10 @@ class ScoreController
         return response($setting);
     }
 
-    public function getSetting($deviceId)
+    public function getSetting($deviceId, RequestInterface $request)
     {
-        $setting = ScoreSetting::where('device_id', $deviceId)->first();
-        
+        $setting = ScoreSetting::where('device_id', $deviceId)->where('product_id', $request->input('product_id', null))->first();
+    
         return response($setting);
     }
 

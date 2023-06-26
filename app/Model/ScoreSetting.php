@@ -25,5 +25,7 @@ class ScoreSetting extends Model
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = [];
+    protected array $casts = [
+        'product_id' => 'integer'
+    ];
 }
