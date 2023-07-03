@@ -95,6 +95,7 @@ class Lme3 extends Model
                 $table->float('temp_chilled_water_out', 15, 10)->nullable();
                 $table->tinyInteger('feedpump_status')->nullable();
                 $table->tinyInteger('oil_transfer_pump_status')->nullable();
+                $table->integer('SP_Feed_Pump_Speed')->nullable();
                 $table->float('performance_per_minutes_2', 15, 10)->nullable();
                 $table->timestamps();
             });
@@ -137,6 +138,7 @@ class Lme3 extends Model
             'temp_chilled_water_out' => $data['temp_chilled_water_out'],
             'feedpump_status' => $data['feedpump_status'],
             'oil_transfer_pump_status' => $data['oil_transfer_pump_status'],
+            'SP_Feed_Pump_Speed' => $data['SP_Feed_Pump_Speed'],
             'performance_per_minutes_2' => $perfoma2
         ];
     }
