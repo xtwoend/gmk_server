@@ -95,6 +95,7 @@ class Lme3 extends Model
                 $table->float('temp_chilled_water_out', 15, 10)->nullable();
                 $table->tinyInteger('feedpump_status')->nullable();
                 $table->tinyInteger('oil_transfer_pump_status')->nullable();
+                $table->float('performance_per_minutes_2', 15, 10)->nullable();
                 $table->timestamps();
             });
         }
@@ -103,7 +104,13 @@ class Lme3 extends Model
     }
 
     public function format(array $data)
-    {
+    { 
+        $perfoma = ($data['SP_LME3_Mill_Speed'] > 0) ? ($data['data8'] / $data['SP_LME3_Mill_Speed']) : 0;
+        $perfoma2 = 0;
+        /**
+         * PV speed = data6
+         * SV speed =
+         */
         return [
             'alarm_message_1' => $this->map($data['alarm_message_1']),
             'alarm_message_2' => $this->map($data['alarm_message_2']),
@@ -121,7 +128,7 @@ class Lme3 extends Model
             'data10' => $data['data10'],
             'IHM_ST_Moinho_status' => $data['IHM_ST_Moinho_status'],
             'SP_LME3_Mill_Speed' => $data['SP_LME3_Mill_Speed'],
-            'performance_per_minutes' => ($data['SP_LME3_Mill_Speed'] > 0) ? ($data['data8'] / $data['SP_LME3_Mill_Speed']) : 0,
+            'performance_per_minutes' => $perfoma,
             'alarm1' => $data['alarm1'],
             'alarm2' => $data['alarm2'],
             'alarm3' => $data['alarm3'],
@@ -129,7 +136,8 @@ class Lme3 extends Model
             'temp_chilled_water_in' => $data['temp_chilled_water_in'],
             'temp_chilled_water_out' => $data['temp_chilled_water_out'],
             'feedpump_status' => $data['feedpump_status'],
-            'oil_transfer_pump_status' => $data['oil_transfer_pump_status']
+            'oil_transfer_pump_status' => $data['oil_transfer_pump_status'],
+            'performance_per_minutes_2' => $perfoma2
         ];
     }
 
