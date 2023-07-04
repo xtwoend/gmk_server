@@ -31,6 +31,8 @@ class Lme3 extends Model
     public string $statusRun = 'IHM_ST_Moinho_status';
     public string $ppm_pv = 'data8';
     public string $ppm_sv = 'SP_LME3_Mill_Speed';
+    public string $ppm2_pv = 'data6';
+    public string $ppm2_sv = 'SP_Feed_Pump_Speed';
 
     /**
      * export table headers
