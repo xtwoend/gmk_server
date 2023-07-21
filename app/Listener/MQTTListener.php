@@ -47,7 +47,7 @@ class MQTTListener implements ListenerInterface
         $date = $data[$ts->ts];
         $data = $ts->format($data);
         $model = $modelClass::table($device, $date);
-        var_dump($data);
+       
         $last = $model->orderBy('terminal_time', 'desc')->first();
         $now = Carbon::parse($date);
 
