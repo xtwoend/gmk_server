@@ -120,19 +120,19 @@ class Leepack1 extends Model
         return [
             'product_id' => $productId,
             'alarm_leepack1' => $this->map($data['alarm_leepack1']),
-            'mc_run' => $data['mc_run'],
-            'mc_stop' => $data['mc_stop'],
-            'filling_speed' => $data['filling_speed'],
-            'sv_speed_bpm' => $data['sv_speed_bpm'],
-            'pv_speed_bpm' => $data['pv_speed_bpm'],
-            'sv_bag' => $data['sv_bag'],
-            'pv_bag' => $data['pv_bag'],
-            'sv_filling_speed_rpm' => $data['sv_filling_speed_rpm'],
-            'pv_filling_speed_rpm' => $data['pv_filling_speed_rpm'],
-            'sv_gripper_width' => $data['sv_gripper_width'],
-            'sp_gripper_width' => $data['sp_gripper_width'],
-            'inverter_fault' => $data['inverter_fault'],
-            'servo_fault' => $data['servo_fault']
+            'mc_run' => $data['mc_run'] ?? 0,
+            'mc_stop' => $data['mc_stop'] ?? 0,
+            'filling_speed' => $data['filling_speed'] ?? 0,
+            'sv_speed_bpm' => $data['sv_speed_bpm'] ?? 0,
+            'pv_speed_bpm' => $data['pv_speed_bpm'] ?? 0,
+            'sv_bag' => $data['sv_bag'] ?? 0,
+            'pv_bag' => $data['pv_bag'] ?? 0,
+            'sv_filling_speed_rpm' => $data['sv_filling_speed_rpm'] ?? 0,
+            'pv_filling_speed_rpm' => $data['pv_filling_speed_rpm'] ?? 0,
+            'sv_gripper_width' => $data['sv_gripper_width'] ?? 0,
+            'sp_gripper_width' => $data['sp_gripper_width'] ?? 0,
+            'inverter_fault' => $data['inverter_fault'] ?? 0,
+            'servo_fault' => $data['servo_fault'] ?? 0
         ];
     }
 

@@ -52,6 +52,9 @@ trait ScoreTrait
             $ppm2_sv = $model->{$model->ppm2_sv} ?: 0;
 
             $isRun = $model->{$model->statusRun} ?: 0;
+            
+            // set max 100%
+            $perfomance = ($perfomance > 1) ? 1: $perfomance;
 
             $s = Score::where('id', $score->id)->update([
                 'ppm' => $ppm1,
@@ -63,7 +66,7 @@ trait ScoreTrait
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
-                'performance' => $perfomance,
+                'performance' => ($perfomance > 1) ? 1: $perfomance ,
                 'availability' => $availability,
                 'quality' => 1,
                 'oee' =>  $perfomance * $availability * 1,

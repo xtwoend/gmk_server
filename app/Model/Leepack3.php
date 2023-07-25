@@ -124,15 +124,15 @@ class Leepack3 extends Model
         return [
             'product_id' => $productId,
             'alarm_leepack3' => $this->map($data['alarm_leepack3']),
-            'mc_run' => $data['mc_run'],
-            'mc_stop' => $data['mc_stop'],
-            'sv_bag' => $data['sv_bag'],
-            'pv_bag' => $data['pv_bag'],
-            'sv_filling_speed_rpm' => $data['sv_filling_speed_rpm'],
-            'sv_filling_pulse' => $data['sv_filling_pulse'],
-            'level_hopper' => $data['level_hopper'],
-            'inverter_fault' => $data['inverter_fault'],
-            'servo_fault' => $data['servo_fault']
+            'mc_run' => $data['mc_run'] ?? 0,
+            'mc_stop' => $data['mc_stop'] ?? 0,
+            'sv_bag' => $data['sv_bag'] ?? 0,
+            'pv_bag' => $data['pv_bag'] ?? 0,
+            'sv_filling_speed_rpm' => $data['sv_filling_speed_rpm'] ?? 0,
+            'sv_filling_pulse' => $data['sv_filling_pulse'] ?? 0,
+            'level_hopper' => $data['level_hopper'] ?? 0,
+            'inverter_fault' => $data['inverter_fault'] ?? 0,
+            'servo_fault' => $data['servo_fault'] ?? 0
         ];
     }
 
