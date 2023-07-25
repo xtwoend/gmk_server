@@ -105,6 +105,7 @@ trait ScoreTrait
             $started_at  = Carbon::parse($date.' '.$shift->started_at);
             $score = Score::create([
                 'device_id' => $model->device_id,
+                'product_id' => $model->product_id,
                 'shift_id' => $shift->id,
                 'production_date' => $date,
                 'started_at' => $started_at,
@@ -124,6 +125,7 @@ trait ScoreTrait
             $perfomance = ($perfomance < 1) ? $perfomance: 1;
             $s = Score::where('id', $score->id)
             ->update([
+                'product_id' => $model->product_id,
                 'output_qty' => $output_qty,
                 'reject_qty' => 0,
                 'ppm' => $ppm,

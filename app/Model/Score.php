@@ -22,6 +22,7 @@ class Score extends Model
      */
     protected array $fillable = [
         'device_id',
+        'product_id',
         'shift_id',
         'user_id',
         'production_date',
