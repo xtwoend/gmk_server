@@ -65,6 +65,7 @@ class Lme2 extends Model
         'temp_chilled_water_in' => 'decimal:2',
         'temp_chilled_water_out' => 'decimal:2',
         'performance_per_minutes_2' => 'decimal:2',
+        'HMI_TK_ST_DispSpeed' => 'decimal:2',
     ];
 
     /**
