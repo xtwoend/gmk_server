@@ -56,7 +56,19 @@ class Lme1 extends Model
         'lme_alarm_message_2' => 'array',
         'ce_alarm_message_1' => 'array',
         'ce_alarm_message_2' => 'array',
-        'HMI_CE_ST_ConcProdTemp' => 'decimal:2'
+        'HMI_CE_ST_ConcProdTemp' => 'decimal:2',
+        'HMI_TK_ST_CoolTkTemp' => 'decimal:2',
+        'HMI_TK_ST_HoldTkTemp' => 'decimal:2',
+        'HMI_LME_ST_FeedPSpeed' => 'decimal:2',
+        'HMI_CUM_ST_MillSpeed' => 'decimal:2',
+        'HMI_LME_ST_MillCurrent' => 'decimal:2',
+        'HMI_LME_ST_InProdPres' => 'decimal:2',
+        'HMI_LME_ST_OutProdTemp' => 'decimal:2',
+        'HMI_LME_SP_MillPAutSpd' => 'decimal:2',
+        'performance_per_minutes' => 'decimal:2',
+        'HMI_LME_SP_FeedPManSpd' => 'decimal:2',
+        'temp_chilled_water_in' => 'decimal:2',
+        'temp_chilled_water_out' => 'decimal:2',
     ];
 
     /**

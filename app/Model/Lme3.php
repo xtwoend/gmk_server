@@ -49,7 +49,22 @@ class Lme3 extends Model
         'alarm_message_1' => 'array',
         'alarm_message_2' => 'array',
         'alarm_message_3' => 'array',
-        'alarm_message_4' => 'array'
+        'alarm_message_4' => 'array',
+        'data1' => 'decimal:2',
+        'data2' => 'decimal:2',
+        'data3' => 'decimal:2',
+        'data4' => 'decimal:2',
+        'data5' => 'decimal:2',
+        'data6' => 'decimal:2',
+        'data7' => 'decimal:2',
+        'data8' => 'decimal:2',
+        'data9' => 'decimal:2',
+        'data10' => 'decimal:2',
+        'SP_LME3_Mill_Speed' => 'decimal:2',
+        'performance_per_minutes' => 'decimal:2',
+        'temp_chilled_water_in' => 'decimal:2',
+        'temp_chilled_water_out' => 'decimal:2',
+        'performance_per_minutes_2' => 'decimal:2'
     ];
 
     /**
