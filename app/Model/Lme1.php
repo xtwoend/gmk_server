@@ -56,6 +56,7 @@ class Lme1 extends Model
         'lme_alarm_message_2' => 'array',
         'ce_alarm_message_1' => 'array',
         'ce_alarm_message_2' => 'array',
+        'HMI_CE_ST_ConcProdTemp' => 'decimal:2'
     ];
 
     /**
