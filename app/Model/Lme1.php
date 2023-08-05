@@ -55,7 +55,7 @@ class Lme1 extends Model
         'lme_alarm_message_1' => 'array',
         'lme_alarm_message_2' => 'array',
         'ce_alarm_message_1' => 'array',
-        'ce_alarm_message_2' => 'array'
+        'ce_alarm_message_2' => 'array',
     ];
 
     /**
@@ -89,20 +89,20 @@ class Lme1 extends Model
                 $table->tinyInteger('TK_ST_TksTransfPump_Status')->nullable(); // untuk acuan downtime loss jika nilai 0 mulai menghitung durasi
                 $table->tinyInteger('LME_ST_MillMotor_Status')->nullable(); // untuk acuan downtime loss jika nilai 0 mulai menghitung durasi
                 $table->tinyInteger('LME_ST_FeedingPump_Status')->nullable();
-                $table->float('HMI_CE_ST_ConcProdTemp', 15, 10)->nullable();
-                $table->float('HMI_TK_ST_CoolTkTemp', 15, 10)->nullable();
-                $table->float('HMI_TK_ST_HoldTkTemp', 15, 10)->nullable();
-                $table->float('HMI_LME_ST_FeedPSpeed', 15, 10)->nullable();
-                $table->float('HMI_CUM_ST_MillSpeed', 15, 10)->nullable();
-                $table->float('HMI_LME_ST_MillCurrent', 15, 10)->nullable();
-                $table->float('HMI_LME_ST_InProdPres', 15, 10)->nullable();
-                $table->float('HMI_LME_ST_OutProdTemp', 15, 10)->nullable();
+                $table->float('HMI_CE_ST_ConcProdTemp', 10, 2)->nullable();
+                $table->float('HMI_TK_ST_CoolTkTemp', 10, 2)->nullable();
+                $table->float('HMI_TK_ST_HoldTkTemp', 10, 2)->nullable();
+                $table->float('HMI_LME_ST_FeedPSpeed', 10, 2)->nullable();
+                $table->float('HMI_CUM_ST_MillSpeed', 10, 2)->nullable();
+                $table->float('HMI_LME_ST_MillCurrent', 10, 2)->nullable();
+                $table->float('HMI_LME_ST_InProdPres', 10, 2)->nullable();
+                $table->float('HMI_LME_ST_OutProdTemp', 10, 2)->nullable();
                 $table->tinyInteger('HMI_TK_ST_CoolTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_TK_ST_HoldTkAgit_status')->nullable();
                 $table->tinyInteger('HMI_CE_ST_Conche_status')->nullable();
                 $table->tinyInteger('HMI_LME_ST_RecirPump_status')->nullable();
-                $table->float('HMI_LME_SP_MillPAutSpd', 15, 10)->nullable();
-                $table->float('performance_per_minutes', 15, 10)->nullable();
+                $table->float('HMI_LME_SP_MillPAutSpd', 10, 2)->nullable();
+                $table->float('performance_per_minutes', 10, 2)->nullable();
                 // alarm to be breakdown
                 $table->tinyInteger('tank_alarm1')->default(0);
                 $table->tinyInteger('tank_alarm2')->default(0);
@@ -115,11 +115,11 @@ class Lme1 extends Model
                 $table->tinyInteger('ce_alarm2')->default(0);
 
                 // addeded
-                $table->float('HMI_LME_SP_FeedPManSpd', 15, 10)->nullable();
-                $table->float('temp_chilled_water_in', 15, 10)->nullable();
-                $table->float('temp_chilled_water_out', 15, 10)->nullable();
+                $table->float('HMI_LME_SP_FeedPManSpd', 10, 2)->nullable();
+                $table->float('temp_chilled_water_in', 10, 2)->nullable();
+                $table->float('temp_chilled_water_out', 10, 2)->nullable();
 
-                $table->float('performance_per_minutes_2', 15, 10)->nullable();
+                $table->float('performance_per_minutes_2', 10, 2)->nullable();
 
                 $table->timestamps();
             });
