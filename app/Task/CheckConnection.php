@@ -8,7 +8,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\Crontab\Annotation\Crontab;
 use Hyperf\Contract\StdoutLoggerInterface;
 
-#[Crontab(name: "CheckConnection", rule: "* * * * *", callback: "execute", memo: "Check connection every 1 minutes")]
+#[Crontab(name: "CheckConnection", rule: "*\/5 * * * * *", callback: "execute", memo: "Check connection every 1 minutes")]
 class CheckConnection
 {
     #[Inject]
@@ -34,6 +34,8 @@ class CheckConnection
             $mqtt->connect($config, true);
             $mqtt->publish($topic, json_encode($off->toArray()), 0);
             $mqtt->disconnect();
+
+            $this->logger->info('run diconnect'. $off->id);
         }
     }
 }
