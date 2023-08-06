@@ -8,7 +8,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\Crontab\Annotation\Crontab;
 use Hyperf\Contract\StdoutLoggerInterface;
 
-#[Crontab(name: "CheckConnection", rule: "*\/5 * * * * *", callback: "execute", memo: "Check connection every 1 minutes")]
+#[Crontab(name: "CheckConnection", rule: "* * * * *", callback: "execute", memo: "Check connection every 1 minutes")]
 class CheckConnection
 {
     #[Inject]
@@ -16,7 +16,7 @@ class CheckConnection
 
     public function execute()
     {
-        $this->logger->info('run check connection', date('Y-m-d H:i:s', time()));
+        $this->logger->info('run check connection '. date('Y-m-d H:i:s', time()));
         Device::where('last_connection', '<=', Carbon::now()->subMinute())->update(['connected' => false]);
         $offline = Device::where('connected', false)->get();
 
