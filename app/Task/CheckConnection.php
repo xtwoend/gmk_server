@@ -18,7 +18,7 @@ class CheckConnection
     {
         $this->logger->info('run check connection '. date('Y-m-d H:i:s', time()));
         Device::where('last_connection', '<=', Carbon::now()->subMinute())->update(['connected' => false]);
-        $offline = Device::where('connected', false)->get();
+        $offline = Device::where('connected', 0)->get();
 
         foreach($offline as $off){
             $topic = 'data/gmk/k/connection';
