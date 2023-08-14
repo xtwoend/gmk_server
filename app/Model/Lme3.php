@@ -64,7 +64,9 @@ class Lme3 extends Model
         'performance_per_minutes' => 'decimal:2',
         'temp_chilled_water_in' => 'decimal:2',
         'temp_chilled_water_out' => 'decimal:2',
-        'performance_per_minutes_2' => 'decimal:2'
+        'performance_per_minutes_2' => 'decimal:2',
+        'chilled_water_in_run' => 'boolean',
+        'chilled_water_out_run' => 'boolean',
     ];
 
     /**
@@ -114,6 +116,13 @@ class Lme3 extends Model
                 $table->tinyInteger('oil_transfer_pump_status')->nullable();
                 $table->integer('SP_Feed_Pump_Speed')->nullable();
                 $table->float('performance_per_minutes_2', 10, 2)->nullable();
+
+                // added 2023-08-14 14.32
+                $table->boolean('chilled_water_in_run')->default(false);
+                $table->boolean('chilled_water_out_run')->default(false);
+                $table->float('chilled_water_in', 10, 2)->default(0);
+                $table->float('chilled_water_out', 10, 2)->default(0);
+
                 $table->timestamps();
             });
         }
@@ -156,7 +165,12 @@ class Lme3 extends Model
             'feedpump_status' => $data['feedpump_status'],
             'oil_transfer_pump_status' => $data['oil_transfer_pump_status'],
             'SP_Feed_Pump_Speed' => $data['SP_Feed_Pump_Speed'],
-            'performance_per_minutes_2' => $perfoma2
+            'performance_per_minutes_2' => $perfoma2,
+
+            'chilled_water_in_run' => $data['di_pkp1.1'][5] ?? false,
+            'chilled_water_out_run' => $data['di_pkp1.1'][6] ?? false,
+            'chilled_water_in' => $data['ai_pkp1.1'][5] ?? 0,
+            'chilled_water_out' => $data['ai_pkp1.1'][6] ?? 0,
         ];
     }
 
@@ -219,10 +233,14 @@ class Lme3 extends Model
             'data6' => 'Feed Pump Speed (rpm)',
             'data8' => 'Mill Motor Speed (rpm)',
             'data9' => 'Product Output Temperature (°C)',
-            'IHM_ST_Moinho_status' => 'Mill Motor Status'
+            'IHM_ST_Moinho_status' => 'Mill Motor Status',
+            'chilled_water_in' => 'Chilled Water In',
+            'chilled_water_out' => 'Chilled Water Out',
+            'chilled_water_in_run' => 'Chilled Water In Status',
+            'chilled_water_out_run' => 'Chilled Water Out Status',
         ];
     
-        return export($headers, $rows, 'report_lme2_'.$from.'-'.$to);
+        return export($headers, $rows, 'report_lme3_'.$from.'-'.$to);
     }
 
     /**
