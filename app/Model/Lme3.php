@@ -67,6 +67,8 @@ class Lme3 extends Model
         'performance_per_minutes_2' => 'decimal:2',
         'chilled_water_in_run' => 'boolean',
         'chilled_water_out_run' => 'boolean',
+        'chilled_water_in' => 'decimal:2',
+        'chilled_water_out' => 'decimal:2'
     ];
 
     /**
@@ -132,6 +134,7 @@ class Lme3 extends Model
 
     public function format(array $data)
     { 
+        var_dump($data);
         $perfoma = ($data['SP_LME3_Mill_Speed'] > 0) ? ($data['data8'] / $data['SP_LME3_Mill_Speed']) : 0;
         $perfoma2 = ($data['SP_Feed_Pump_Speed'] > 0) ? ($data['data6'] / $data['SP_Feed_Pump_Speed']) : 0;
         /**
@@ -167,10 +170,10 @@ class Lme3 extends Model
             'SP_Feed_Pump_Speed' => $data['SP_Feed_Pump_Speed'],
             'performance_per_minutes_2' => $perfoma2,
 
-            'chilled_water_in_run' => $data['di_pkp1.1'][5] ?? false,
-            'chilled_water_out_run' => $data['di_pkp1.1'][6] ?? false,
-            'chilled_water_in' => $data['ai_pkp1.1'][5] ?? 0,
-            'chilled_water_out' => $data['ai_pkp1.1'][6] ?? 0,
+            'chilled_water_in_run' => $data['di_pkp1.1'][5],
+            'chilled_water_out_run' => $data['di_pkp1.1'][6],
+            'chilled_water_in' => $data['ai_pkp1.1'][5],
+            'chilled_water_out' => $data['ai_pkp1.1'][6],
         ];
     }
 
