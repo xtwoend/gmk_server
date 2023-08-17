@@ -131,8 +131,13 @@ class Lme1 extends Model
                 $table->float('HMI_LME_SP_FeedPManSpd', 10, 2)->nullable();
                 $table->float('temp_chilled_water_in', 10, 2)->nullable();
                 $table->float('temp_chilled_water_out', 10, 2)->nullable();
-
                 $table->float('performance_per_minutes_2', 10, 2)->nullable();
+
+                // added 2023-08-14 14.32
+                $table->boolean('chilled_water_in_run')->default(false);
+                $table->boolean('chilled_water_out_run')->default(false);
+                $table->float('chilled_water_in', 10, 2)->default(0);
+                $table->float('chilled_water_out', 10, 2)->default(0);
 
                 $table->timestamps();
             });
@@ -374,6 +379,11 @@ class Lme1 extends Model
             'temp_chilled_water_in' => $data['temp_chilled_water_in'],
             'temp_chilled_water_out' => $data['temp_chilled_water_out'],
             'performance_per_minutes_2' => ($perfoma2 > 1) ? 1: $perfoma2,
+
+            'chilled_water_in_run' => $data['di_pkp1.1'][0],
+            'chilled_water_out_run' => $data['di_pkp1.1'][1],
+            'chilled_water_in' => $data['ai_pkp1.1'][1],
+            'chilled_water_out' => $data['ai_pkp1.1'][2],
         ];
     }
     
