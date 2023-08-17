@@ -134,9 +134,9 @@ class Lme3 extends Model
 
     public function format(array $data)
     { 
-        var_dump($data);
         $perfoma = ($data['SP_LME3_Mill_Speed'] > 0) ? ($data['data8'] / $data['SP_LME3_Mill_Speed']) : 0;
         $perfoma2 = ($data['SP_Feed_Pump_Speed'] > 0) ? ($data['data6'] / $data['SP_Feed_Pump_Speed']) : 0;
+
         /**
          * PV speed = data6
          * SV speed =
