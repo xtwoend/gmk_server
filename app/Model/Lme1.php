@@ -334,7 +334,7 @@ class Lme1 extends Model
     {
         $perfoma = $data['HMI_LME_SP_MillPAutSpd'] > 0 ? ($data['HMI_CUM_ST_MillSpeed'] / $data['HMI_LME_SP_MillPAutSpd']) : 0;
         $perfoma2 = $data['HMI_LME_SP_FeedPManSpd'] > 0? ($data['HMI_LME_ST_FeedPSpeed'] / $data['HMI_LME_SP_FeedPManSpd']) : 0;
-
+        
         return [
             'tk_alarm_message_1' => $this->map($data['tk_alarm_message_1']),
             'tk_alarm_message_2' => $this->map($data['tk_alarm_message_2']),
@@ -376,8 +376,8 @@ class Lme1 extends Model
             'ce_alarm2' => $data['ce_alarm2'],
 
             'HMI_LME_SP_FeedPManSpd' => $data['HMI_LME_SP_FeedPManSpd'],
-            'temp_chilled_water_in' => $data['temp_chilled_water_in'],
-            'temp_chilled_water_out' => $data['temp_chilled_water_out'],
+            // 'temp_chilled_water_in' => $data['temp_chilled_water_in'],
+            // 'temp_chilled_water_out' => $data['temp_chilled_water_out'],
             'performance_per_minutes_2' => ($perfoma2 > 1) ? 1: $perfoma2,
 
             'chilled_water_in_run' => $data['di_pkp1.1'][0],
