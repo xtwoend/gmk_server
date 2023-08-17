@@ -38,14 +38,16 @@ class MQTTListener implements ListenerInterface
         $topic = $event->topic;
         $device = $event->device;
         $modelClass = $device->model;
-        
+       
         if(! class_exists($modelClass)) {
             return;
         }
         
         $ts = (new $modelClass);
         $date = $data[$ts->ts];
+        
         $data = $ts->format($data);
+        
         $model = $modelClass::table($device, $date);
        
         $last = $model->orderBy('terminal_time', 'desc')->first();
