@@ -52,7 +52,7 @@ class ProductionVerification extends Model
         'remark'
     ];
 
-    protected array $appends = ['order_text'];
+    protected array $appends = ['order_text', 'ng_count', 'good_count'];
 
     /**
      * The attributes that should be cast to native types.
