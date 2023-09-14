@@ -96,4 +96,24 @@ class ProductionVerification extends Model
     {
         return $this->hasMany(ProductionRecord::class,  'production_id', 'production_id');
     }
+
+    public function getNgCountAttribute()
+    { 
+        $started = $this->production->startup->started_at;
+        $finished = $this->attributes['finished_at'];
+        
+        $count = $this->records()->where('status', 1)->whereBetween('datetime', [$started, $finished])->count();
+
+        return $count;
+    }
+
+    public function getGoodCountAttribute()
+    { 
+        $started = $this->production->startup->started_at;
+        $finished = $this->attributes['finished_at'];
+        
+        $count = $this->records()->where('status', 0)->whereBetween('datetime', [$started, $finished])->count();
+
+        return $count;
+    }
 }

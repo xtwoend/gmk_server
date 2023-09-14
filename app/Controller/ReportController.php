@@ -118,6 +118,10 @@ class ReportController
         $j = ($i + 6);
         $no = 1;
         foreach($productions as $row) {
+
+            $p_ng_count = 0;
+            $p_good_count = 0;
+
             $sheet->setCellValue('B' . $j, $no++);
             $sheet->setCellValue('C' . $j, Carbon::parse($row->started_at)->format('d/m/Y H:i:s') . '-' . Carbon::parse($row->finished_at)->format('d/m/Y H:i:s'));
             $sheet->setCellValue('D' . $j, $row->production?->product?->name);
