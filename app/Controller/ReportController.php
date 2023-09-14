@@ -99,6 +99,7 @@ class ReportController
         // startup verification
         $i = 9;
         foreach($startup->verifications as $verify) {
+            $sheet->insertNewRowBefore($i, 1);
             $sheet->setCellValue('B'. $i, Carbon::parse($verify->started_at)->format('d/m/Y H:i:s') . '-' . Carbon::parse($verify->finished_at)->format('d/m/Y H:i:s'));
             $sheet->setCellValue('C'. $i, $verify->type_text);
             $sheet->setCellValue('D'. $i, $verify->fe? '✔️' : '');
@@ -109,7 +110,6 @@ class ReportController
             $sheet->setCellValue('I'. $i, $verify->foreman?->name ?: '');
             $sheet->setCellValue('K'. $i, $verify->wor_number);
             $i++;
-            $sheet->insertNewRowBefore(1);
         }
 
         $sheet->getStyle('B9:K'.$i)->applyFromArray($styleArray);
