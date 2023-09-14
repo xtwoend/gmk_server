@@ -109,7 +109,7 @@ class ReportController
             $sheet->setCellValue('I'. $i, $verify->foreman?->name ?: '');
             $sheet->setCellValue('K'. $i, $verify->wor_number);
             $i++;
-            $sheet->insertNewRowAfter(1);
+            $sheet->insertNewRowBefore(1);
         }
 
         $sheet->getStyle('B9:K'.$i)->applyFromArray($styleArray);
