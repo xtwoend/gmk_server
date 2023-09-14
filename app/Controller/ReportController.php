@@ -24,13 +24,21 @@ class ReportController
         $date = Carbon::parse($date)->timezone('Asia/Jakarta')->format('Y-m-d');
 
         $device = Device::findOrFail($id);
-        $startup = Startup::with('device', 'verifications', 'verifications.operator', 'verifications.foreman')
+        $startup = Startup::with(['device', 'verifications', 'verifications.operator' => function($query){
+                    return $query->select('id', 'name', 'nik', 'roles');
+                } , 'verifications.foreman' => function($query){
+                    return $query->select('id', 'name', 'nik', 'roles');
+                }])
                 ->where('device_id', $device->id)
                 ->whereDate('started_at', $date)
                 ->latest()
                 ->firstOrFail();
 
-        $productions = ProductionVerification::with('operator', 'foreman', 'production', 'production.product')
+        $productions = ProductionVerification::with(['operator' => function($query){
+                return $query->select('id', 'name', 'nik', 'roles');
+            }, 'foreman' => function($query){
+                return $query->select('id', 'name', 'nik', 'roles');
+            }, 'production', 'production.product'])
             ->withCount(['good_records', 'ng_records'])
             ->whereIn('production_id', $startup->productions->pluck('id')->toArray())
             ->orderBy('started_at')
