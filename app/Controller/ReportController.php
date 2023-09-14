@@ -115,7 +115,7 @@ class ReportController
         $sheet->getStyle('B9:K'.$i)->applyFromArray($styleArray);
 
         // verification
-        $j = ($i + 5);
+        $j = ($i + 6);
         $no = 1;
         foreach($productions as $row) {
             $sheet->setCellValue('B' . $j, $no++);
