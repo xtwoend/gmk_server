@@ -43,7 +43,8 @@ if( ! function_exists('response')) {
             }
         }
 
-        $payload = Json::encode($payload);
+        // $payload = mb_convert_encoding($payload, 'UTF-8', 'UTF-8');
+        $payload = Json::encode($payload, true);
         
         return $response
                 ->withStatus(200)
