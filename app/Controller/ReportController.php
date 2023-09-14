@@ -39,7 +39,7 @@ class ReportController
             }, 'foreman' => function($query){
                 return $query->select('id', 'name', 'nik', 'roles');
             }, 'production', 'production.product'])
-            ->withCount(['good_records', 'ng_records'])
+            // ->withCount(['good_records', 'ng_records'])
             ->whereIn('production_id', $startup->productions->pluck('id')->toArray())
             ->orderBy('started_at')
             ->orderBy('order')
@@ -72,7 +72,7 @@ class ReportController
             }, 'foreman' => function($query){
                 return $query->select('id', 'name', 'nik', 'roles');
             }, 'production', 'production.product'])
-            ->withCount(['good_records', 'ng_records'])
+            // ->withCount(['good_records', 'ng_records'])
             ->whereIn('production_id', $startup->productions->pluck('id')->toArray())
             ->orderBy('started_at')
             ->orderBy('order')

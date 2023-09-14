@@ -52,7 +52,7 @@ class ProductionVerification extends Model
         'remark'
     ];
 
-    protected array $appends = ['order_text', 'ng_count', 'good_count'];
+    protected array $appends = ['order_text', 'good_records_count', 'ng_records_count'];
 
     /**
      * The attributes that should be cast to native types.
@@ -82,37 +82,41 @@ class ProductionVerification extends Model
         return $this->belongsTo(User::class, 'foreman_id');
     }
 
-    public function good_records()
-    {
-        return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 0);
-    }
+    // public function good_records()
+    // {
+    //     return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 0);
+    // }
 
-    public function ng_records()
-    {
-        return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 1);
-    }
+    // public function ng_records()
+    // {
+    //     return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 1);
+    // }
 
     public function records()
     {
         return $this->hasMany(ProductionRecord::class,  'production_id', 'production_id');
     }
 
-    public function getNgCountAttribute()
+    public function getNgRecordsCountAttribute()
     { 
-        $started = $this->production->startup->started_at;
+        $startup = $this->production->startup;
+        $started = $startup->started_at;
         $finished = $this->attributes['finished_at'];
-        
-        $count = $this->records()->where('status', 1)->whereBetween('datetime', [$started, $finished])->count();
+        $productionIds = $startup->productions->pluck('id')->toArray();
+
+        $count = ProductionRecord::whereIn('production_id', $productionIds)->where('status', 1)->whereBetween('datetime', [$started, $finished])->count();
 
         return $count;
     }
 
-    public function getGoodCountAttribute()
+    public function getGoodRecordsCountAttribute()
     { 
-        $started = $this->production->startup->started_at;
+        $startup = $this->production->startup;
+        $started = $startup->started_at;
         $finished = $this->attributes['finished_at'];
-        
-        $count = $this->records()->where('status', 0)->whereBetween('datetime', [$started, $finished])->count();
+        $productionIds = $startup->productions->pluck('id')->toArray();
+
+        $count = ProductionRecord::whereIn('production_id', $productionIds)->where('status', 0)->whereBetween('datetime', [$started, $finished])->count();
 
         return $count;
     }
