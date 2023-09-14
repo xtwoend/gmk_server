@@ -25,7 +25,7 @@ class Product extends Model
      */
     protected array $casts = [];
 
-    protected $appends = ["name"];
+    protected array $appends = ["name"];
 
     public function getNameAttribute(){
         return $this->attributes['product_name'];
