@@ -91,4 +91,9 @@ class ProductionVerification extends Model
     {
         return $this->hasMany(ProductionRecord::class, 'production_id', 'production_id')->where('status', 1);
     }
+
+    public function records()
+    {
+        return $this->hasMany(ProductionRecord::class,  'production_id', 'production_id');
+    }
 }
