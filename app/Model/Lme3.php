@@ -68,7 +68,9 @@ class Lme3 extends Model
         'chilled_water_in_run' => 'boolean',
         'chilled_water_out_run' => 'boolean',
         'chilled_water_in' => 'decimal:2',
-        'chilled_water_out' => 'decimal:2'
+        'chilled_water_out' => 'decimal:2',
+        'cooling_tank' => 'decimal:2',
+        'holding_tank' => 'decimal:2'
     ];
 
     /**
@@ -178,6 +180,9 @@ class Lme3 extends Model
             'chilled_water_out_run' => $data['di_pkp1.1'][6],
             'chilled_water_in' => $data['ai_pkp1.1'][5],
             'chilled_water_out' => $data['ai_pkp1.1'][6],
+
+            'cooling_tank' => $data['ai_pkp1.1'][7],
+            'holding_tank' => $data['ai_pkp1.1'][8],
         ];
     }
 
