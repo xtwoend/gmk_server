@@ -125,6 +125,10 @@ class Lme3 extends Model
                 $table->float('chilled_water_in', 10, 2)->default(0);
                 $table->float('chilled_water_out', 10, 2)->default(0);
 
+                // added 2023-09-13 21.56
+                $table->float('cooling_tank', 10, 2)->default(0);
+                $table->float('holding_tank', 10, 2)->default(0);
+
                 $table->timestamps();
             });
         }
