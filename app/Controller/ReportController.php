@@ -29,6 +29,7 @@ class ReportController
                 } , 'verifications.foreman' => function($query){
                     return $query->select('id', 'name', 'nik', 'roles');
                 }])
+                ->where('status', 0)
                 ->where('device_id', $device->id)
                 ->whereDate('started_at', $date)
                 ->latest()
