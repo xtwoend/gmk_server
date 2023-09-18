@@ -99,10 +99,11 @@ class ProductionVerification extends Model
 
     public function getNgRecordsCountAttribute()
     { 
-        $startup = $this->production->startup;
-        $started = $startup->started_at;
-        $finished = $this->attributes['finished_at'];
         $productionIds = $startup->productions->pluck('id')->toArray();
+
+        $lastCheck = self::where('finished_at', '<', $this->attributes['started_at'])->whereIn('production_id', $productionIds)->latest()->first();
+        $started = $lastCheck->finished_at;
+        $finished = $this->attributes['finished_at'];
 
         $count = ProductionRecord::whereIn('production_id', $productionIds)->where('status', 1)->whereBetween('datetime', [$started, $finished])->count();
 
@@ -111,10 +112,10 @@ class ProductionVerification extends Model
 
     public function getGoodRecordsCountAttribute()
     { 
-        $startup = $this->production->startup;
-        $started = $startup->started_at;
-        $finished = $this->attributes['finished_at'];
         $productionIds = $startup->productions->pluck('id')->toArray();
+        $lastCheck = self::where('finished_at', '<', $this->attributes['started_at'])->whereIn('production_id', $productionIds)->latest()->first();
+        $started = $lastCheck->finished_at;
+        $finished = $this->attributes['finished_at'];
 
         $count = ProductionRecord::whereIn('production_id', $productionIds)->where('status', 0)->whereBetween('datetime', [$started, $finished])->count();
 
