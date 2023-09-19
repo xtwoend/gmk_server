@@ -53,6 +53,7 @@ Router::get('/shift/current', [ScoreController::class, 'getCurrentShift']);
 
 // report
 Router::get('/report/{id}', [ReportController::class, 'data']);
+Router::get('/report/{id}/list', [ReportController::class, 'list']);
 Router::get('/report/{id}/export', [ReportController::class, 'export']);
 
 // sync 
