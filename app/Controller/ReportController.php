@@ -46,8 +46,10 @@ class ReportController
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
         $date = Carbon::parse($date)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $startupId = $request->input('id', null);
 
         $device = Device::findOrFail($id);
+
         $startup = Startup::with(['device', 'verifications', 'verifications.operator' => function($query){
                     return $query->select('id', 'name', 'nik', 'roles');
                 } , 'verifications.foreman' => function($query){
@@ -58,6 +60,14 @@ class ReportController
                 ->whereDate('started_at', $date)
                 ->latest()
                 ->firstOrFail();
+
+        if($startupId) {
+            $startup = Startup::with(['device', 'verifications', 'verifications.operator' => function($query){
+                return $query->select('id', 'name', 'nik', 'roles');
+            } , 'verifications.foreman' => function($query){
+                return $query->select('id', 'name', 'nik', 'roles');
+            }])->find($startupId);
+        }
 
         $productions = ProductionVerification::with(['operator' => function($query){
                 return $query->select('id', 'name', 'nik', 'roles');
