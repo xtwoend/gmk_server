@@ -39,7 +39,7 @@ class ReportController
         
         $rows = $rows->paginate(20);
 
-        return response($rows);
+        return response(ReportResource::collection($rows));
     }
 
     public function data($id, RequestInterface $request)
