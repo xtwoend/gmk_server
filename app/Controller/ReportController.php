@@ -18,6 +18,30 @@ use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class ReportController
 {
+    public function list($id, RequestInterface $request)
+    {
+        $from = $request->input('from', null);
+        $to = $request->input('to', null);
+
+        
+        $device = Device::findOrFail($id);
+
+        $rows = Startup::with(['device', 'operator' => function($query){
+                return $query->select('id', 'name', 'nik', 'roles');
+            }])
+            ->where('device_id', $device->id);
+        
+        if(! is_null($from) && ! is_null($to)) {
+            $from = Carbon::parse($from)->timezone('Asia/Jakarta');
+            $to = Carbon::parse($to)->timezone('Asia/Jakarta');
+            $rows = $rows->whereBetween('started_at', [$from, $to]);
+        }
+        
+        $rows = $rows->paginate(20);
+
+        return response($rows);
+    }
+
     public function data($id, RequestInterface $request)
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
