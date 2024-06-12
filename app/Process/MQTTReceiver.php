@@ -38,8 +38,8 @@ class MQTTReceiver extends AbstractProcess
         foreach(Device::active()->where('mqtt_server', $listen)->get() as $device) {
             $mqtt->subscribe($device->topic, function ($topic, $message) use ($logger, $event, $device) {
                 try {
-                        
-                    $data = (new Extractor($message))->toArray();
+                    $parser = (! is_null($device->parser) && class_exists($device->parser)) ? $device->parser :  'App\Mqtt\Extractor';
+                    $data = (new $parser($message))->toArray();
                     $event->dispatch(new MQTTReceived($data, $message, $topic, $device));
                     $logger->info('Received Topic: '. $topic);
                     
