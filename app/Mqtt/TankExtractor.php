@@ -28,6 +28,8 @@ class TankExtractor
     {
         try {
             $data = Json::decode($message);
+            
+            $this->attributes['ts'] = $data['ts'];
 
             $this->attributes['level_tank1'] = $data['ai_module_1'][0];
             $this->attributes['temp_piping_tank1'] =$data['ai_module_1'][1];
