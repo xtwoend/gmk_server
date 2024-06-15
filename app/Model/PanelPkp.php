@@ -124,7 +124,7 @@ class PanelPkp extends Model
             'ai_module_10' => $this->map($data['ai_module_10']),
             'ai_module_11' => $this->map($data['ai_module_11']),
             'ai_module_12' => $this->map($data['ai_module_12']),
-            'ai_module_13' => $this->map($data['ai_module_13']),
+            'ai_module_13' => $this->map($data['ai_modue_13']),
             'ai_module_14' => $this->map($data['ai_module_14']),
             'ai_module_15' => $this->map($data['ai_module_15']),
             'ai_refiner' => isset($data['ai_refiner'])? $this->map($data['ai_refiner']) : [],
