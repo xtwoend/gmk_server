@@ -1,0 +1,12 @@
+{
+    "cooling_temperature1" : 14,
+    "cooling_temperature2" : 11.899999618530273,
+    "formen_temperature" : 29.899999618530273,
+    "temperature_heating1_up" : 30.299999237060547,
+    "tempeature_heating2_up" : 24.353771209716797,
+    "cooling_tempeature3" : 11.300000190734863,
+    "cooling_tempeature4" : 9,
+    "water_temp_forward_run" : 41.799999237060547,
+    "water_temp_runback" : 41.099998474121094,
+    "ts" : "2024-09-20T09:41:16.842571"
+}

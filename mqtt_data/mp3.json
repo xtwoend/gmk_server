@@ -1,0 +1,23 @@
+{
+    "water_heater_pv" : 28,
+    "water_heater_sv" : 45,
+    "pump_speed" : 8,
+    "hose_heater_pv" : 31000,
+    "hose_hwater_sv" : 45,
+    "encoder_cutoff_value" : 65535,
+    "cutter_cutter_speed" : 75,
+    "cutter_belt_speed" : 24,
+    "cutter_cutting_lenght" : 79,
+    "servo_pulse_travel" : 800,
+    "water_heater_alarm_upper_limit" : 50,
+    "water_heater_alarm_lower_limit" : 30,
+    "hose_heater_alarm_upper_limit" : 55,
+    "hose_heater_alarm_lower_limit" : 30,
+    "recipe_par_conveyor_belt_sv" : 24,
+    "recipe_par_cutter_speed" : 75,
+    "depositor_pump_speed" : 8,
+    "stripe_lenght" : 79,
+    "cutting_offset_increament_value" : 0,
+    "cutting_offset_decreament_value" : 24,
+    "ts" : "2024-09-20T09:42:37.434603"
+}

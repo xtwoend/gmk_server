@@ -1,0 +1,13 @@
+{
+    "water_temperature" : 48.400001525878906,
+    "temperature_heating_house" : 49.099998474121094,
+    "water_temperature_in" : 26.299999237060547,
+    "water_temperature_out" : 26,
+    "level_control_left" : 31,
+    "cooling_temperature1_right" : 24.100000381469727,
+    "cooling_temperature2_left" : 24.200000762939453,
+    "cooling_temperature3_right" : 22.200000762939453,
+    "cooling_temperature4_left" : 21.899999618530273,
+    "run_status" : false,
+    "ts" : "2024-09-20T01:39:36.554386"
+}
