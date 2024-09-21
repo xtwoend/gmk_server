@@ -12,6 +12,7 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Model\Events\Created;
+use Hyperf\Database\Model\Events\Creating;
 
 /**
  */
@@ -44,7 +45,7 @@ class SalsaThree extends Model
     public string $ts = 'ts';
 
     // trigger run status
-    public string $statusRun = 'rpm_masterrefiner_300_mill';
+    public string $statusRun = 'is_run';
     public string $ppm_pv = 'rpm_masterrefiner_300_mill';
     public string $ppm_sv = 'SP_LME3_Mill_Speed'; // ambil dari setting
     public string $ppm2_pv = 'rpm_masterrefiner_300_feed_pump';
@@ -101,6 +102,7 @@ class SalsaThree extends Model
                 $table->float('rpm_masterrefiner_300_discharge_pump', 10, 3)->default(0);
                 $table->float('rpm_sugar_dosage_rotary_valve', 10, 3)->default(0);
                 
+                $table->boolean('is_run')->default(false);
                 $table->float('performance_per_minutes', 10, 2)->nullable();
                 $table->integer('sp_ppm_1')->nullable();
                 $table->float('performance_per_minutes_2', 10, 2)->nullable();
@@ -157,6 +159,11 @@ class SalsaThree extends Model
     public function isAlarmOn(): bool
     {
         return false;
+    }
+
+    public function creating(Creating $event) {
+        
+        $this->is_run = $this->rpm_masterrefiner_300_mill >= 0;
     }
 
     public function created(Created $event)
