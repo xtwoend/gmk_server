@@ -46,6 +46,14 @@ class Mp2 extends Model
      */
     public string $ts = 'ts';
 
+    // trigger run status
+    public string $statusRun = 'is_run';
+    public string $ppm_pv = 'temperature_heating_house';
+    public string $ppm_sv = ''; // ambil dari setting
+    public string $ppm2_pv = 'temperature_heating_house';
+    public string $ppm2_sv = ''; // ambil dari setting
+
+
     /**
      * create or choice table
      */
@@ -71,6 +79,12 @@ class Mp2 extends Model
                 $table->float('cooling_temperature3_right', 10, 3)->default(0);
                 $table->float('cooling_temperature4_left', 10, 3)->default(0);
                 $table->boolean('run_status')->default(false);
+
+                $table->boolean('is_run')->default(false);
+                $table->float('performance_per_minutes', 3, 2)->nullable();
+                $table->integer('sp_ppm_1')->nullable();
+                $table->float('performance_per_minutes_2', 3, 2)->nullable();
+                $table->integer('sp_ppm_2')->nullable();
 
                 $table->timestamps();
             });
@@ -102,7 +116,7 @@ class Mp2 extends Model
 
     public function creating(Creating $event) {
         $this->id = Uuid::uuid4();
-        $this->is_run = ($this->feedpump_speed > 0);
+        $this->is_run = $this->run_status;
     }
 
     public function created(Created $event)
@@ -111,17 +125,15 @@ class Mp2 extends Model
 
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
         $sp_ppm_1 = $setting?->sp_ppm_1;
-        $sp_ppm_2 = $setting?->sp_ppm_2;
 
         $perfoma = ($model->run_status > 0) ? ($model->temperature_heating_house / $sp_ppm_1) : 0;
-        $perfoma2 = 0;
         
         // update new data
         $model->fill([
             'sp_ppm_1' => $sp_ppm_1,
-            'sp_ppm_2' => $sp_ppm_2,
+            'sp_ppm_2' => null,
             'performance_per_minutes' => $perfoma > 1 ? 1 : $perfoma,
-            'performance_per_minutes_2' => $perfoma2 > 1 ? 1 : $perfoma2
+            'performance_per_minutes_2' => null,
         ])->save();
 
         $score = $this->createScoreDaily($model);
