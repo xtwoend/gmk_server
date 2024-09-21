@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use App\Model\ScoreTrait;
 use App\Model\DeviceTrait;
 use App\Model\ResourceTrait;
@@ -162,8 +163,8 @@ class SalsaThree extends Model
     }
 
     public function creating(Creating $event) {
-        
-        $this->is_run = $this->rpm_masterrefiner_300_mill >= 0;
+        $this->id = Uuid::uuid4();
+        $this->is_run = ($this->rpm_masterrefiner_300_mill >= 1);
     }
 
     public function created(Created $event)
@@ -174,20 +175,20 @@ class SalsaThree extends Model
         $sp_ppm_1 = $setting?->sp_ppm_1;
         $sp_ppm_2 = $setting?->sp_ppm_2;
 
-        $perfoma = ($model->{$this->statusRun} > 0) ? ($model->rpm_masterrefiner_300_mill / $sp_ppm_1) : 0;
+        $perfoma = ($model->rpm_masterrefiner_300_mill > 0) ? ($model->rpm_masterrefiner_300_mill / $sp_ppm_1) : 0;
         $perfoma2 = ($model->rpm_masterrefiner_300_feed_pump > 0) ? ($model->rpm_masterrefiner_300_feed_pump / $sp_ppm_2) : 0;
         
         // update new data
         $model->fill([
             'sp_ppm_1' => $sp_ppm_1,
             'sp_ppm_2' => $sp_ppm_2,
-            'performance_per_minutes' => $perfoma,
-            'performance_per_minutes_2' => $perfoma2
+            'performance_per_minutes' => $perfoma > 1 ? 1 : $perfoma,
+            'performance_per_minutes_2' => $perfoma2 > 1 ? 1 : $perfoma2
         ])->save();
 
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->{$this->statusRun} > 0) {
+        if($score && $model->rpm_masterrefiner_300_mill > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -216,7 +217,7 @@ class SalsaThree extends Model
             ]);
         }
 
-        if($score && $model->{$this->statusRun} <= 0 && $model->isAlarmOn()) {
+        if($score && $model->rpm_masterrefiner_300_mill <= 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -245,7 +246,7 @@ class SalsaThree extends Model
             ]);
         }
 
-        if($score && $model->{$this->statusRun} <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->rpm_masterrefiner_300_mill <= 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
