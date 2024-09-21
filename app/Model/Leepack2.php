@@ -144,7 +144,8 @@ class Leepack2 extends Model
         $model = $event->getModel();
        
         $this->alarmDb($model, 'alarm_leepack2');
-        $score = $this->createScoreShift($model);if($score && $model->mc_run) {
+        $score = $this->createScoreShift($model);
+        if($score && $model->mc_run) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)

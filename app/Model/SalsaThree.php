@@ -11,6 +11,7 @@ use App\Model\ResourceTrait;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Model\Events\Created;
 
 /**
  */
@@ -41,6 +42,13 @@ class SalsaThree extends Model
      * timestamp attribute from device iot gateway
      */
     public string $ts = 'ts';
+
+    // trigger run status
+    public string $statusRun = 'rpm_masterrefiner_300_mill';
+    public string $ppm_pv = 'rpm_masterrefiner_300_mill';
+    public string $ppm_sv = 'SP_LME3_Mill_Speed'; // ambil dari setting
+    public string $ppm2_pv = 'rpm_masterrefiner_300_feed_pump';
+    public string $ppm2_sv = 'SP_Feed_Pump_Speed'; // ambil dari setting
 
     /**
      * create or choice table
@@ -92,6 +100,12 @@ class SalsaThree extends Model
                 $table->float('rpm_masterrefiner_300_feed_pump', 10, 3)->default(0);
                 $table->float('rpm_masterrefiner_300_discharge_pump', 10, 3)->default(0);
                 $table->float('rpm_sugar_dosage_rotary_valve', 10, 3)->default(0);
+                
+                $table->float('performance_per_minutes', 10, 2)->nullable();
+                $table->integer('sp_ppm_1')->nullable();
+                $table->float('performance_per_minutes_2', 10, 2)->nullable();
+                $table->integer('sp_ppm_2')->nullable();
+
                 $table->timestamps();
             });
         }
@@ -136,7 +150,121 @@ class SalsaThree extends Model
             'rpm_masterrefiner_300_mill' => (float) $data['rpm_masterrefiner_300_mill'],
             'rpm_masterrefiner_300_feed_pump' => (float) $data['rpm_masterrefiner_300_feed_pump'],
             'rpm_masterrefiner_300_discharge_pump' => (float) $data['rpm_masterrefiner_300_discharge_pump'],
-            'rpm_sugar_dosage_rotary_valve' => (float) $data['rpm_sugar_dosage_rotary_valve'],
+            'rpm_sugar_dosage_rotary_valve' => (float) $data['rpm_sugar_dosage_rotary_valve']
         ];
+    }
+
+    public function isAlarmOn(): bool
+    {
+        return false;
+    }
+
+    public function created(Created $event)
+    {
+        $model = $event->getModel();
+
+        $setting = ScoreSetting::where('device_id', $model->device_id)->first();
+        $sp_ppm_1 = $setting?->sp_ppm_1;
+        $sp_ppm_2 = $setting?->sp_ppm_2;
+
+        $perfoma = ($model->{$this->statusRun} > 0) ? ($model->rpm_masterrefiner_300_mill / $sp_ppm_1) : 0;
+        $perfoma2 = ($model->rpm_masterrefiner_300_feed_pump > 0) ? ($model->rpm_masterrefiner_300_feed_pump / $sp_ppm_2) : 0;
+        
+        // update new data
+        $model->fill([
+            'sp_ppm_1' => $sp_ppm_1,
+            'sp_ppm_2' => $sp_ppm_2,
+            'performance_per_minutes' => $perfoma,
+            'performance_per_minutes_2' => $perfoma2
+        ])->save();
+
+        $score = $this->createScoreDaily($model);
+
+        if($score && $model->{$this->statusRun} > 0) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'run')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'run'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
+
+        if($score && $model->{$this->statusRun} <= 0 && $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'breakdown')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'breakdown'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
+
+        if($score && $model->{$this->statusRun} <= 0 && ! $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'idle')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'idle'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
     }
 }

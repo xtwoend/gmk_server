@@ -14,7 +14,7 @@ use Hyperf\Database\Schema\Blueprint;
 
 /**
  */
-class BlOne extends Model
+class Bl1 extends Model
 {
     use DeviceTrait, ResourceTrait, ScoreTrait;
     

@@ -131,4 +131,5 @@ class SalsaSix extends Model
             'cooling_water_flow' => (float) $data['cooling_water_flow'] ?: 0,
         ];
     }
+
 }

@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Carbon\Carbon;
 use App\Model\Device;
+use Hyperf\DbConnection\Db;
 use Hyperf\Database\Model\Events\Creating;
 
 trait DeviceTrait
