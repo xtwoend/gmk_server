@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use App\Model\ScoreTrait;
 use App\Model\DeviceTrait;
 use App\Model\ResourceTrait;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Model\Events\Created;
+use Hyperf\Database\Model\Events\Creating;
 
 /**
  */
@@ -86,6 +89,12 @@ class Mp1 extends Model
                 $table->float('sp_maintain_temp_hopper', 10, 3)->default(0);
                 $table->float('sp_tunnel_temperature', 10, 3)->default(0);
 
+                $table->boolean('is_run')->default(false);
+                $table->float('performance_per_minutes', 3, 2)->nullable();
+                $table->integer('sp_ppm_1')->nullable();
+                $table->float('performance_per_minutes_2', 3, 2)->nullable();
+                $table->integer('sp_ppm_2')->nullable();
+
                 $table->timestamps();
             });
         }
@@ -95,6 +104,8 @@ class Mp1 extends Model
 
     public function format(array $data)
     {
+        $productId = array_search(true, $data['product_type']);
+
         return [
             'sp_machine_weighing_minute_from_hmi' => (float) $data['sp_machine_weighing_minute_from_hmi'] ?: 0,
             'sp_right_dispenser_preaspiration_distance_from_hmi' => (float) $data['sp_right_dispenser_preaspiration_distance_from_hmi'] ?: 0,
@@ -125,5 +136,124 @@ class Mp1 extends Model
             'sp_maintain_temp_hopper' => (float) $data['sp_maintain_temp_hopper'] ?: 0,
             'sp_tunnel_temperature' => (float) $data['sp_tunnel_temperature'] ?: 0,
         ];
+    }
+
+    public function isAlarmOn(): bool
+    {
+        return false;
+    }
+
+    public function creating(Creating $event) {
+        $this->id = Uuid::uuid4();
+        $this->is_run = ($this->feedpump_speed > 0);
+    }
+
+    public function created(Created $event)
+    {
+        $model = $event->getModel();
+
+        $setting = ScoreSetting::where('device_id', $model->device_id)->first();
+        $sp_ppm_1 = $setting?->sp_ppm_1;
+        $sp_ppm_2 = $setting?->sp_ppm_2;
+
+        $perfoma = ($model->mill_speed > 0) ? ($model->mill_speed / $sp_ppm_1) : 0;
+        $perfoma2 = ($model->mill_speed > 0) ? ($model->feedpump_speed / $sp_ppm_2) : 0;
+        
+        // update new data
+        $model->fill([
+            'sp_ppm_1' => $sp_ppm_1,
+            'sp_ppm_2' => $sp_ppm_2,
+            'performance_per_minutes' => $perfoma > 1 ? 1 : $perfoma,
+            'performance_per_minutes_2' => $perfoma2 > 1 ? 1 : $perfoma2
+        ])->save();
+
+        $score = $this->createScoreDaily($model);
+
+        if($score && $model->mill_speed > 0) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'run')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'run'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
+
+        if($score && $model->mill_speed <= 0 && $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'breakdown')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'breakdown'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
+
+        if($score && $model->mill_speed <= 0 && ! $model->isAlarmOn()) {
+            $timesheet = $score->timesheets()
+                ->where('score_id', $score->id)
+                ->where('in_progress', 1)
+                ->where('status', 'idle')
+                ->latest()
+                ->first();
+            
+            if(is_null($timesheet)) {
+                $time = Carbon::now();
+                $score->timesheets()
+                    ->where('in_progress', 1)
+                    ->update([
+                        'in_progress' => 0,
+                        'ended_at' => Carbon::now()
+                    ]);
+                $timesheet = $score->timesheets()
+                    ->create([
+                        'started_at' => $time,
+                        'in_progress' => 1,
+                        'status' => 'idle'
+                    ]);
+            }
+
+            $timesheet->update([
+                'ended_at' => Carbon::now()
+            ]);
+        }
     }
 }
