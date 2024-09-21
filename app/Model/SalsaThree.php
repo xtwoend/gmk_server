@@ -102,15 +102,21 @@ class SalsaThree extends Model
                 $table->float('rpm_masterrefiner_300_feed_pump', 10, 3)->default(0);
                 $table->float('rpm_masterrefiner_300_discharge_pump', 10, 3)->default(0);
                 $table->float('rpm_sugar_dosage_rotary_valve', 10, 3)->default(0);
-                
-                $table->boolean('is_run')->default(false);
-                $table->float('performance_per_minutes', 10, 2)->nullable();
-                $table->integer('sp_ppm_1')->nullable();
-                $table->float('performance_per_minutes_2', 10, 2)->nullable();
-                $table->integer('sp_ppm_2')->nullable();
-
+        
                 $table->timestamps();
             });
+        }
+
+        if(Schema::hasTable($tableName)) {
+            if (! Schema::hasColumn($tableName, 'is_run')) {
+                Schema::create($tableName, function (Blueprint $table) {
+                    $table->boolean('is_run')->default(false);
+                    $table->float('performance_per_minutes', 3, 2)->nullable();
+                    $table->integer('sp_ppm_1')->nullable();
+                    $table->float('performance_per_minutes_2', 3, 2)->nullable();
+                    $table->integer('sp_ppm_2')->nullable();
+                });
+            }
         }
 
         return $model->setTable($tableName);
