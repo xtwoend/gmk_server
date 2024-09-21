@@ -109,7 +109,7 @@ class SalsaSix extends Model
 
         if(Schema::hasTable($tableName)) {
             if (! Schema::hasColumn($tableName, 'is_run')) {
-                Schema::create($tableName, function (Blueprint $table) {
+                Schema::table($tableName, function (Blueprint $table) {
                     $table->boolean('is_run')->default(false);
                     $table->float('performance_per_minutes', 3, 2)->nullable();
                     $table->integer('sp_ppm_1')->nullable();
