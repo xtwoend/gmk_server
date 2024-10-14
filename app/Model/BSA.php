@@ -48,7 +48,7 @@ class BSA extends Model
 
     // trigger run status
     public string $statusRun = 'is_run';
-    public string $ppm_pv = 'temperature_heating_house';
+    public string $ppm_pv = 'pv_maindrive_speed';
     public string $ppm_sv = ''; // ambil dari setting
     public string $ppm2_pv = 'temperature_heating_house';
     public string $ppm2_sv = ''; // ambil dari setting
@@ -69,15 +69,8 @@ class BSA extends Model
                 $table->unsignedBigInteger('device_id')->index();
                 $table->datetime('terminal_time')->unique()->index();
 
-                $table->float('water_temperature', 10, 3)->default(0);
-                $table->float('temperature_heating_house', 10, 3)->default(0);
-                $table->float('water_temperature_in', 10, 3)->default(0);
-                $table->float('water_temperature_out', 10, 3)->default(0);
-                $table->float('level_control_left', 10, 3)->default(0);
-                $table->float('cooling_temperature1_right', 10, 3)->default(0);
-                $table->float('cooling_temperature2_left', 10, 3)->default(0);
-                $table->float('cooling_temperature3_right', 10, 3)->default(0);
-                $table->float('cooling_temperature4_left', 10, 3)->default(0);
+                // speed maindrive
+                $table->float('pv_maindrive_speed', 10, 3)->default(0);
                 $table->boolean('run_status')->default(false);
 
                 $table->boolean('is_run')->default(false);
@@ -96,15 +89,7 @@ class BSA extends Model
     public function format(array $data)
     {
         return [
-            'water_temperature' => (float) $data['water_temperature'],
-            'temperature_heating_house' => (float) $data['temperature_heating_house'],
-            'water_temperature_in' => (float) $data['water_temperature_in'],
-            'water_temperature_out' => (float) $data['water_temperature_out'],
-            'level_control_left' => (float) $data['level_control_left'],
-            'cooling_temperature1_right' => (float) $data['cooling_temperature1_right'],
-            'cooling_temperature2_left' => (float) $data['cooling_temperature2_left'],
-            'cooling_temperature3_right' => (float) $data['cooling_temperature3_right'],
-            'cooling_temperature4_left' => (float) $data['cooling_temperature4_left'],
+            'pv_maindrive_speed' => (float) $data['pv_maindrive_speed'],
             'run_status' => (bool) $data['run_status'],
         ];
     }

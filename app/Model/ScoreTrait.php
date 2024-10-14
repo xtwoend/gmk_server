@@ -3,10 +3,8 @@
 namespace App\Model;
 
 use Carbon\Carbon;
-use App\Model\Alarm;
 use App\Model\Score;
 use App\Model\Timesheet;
-use App\Model\DeviceStatus;
 use App\Model\ScoreSetting;
 use Hyperf\DbConnection\Db;
 use Hyperf\Database\Schema\Schema;
@@ -123,7 +121,8 @@ trait ScoreTrait
             
             $availability = $this->getAvailability($model, $score);
             $perfomance = ($perfomance < 1) ? $perfomance: 1;
-            $s = Score::where('id', $score->id)
+
+            Score::where('id', $score->id)
             ->update([
                 'product_id' => $model->product_id,
                 'output_qty' => $output_qty,
@@ -205,10 +204,17 @@ trait ScoreTrait
         $to = Carbon::now();
         $seconds = $to->diffInSeconds($from);
 
-        $settingIdle = (bool) ScoreSetting::where('');
-       
-        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['run'])->get()->sum('runTime');
-        $noRunTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as noRunTime"))->whereIn('status', ['idle', 'breakdown'])->get()->sum('noRunTime');
+        $setting = ScoreSetting::where('device_id', $model->device_id)->first();
+
+        $idle = (bool) $setting?->enable_idle;
+
+        // $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['run'])->get()->sum('runTime');
+        
+        $in = $idle ? ['idle', 'breakdown'] : ['breakdown'];
+
+        $noRunTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as noRunTime"))->whereIn('status', $in)->get()->sum('noRunTime');
+        
+        $runTime = $seconds - ($noRunTime);
 
         return (float) ($runTime / $seconds);
     }
