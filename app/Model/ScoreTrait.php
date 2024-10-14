@@ -204,9 +204,12 @@ trait ScoreTrait
         $from = Carbon::parse($score->started_at);
         $to = Carbon::now();
         $seconds = $to->diffInSeconds($from);
+
+        $settingIdle = (bool) ScoreSetting::where('');
        
-        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['idle', 'run'])->get()->sum('runTime');
-       
+        $runTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as runTime"))->whereIn('status', ['run'])->get()->sum('runTime');
+        $noRunTime = $score->timesheets()->select(Db::raw("TIMESTAMPDIFF(SECOND, started_at, ended_at) as noRunTime"))->whereIn('status', ['idle', 'breakdown'])->get()->sum('noRunTime');
+
         return (float) ($runTime / $seconds);
     }
 }
