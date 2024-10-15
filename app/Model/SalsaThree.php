@@ -194,7 +194,7 @@ class SalsaThree extends Model
 
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->rpm_masterrefiner_300_mill > 0) {
+        if($score && $model->is_run > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -223,7 +223,7 @@ class SalsaThree extends Model
             ]);
         }
 
-        if($score && $model->rpm_masterrefiner_300_mill <= 0 && $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -252,7 +252,7 @@ class SalsaThree extends Model
             ]);
         }
 
-        if($score && $model->rpm_masterrefiner_300_mill <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)

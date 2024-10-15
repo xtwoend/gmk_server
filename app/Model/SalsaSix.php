@@ -189,7 +189,7 @@ class SalsaSix extends Model
 
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->mill_speed > 0) {
+        if($score && $model->is_run > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -218,7 +218,7 @@ class SalsaSix extends Model
             ]);
         }
 
-        if($score && $model->mill_speed <= 0 && $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -247,7 +247,7 @@ class SalsaSix extends Model
             ]);
         }
 
-        if($score && $model->mill_speed <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
