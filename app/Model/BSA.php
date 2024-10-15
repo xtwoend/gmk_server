@@ -111,7 +111,7 @@ class BSA extends Model
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
         $sp_ppm_1 = $setting?->sp_ppm_1;
 
-        $perfoma = ($model->run_status > 0) ? ($model->temperature_heating_house / $sp_ppm_1) : 0;
+        $perfoma = ($model->is_run > 0 && $sp_ppm_1 > 0) ? ($model->{$this->ppm_pv} / $sp_ppm_1) : 0;
         
         // update new data
         $model->fill([
@@ -120,10 +120,10 @@ class BSA extends Model
             'performance_per_minutes' => $perfoma > 1 ? 1 : $perfoma,
             'performance_per_minutes_2' => null,
         ])->save();
-
+            
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->run_status > 0) {
+        if($score && $model->is_run > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -152,7 +152,7 @@ class BSA extends Model
             ]);
         }
 
-        if($score && $model->run_status <= 0 && $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -181,7 +181,7 @@ class BSA extends Model
             ]);
         }
 
-        if($score && $model->run_status <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)

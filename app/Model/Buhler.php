@@ -126,7 +126,7 @@ class Buhler extends Model
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
         $sp_ppm_1 = $setting?->sp_ppm_1;
 
-        $perfoma = ($model->run_status > 0) ? ($model->temperature_heating_house / $sp_ppm_1) : 0;
+        $perfoma = ($model->is_run > 0) ? ($model->temperature_heating_house / $sp_ppm_1) : 0;
         
         // update new data
         $model->fill([
@@ -138,7 +138,7 @@ class Buhler extends Model
 
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->run_status > 0) {
+        if($score && $model->is_run > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -167,7 +167,7 @@ class Buhler extends Model
             ]);
         }
 
-        if($score && $model->run_status <= 0 && $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -196,7 +196,7 @@ class Buhler extends Model
             ]);
         }
 
-        if($score && $model->run_status <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)

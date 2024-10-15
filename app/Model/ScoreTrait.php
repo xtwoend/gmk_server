@@ -64,7 +64,7 @@ trait ScoreTrait
                 'run_time' => $runTime,
                 'down_time' => $downTime,
                 'stop_time' => $stopTime,
-                'performance' => ($perfomance > 1) ? 1: $perfomance ,
+                'performance' => ($perfomance > 1) ? 1: $perfomance,
                 'availability' => $availability,
                 'quality' => 1,
                 'oee' =>  $perfomance * $availability * 1,

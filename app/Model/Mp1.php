@@ -45,6 +45,15 @@ class Mp1 extends Model
      */
     public string $ts = 'ts';
 
+    // trigger run status
+    public string $statusRun = 'is_run';
+    public string $ppm_pv = 'pv_belt_speed';
+    public string $ppm_sv = ''; // ambil dari setting
+    public string $ppm2_pv = 'temperature_heating_house';
+    public string $ppm2_sv = ''; // ambil dari setting
+ 
+ 
+
     /**
      * create or choice table
      */
@@ -89,6 +98,8 @@ class Mp1 extends Model
                 $table->float('sp_maintain_temp_hopper', 10, 3)->default(0);
                 $table->float('sp_tunnel_temperature', 10, 3)->default(0);
 
+                $table->float('pv_belt_speed', 10, 3)->default(0);
+
                 $table->boolean('is_run')->default(false);
                 $table->float('performance_per_minutes', 3, 2)->nullable();
                 $table->integer('sp_ppm_1')->nullable();
@@ -104,37 +115,36 @@ class Mp1 extends Model
 
     public function format(array $data)
     {
-        $productId = array_search(true, $data['product_type']);
-
         return [
-            'sp_machine_weighing_minute_from_hmi' => (float) $data['sp_machine_weighing_minute_from_hmi'] ?: 0,
-            'sp_right_dispenser_preaspiration_distance_from_hmi' => (float) $data['sp_right_dispenser_preaspiration_distance_from_hmi'] ?: 0,
-            'sp_right_dosing_suction_distance_from_hmi' => (float) $data['sp_right_dosing_suction_distance_from_hmi'] ?: 0,
-            'sp_right_dispenser_offset_distance' => (float) $data['sp_right_dispenser_offset_distance'] ?: 0,
-            'sp_left_dispenser_preaspiration_distance' => (float) $data['sp_left_dispenser_preaspiration_distance'] ?: 0,
-            'sp_left_dispenser_dosing_distance' => (float) $data['sp_left_dispenser_dosing_distance'] ?: 0,
-            'sp_left_dispenser_offset_distance' => (float) $data['sp_left_dispenser_offset_distance'] ?: 0,
-            'sp_no_dosages_followed' => (float) $data['sp_no_dosages_followed'] ?: 0,
-            'sp_left_dispenser_start_delay_time_from_hmi' => (float) $data['sp_left_dispenser_start_delay_time_from_hmi'] ?: 0,
-            'sp_left_dispenser_preaspiration_distance_from_hmi' => (float) $data['sp_left_dispenser_preaspiration_distance_from_hmi'] ?: 0,
-            'sp_left_dosing_suction_distance_from_hmi' => (float) $data['sp_left_dosing_suction_distance_from_hmi'] ?: 0,
-            'pv_hopper_temperature' => (float) $data['pv_hopper_temperature'] ?: 0,
-            'sp_hopper_temperature' => (float) $data['sp_hopper_temperature'] ?: 0,
-            'pv_tunnel_temperature' => (float) $data['pv_tunnel_temperature'] ?: 0,
-            'weighing_machine_minute' => (float) $data['weighing_machine_minute'] ?: 0,
-            'partial_dosage_counter' => (float) $data['partial_dosage_counter'] ?: 0,
-            'total_dosage_counter' => (float) $data['total_dosage_counter'] ?: 0,
-            'drag_belt_driver_alarm_code' => (float) $data['drag_belt_driver_alarm_code'] ?: 0,
-            'right_dosing_driver_alarm_code' => (float) $data['right_dosing_driver_alarm_code'] ?: 0,
-            'total_operating_hours_counter' => (float) $data['total_operating_hours_counter'] ?: 0,
-            'total_operating_minute_counter' => (float) $data['total_operating_minute_counter'] ?: 0,
-            'sp_lifting_table_height' => (float) $data['sp_lifting_table_height'] ?: 0,
-            'sp_percentage_dosage_start_lowering_lifting_table' => (float) $data['sp_percentage_dosage_start_lowering_lifting_table'] ?: 0,
-            'sp_percentage_dosage_start_conveyor_belt_run' => (float) $data['sp_percentage_dosage_start_conveyor_belt_run'] ?: 0,
-            'sp_vibrator_speed' => (float) $data['sp_vibrator_speed'] ?: 0,
-            'sp_work_temp_hopper' => (float) $data['sp_work_temp_hopper'] ?: 0,
-            'sp_maintain_temp_hopper' => (float) $data['sp_maintain_temp_hopper'] ?: 0,
-            'sp_tunnel_temperature' => (float) $data['sp_tunnel_temperature'] ?: 0,
+            'sp_machine_weighing_minute_from_hmi' => $data['sp_machine_weighing_minute_from_hmi'] ?? 0,
+            'sp_right_dispenser_preaspiration_distance_from_hmi' => $data['sp_right_dispenser_preaspiration_distance_from_hmi'] ?? 0,
+            'sp_right_dosing_suction_distance_from_hmi' => $data['sp_right_dosing_suction_distance_from_hmi'] ?? 0,
+            'sp_right_dispenser_offset_distance' => $data['sp_right_dispenser_offset_distance'] ?? 0,
+            'sp_left_dispenser_preaspiration_distance' => $data['sp_left_dispenser_preaspiration_distance'] ?? 0,
+            'sp_left_dispenser_dosing_distance' => $data['sp_left_dispenser_dosing_distance'] ?? 0,
+            'sp_left_dispenser_offset_distance' => $data['sp_left_dispenser_offset_distance'] ?? 0,
+            'sp_no_dosages_followed' => $data['sp_no_dosages_followed'] ?? 0,
+            'sp_left_dispenser_start_delay_time_from_hmi' => $data['sp_left_dispenser_start_delay_time_from_hmi'] ?? 0,
+            'sp_left_dispenser_preaspiration_distance_from_hmi' => $data['sp_left_dispenser_preaspiration_distance_from_hmi'] ?? 0,
+            'sp_left_dosing_suction_distance_from_hmi' => $data['sp_left_dosing_suction_distance_from_hmi'] ?? 0,
+            'pv_hopper_temperature' => $data['pv_hopper_temperature'] ?? 0,
+            'sp_hopper_temperature' => $data['sp_hopper_temperature'] ?? 0,
+            'pv_tunnel_temperature' => $data['pv_tunnel_temperature'] ?? 0,
+            'weighing_machine_minute' => $data['weighing_machine_minute'] ?? 0,
+            'partial_dosage_counter' => $data['partial_dosage_counter'] ?? 0,
+            'total_dosage_counter' => $data['total_dosage_counter'] ?? 0,
+            'drag_belt_driver_alarm_code' => $data['drag_belt_driver_alarm_code'] ?? 0,
+            'right_dosing_driver_alarm_code' => $data['right_dosing_driver_alarm_code'] ?? 0,
+            'total_operating_hours_counter' => $data['total_operating_hours_counter'] ?? 0,
+            'total_operating_minute_counter' => $data['total_operating_minute_counter'] ?? 0,
+            'sp_lifting_table_height' => $data['sp_lifting_table_height'] ?? 0,
+            'sp_percentage_dosage_start_lowering_lifting_table' => $data['sp_percentage_dosage_start_lowering_lifting_table'] ?? 0,
+            'sp_percentage_dosage_start_conveyor_belt_run' => $data['sp_percentage_dosage_start_conveyor_belt_run'] ?? 0,
+            'sp_vibrator_speed' => $data['sp_vibrator_speed'] ?? 0,
+            'sp_work_temp_hopper' => $data['sp_work_temp_hopper'] ?? 0,
+            'sp_maintain_temp_hopper' => $data['sp_maintain_temp_hopper'] ?? 0,
+            'sp_tunnel_temperature' => $data['sp_tunnel_temperature'] ?? 0,
+            'pv_belt_speed' => $data['pv_belt_speed'] ?? 0
         ];
     }
 
@@ -155,21 +165,21 @@ class Mp1 extends Model
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
         $sp_ppm_1 = $setting?->sp_ppm_1;
         $sp_ppm_2 = $setting?->sp_ppm_2;
-
-        $perfoma = ($model->mill_speed > 0) ? ($model->mill_speed / $sp_ppm_1) : 0;
-        $perfoma2 = ($model->mill_speed > 0) ? ($model->feedpump_speed / $sp_ppm_2) : 0;
+        
+        $perfoma = ($model->is_run > 0 && $sp_ppm_1 > 0) ? ($model->{$this->ppm_pv} / $sp_ppm_1) : 0;
+        // $perfoma2 = ($model->is_run > 0 && $sp_ppm_2 > 0) ? ($model->{$this->ppm2_pv} / $sp_ppm_2) : 0;
         
         // update new data
         $model->fill([
             'sp_ppm_1' => $sp_ppm_1,
-            'sp_ppm_2' => $sp_ppm_2,
+            // 'sp_ppm_2' => $sp_ppm_2,
             'performance_per_minutes' => $perfoma > 1 ? 1 : $perfoma,
-            'performance_per_minutes_2' => $perfoma2 > 1 ? 1 : $perfoma2
+            // 'performance_per_minutes_2' => $perfoma2 > 1 ? 1 : $perfoma2
         ])->save();
 
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->mill_speed > 0) {
+        if($score && $model->is_run) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -198,7 +208,7 @@ class Mp1 extends Model
             ]);
         }
 
-        if($score && $model->mill_speed <= 0 && $model->isAlarmOn()) {
+        if($score && ! $model->is_run && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -227,7 +237,7 @@ class Mp1 extends Model
             ]);
         }
 
-        if($score && $model->mill_speed <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->is_run && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)

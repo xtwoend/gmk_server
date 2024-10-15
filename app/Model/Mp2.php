@@ -48,7 +48,7 @@ class Mp2 extends Model
 
     // trigger run status
     public string $statusRun = 'is_run';
-    public string $ppm_pv = 'temperature_heating_house';
+    public string $ppm_pv = 'pv_dropcycle_perminute';
     public string $ppm_sv = ''; // ambil dari setting
     public string $ppm2_pv = 'temperature_heating_house';
     public string $ppm2_sv = ''; // ambil dari setting
@@ -126,7 +126,7 @@ class Mp2 extends Model
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
         $sp_ppm_1 = $setting?->sp_ppm_1;
 
-        $perfoma = ($model->run_status > 0) ? ($model->temperature_heating_house / $sp_ppm_1) : 0;
+        $perfoma = ($model->is_run > 0 && $sp_ppm_1 > 0) ? ($model->{$this->ppm_pv} / $sp_ppm_1) : 0;
         
         // update new data
         $model->fill([
@@ -138,7 +138,7 @@ class Mp2 extends Model
 
         $score = $this->createScoreDaily($model);
 
-        if($score && $model->run_status > 0) {
+        if($score && $model->is_run > 0) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -167,7 +167,7 @@ class Mp2 extends Model
             ]);
         }
 
-        if($score && $model->run_status <= 0 && $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
@@ -196,7 +196,7 @@ class Mp2 extends Model
             ]);
         }
 
-        if($score && $model->run_status <= 0 && ! $model->isAlarmOn()) {
+        if($score && $model->is_run <= 0 && ! $model->isAlarmOn()) {
             $timesheet = $score->timesheets()
                 ->where('score_id', $score->id)
                 ->where('in_progress', 1)
