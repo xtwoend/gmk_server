@@ -48,7 +48,7 @@ class Mp3 extends Model
 
     // trigger run status
     public string $statusRun = 'is_run';
-    public string $ppm_pv = 'pump_speed';
+    public string $ppm_pv = 'pv_pump_speed';
     public string $ppm_sv = ''; // ambil dari setting
     public string $ppm2_pv = '';
     public string $ppm2_sv = ''; // ambil dari setting
@@ -89,6 +89,9 @@ class Mp3 extends Model
                 $table->float('cutting_offset_increament_value', 10, 3)->default(0);
                 $table->float('cutting_offset_decreament_value', 10, 3)->default(0);
 
+                $table->float('pv_pump_speed', 10, 3)->default(0);
+                $table->float('sp_pump_speed', 10, 3)->default(0);
+
                 $table->boolean('is_run')->default(false);
                 $table->float('performance_per_minutes', 3, 2)->nullable();
                 $table->integer('sp_ppm_1')->nullable();
@@ -125,6 +128,8 @@ class Mp3 extends Model
             'stripe_lenght' => (float) $data['stripe_lenght'] ?? 0,
             'cutting_offset_increament_value' => (float) $data['cutting_offset_increament_value'] ?? 0,
             'cutting_offset_decreament_value' => (float) $data['cutting_offset_decreament_value'] ?? 0,
+            'pv_pump_speed' => (float) $data['pv_pump_speed'] ?? 0,
+            'sp_pump_speed' => (float) $data['sp_pump_speed'] ?? 0,
         ];
     }
 
@@ -135,7 +140,7 @@ class Mp3 extends Model
 
     public function creating(Creating $event) {
         $this->id = Uuid::uuid4();
-        $this->is_run = $this->run_status;
+        $this->is_run = $this->pv_pump_speed > ($this->sp_pump_speed / 2);
     }
 
     public function created(Created $event)
