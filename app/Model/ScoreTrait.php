@@ -55,10 +55,10 @@ trait ScoreTrait
             $perfomance = ($perfomance > 1) ? 1: $perfomance;
 
             $s = Score::where('id', $score->id)->update([
-                'ppm' => $ppm1,
+                'ppm' => $ppm1 ?? 0,
                 'ppm_pv' => ($isRun)? $ppm_pv : $score->ppm_pv,
                 'ppm_sv' => ($isRun)? $ppm_sv : $score->ppm_sv,
-                'ppm2' => $ppm2 ?: 0,
+                'ppm2' => $ppm2 ?? 0,
                 'ppm2_pv' => ($isRun)? $ppm2_pv : $score->ppm2_pv,
                 'ppm2_sv' => ($isRun)? $ppm2_sv : $score->ppm2_sv,
                 'run_time' => $runTime,

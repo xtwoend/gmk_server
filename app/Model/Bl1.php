@@ -49,7 +49,7 @@ class Bl1 extends Model
     // trigger run status
     public string $statusRun = 'is_run';
     public string $ppm_pv = 'sv_mould_perminute';
-    public string $ppm_sv = ''; // ambil dari setting
+    public string $ppm_sv = 'sp_mould_perminute'; // ambil dari setting
     public string $ppm2_pv = '';
     public string $ppm2_sv = ''; // ambil dari setting
 
@@ -243,7 +243,7 @@ class Bl1 extends Model
         $model = $event->getModel();
 
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
-        $sp_ppm_1 = $setting?->sp_ppm_1;
+        $sp_ppm_1 = $this->{$this->ppm_sv} ?: $setting?->sp_ppm_1;
 
         $perfoma = ($model->is_run > 0 && $sp_ppm_1 > 0) ? ($model->{$this->ppm_pv} / $sp_ppm_1) : 0;
         

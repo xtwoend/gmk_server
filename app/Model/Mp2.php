@@ -124,7 +124,7 @@ class Mp2 extends Model
         $model = $event->getModel();
 
         $setting = ScoreSetting::where('device_id', $model->device_id)->first();
-        $sp_ppm_1 = $setting?->sp_ppm_1;
+        $sp_ppm_1 = $this->{$this->ppm_sv} ?: $setting?->sp_ppm_1;
 
         $perfoma = ($model->is_run > 0 && $sp_ppm_1 > 0) ? ($model->{$this->ppm_pv} / $sp_ppm_1) : 0;
         

@@ -42,7 +42,6 @@ class MQTTReceiver extends AbstractProcess
                     $data = (new $parser($message))->toArray();
                     $event->dispatch(new MQTTReceived($data, $message, $topic, $device));
                     $logger->info('Received Topic: '. $topic);
-                    
                 } catch (\Throwable $th) {
                     
                     ErrorLog::where('created_at', '<=', Carbon::now()->subHours(2)->format('Y-m-d H:i:s'))->delete();
