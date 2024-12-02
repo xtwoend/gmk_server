@@ -14,6 +14,7 @@ use App\Controller\ScoreController;
 use App\Controller\TableController;
 use App\Controller\TrendController;
 use App\Controller\DeviceController;
+use App\Controller\IndexController;
 use App\Controller\ReportController;
 use Hyperf\HttpServer\Router\Router;
 use App\Controller\MqttLogController;
@@ -58,6 +59,9 @@ Router::get('/report/{id}/export', [ReportController::class, 'export']);
 
 // sync 
 Router::post('/sync/{table}', [RestApiController::class, 'sync']);
+
+
+Router::get('/parse', [IndexController::class, 'extract']);
 
 Router::get('/favicon.ico', function () {
     return '';
