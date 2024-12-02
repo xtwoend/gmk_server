@@ -85,7 +85,7 @@ class Mp1 extends Model
                 $table->float('pv_tunnel_temperature', 10, 3)->default(0);
                 $table->float('weighing_machine_minute', 10, 3)->default(0);
                 $table->bigInteger('partial_dosage_counter')->default(0);
-                $table->float('total_dosage_counter', 10, 3)->default(0);
+                $table->bigInteger('total_dosage_counter')->default(0);
                 $table->float('drag_belt_driver_alarm_code', 10, 3)->default(0);
                 $table->float('right_dosing_driver_alarm_code', 10, 3)->default(0);
                 $table->float('total_operating_hours_counter', 10, 3)->default(0);
@@ -132,7 +132,7 @@ class Mp1 extends Model
             'pv_tunnel_temperature' => (float) $data['pv_tunnel_temperature'] ?? 0,
             'weighing_machine_minute' => (float) $data['weighing_machine_minute'] ?? 0,
             'partial_dosage_counter' => (int) $data['partial_dosage_counter'] ?? 0,
-            'total_dosage_counter' => (float) $data['total_dosage_counter'] ?? 0,
+            'total_dosage_counter' => (int) $data['total_dosage_counter'] ?? 0,
             'drag_belt_driver_alarm_code' => (float) $data['drag_belt_driver_alarm_code'] ?? 0,
             'right_dosing_driver_alarm_code' => (float) $data['right_dosing_driver_alarm_code'] ?? 0,
             'total_operating_hours_counter' => (float) $data['total_operating_hours_counter'] ?? 0,

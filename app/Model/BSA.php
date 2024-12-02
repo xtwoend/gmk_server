@@ -48,7 +48,7 @@ class BSA extends Model
 
     // trigger run status
     public string $statusRun = 'is_run';
-    public string $ppm_pv = 'pv_maindrive_speed';
+    public string $ppm_pv = 'hopper_actual_load';
     public string $ppm_sv = ''; // ambil dari setting
     public string $ppm2_pv = 'temperature_heating_house';
     public string $ppm2_sv = ''; // ambil dari setting
@@ -69,10 +69,33 @@ class BSA extends Model
                 $table->unsignedBigInteger('device_id')->index();
                 $table->datetime('terminal_time')->unique()->index();
 
-                // speed maindrive
-                $table->float('pv_maindrive_speed', 10, 3)->default(0);
-                $table->boolean('run_status')->default(false);
-
+                $table->float('hopper_actual_load', 10, 3)->default(0);
+                $table->float('hopper_total_volume', 10, 3)->default(0);
+                $table->float('hopper_tank', 10, 3)->default(0);
+                $table->float('hopper_dead_load', 10, 3)->default(0);
+                $table->float('parameter_pressure_roll_bellow_left_press_set_act', 10, 3)->default(0);
+                $table->float('parameter_pressure_roll_bellow_left_press_pv_act', 10, 3)->default(0);
+                $table->float('parameter_pressure_roll_bellow_right_press_set_act', 10, 3)->default(0);
+                $table->float('parameter_pressure_roll_bellow_right_press_pv_act', 10, 3)->default(0);
+                $table->float('mixer1_rec_start_dos_kg', 10, 3)->default(0);
+                $table->float('mixer1_mass_act_temp', 10, 3)->default(0);
+                $table->float('mixer1_waterfw_act_temp', 10, 3)->default(0);
+                $table->float('mixer1_waterrw_act_temp', 10, 3)->default(0);
+                $table->float('mixer1_sp_temp_water_c', 10, 3)->default(0);
+                $table->float('mixer2_rec_start_dos_kg', 10, 3)->default(0);
+                $table->float('mixer2_mass_act_temp', 10, 3)->default(0);
+                $table->float('mixer2_waterfw_act_temp', 10, 3)->default(0);
+                $table->float('mixer2_waterrw_act_temp', 10, 3)->default(0);
+                $table->float('mixer2_sp_temp_water_c', 10, 3)->default(0);
+                $table->float('hrk1_actual_weight_kg', 10, 3)->default(0);
+                $table->float('hrk1_mass_act_temp', 10, 3)->default(0);
+                $table->float('hrk1_waterfw_act_temp', 10, 3)->default(0);
+                $table->float('hrk1_waterrw_act_temp', 10, 3)->default(0);
+                $table->float('hrk2_actual_weight_kg', 10, 3)->default(0);
+                $table->float('hrk2_mass_act_temp', 10, 3)->default(0);
+                $table->float('hrk2_waterfw_act_temp', 10, 3)->default(0);
+                $table->float('hrk2_waterrw_act_temp', 10, 3)->default(0);
+        
                 $table->boolean('is_run')->default(false);
                 $table->float('performance_per_minutes', 3, 2)->nullable();
                 $table->integer('sp_ppm_1')->nullable();
@@ -89,8 +112,32 @@ class BSA extends Model
     public function format(array $data)
     {
         return [
-            'pv_maindrive_speed' => (float) $data['pv_maindrive_speed'],
-            'run_status' => (bool) $data['run_status'],
+            'hopper_actual_load' => (float) $data['hopper_actual_load'] ?? 0,
+            'hopper_total_volume' => (float) $data['hopper_total_volume'] ?? 0,
+            'hopper_tank' => (float) $data['hopper_tank'] ?? 0,
+            'hopper_dead_load' => (float) $data['hopper_dead_load'] ?? 0,
+            'parameter_pressure_roll_bellow_left_press_set_act' => (float) $data['parameter_pressure_roll_bellow_left_press_set_act'] ?? 0,
+            'parameter_pressure_roll_bellow_left_press_pv_act' => (float) $data['parameter_pressure_roll_bellow_left_press_pv_act'] ?? 0,
+            'parameter_pressure_roll_bellow_right_press_set_act' => (float) $data['parameter_pressure_roll_bellow_right_press_set_act'] ?? 0,
+            'parameter_pressure_roll_bellow_right_press_pv_act' => (float) $data['parameter_pressure_roll_bellow_right_press_pv_act'] ?? 0,
+            'mixer1_rec_start_dos_kg' => (float) $data['mixer1_rec_start_dos_kg'] ?? 0,
+            'mixer1_mass_act_temp' => (float) $data['mixer1_mass_act_temp'] ?? 0,
+            'mixer1_waterfw_act_temp' => (float) $data['mixer1_waterfw_act_temp'] ?? 0,
+            'mixer1_waterrw_act_temp' => (float) $data['mixer1_waterrw_act_temp'] ?? 0,
+            'mixer1_sp_temp_water_c' => (float) $data['mixer1_sp_temp_water_c'] ?? 0,
+            'mixer2_rec_start_dos_kg' => (float) $data['mixer2_rec_start_dos_kg'] ?? 0,
+            'mixer2_mass_act_temp' => (float) $data['mixer2_mass_act_temp'] ?? 0,
+            'mixer2_waterfw_act_temp' => (float) $data['mixer2_waterfw_act_temp'] ?? 0,
+            'mixer2_waterrw_act_temp' => (float) $data['mixer2_waterrw_act_temp'] ?? 0,
+            'mixer2_sp_temp_water_c' => (float) $data['mixer2_sp_temp_water_c'] ?? 0,
+            'hrk1_actual_weight_kg' => (float) $data['hrk1_actual_weight_kg'] ?? 0,
+            'hrk1_mass_act_temp' => (float) $data['hrk1_mass_act_temp'] ?? 0,
+            'hrk1_waterfw_act_temp' => (float) $data['hrk1_waterfw_act_temp'] ?? 0,
+            'hrk1_waterrw_act_temp' => (float) $data['hrk1_waterrw_act_temp'] ?? 0,
+            'hrk2_actual_weight_kg' => (float) $data['hrk2_actual_weight_kg'] ?? 0,
+            'hrk2_mass_act_temp' => (float) $data['hrk2_mass_act_temp'] ?? 0,
+            'hrk2_waterfw_act_temp' => (float) $data['hrk2_waterfw_act_temp'] ?? 0,
+            'hrk2_waterrw_act_temp' => (float) $data['hrk2_waterrw_act_temp'] ?? 0,
         ];
     }
 
@@ -101,7 +148,7 @@ class BSA extends Model
 
     public function creating(Creating $event) {
         $this->id = Uuid::uuid4();
-        $this->is_run = $this->run_status;
+        $this->is_run = $this->{$this->ppm_pv} > 0;
     }
 
     public function created(Created $event)
