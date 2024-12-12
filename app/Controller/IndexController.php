@@ -29,7 +29,7 @@ class IndexController extends AbstractController
     
     public function extract()
     {
-        $json = file_get_contents(BASE_PATH . '/mqtt_data/bsa.json');
+        $json = file_get_contents(BASE_PATH . '/mqtt_data/bl2.json');
 
         $data = [];
         foreach(Json::decode($json) as $key => $json) {
