@@ -49,7 +49,7 @@ class Mp3 extends Model
     // trigger run status
     public string $statusRun = 'is_run';
     public string $ppm_pv = 'pump_speed';
-    public string $ppm_sv = ''; // ambil dari setting
+    public string $ppm_sv = 'sp_pump_speed'; // ambil dari setting
     public string $ppm2_pv = '';
     public string $ppm2_sv = ''; // ambil dari setting
 
@@ -140,7 +140,7 @@ class Mp3 extends Model
 
     public function creating(Creating $event) {
         $setting = ScoreSetting::where('device_id', $this->device_id)->first();
-        $sp_ppm_1 = $setting?->sp_ppm_1 ?: null;
+        $sp_ppm_1 = $setting?->sp_ppm_1 ?: 0;
 
         $this->id = Uuid::uuid4();
         $this->pv_pump_speed = $this->pump_speed;
